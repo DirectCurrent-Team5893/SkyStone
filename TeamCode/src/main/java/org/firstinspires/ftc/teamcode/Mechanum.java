@@ -93,6 +93,7 @@ public class Mechanum extends LinearOpMode {
                 isItTooBig = true;
             }
         }
+        //scale all the powers so that the motor isn't set to a value above one
         if (isItTooBig) {
             double greatest = 0;
             for(double power :powers){
