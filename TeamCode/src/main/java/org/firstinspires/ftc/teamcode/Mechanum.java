@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 
@@ -22,6 +23,16 @@ public class Mechanum extends LinearOpMode {
     private DcMotor backRight = null;
     private DcMotor rightIntake = null;
     private DcMotor leftIntake = null;
+    private DcMotor OuttakeLift = null;
+    private DcMotor HorizontalLift = null;
+
+    Servo Grabber;
+    Servo LeftBlockGrabber;
+    Servo RightBlockGrabber;
+    Servo LeftBaseplateShover;
+    Servo RightBaseplateShover;
+    Servo ShoveBlack;
+
 
     @Override
     public void runOpMode() {
@@ -34,11 +45,21 @@ public class Mechanum extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
         frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
 
+        Grabber = hardwareMap.get(Servo.class, "Grabber");
+        LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
+        RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
+        LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
+        RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
+        ShoveBlack = hardwareMap.get(Servo.class, "SB");
+
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
+
+
         int STOP = 0;
         int FORWARD = 1;
         int BACKWARD = -1;
+
         waitForStart();
         while (opModeIsActive()) {
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
@@ -57,22 +78,30 @@ public class Mechanum extends LinearOpMode {
                 leftIntake.setPower(STOP);
                 rightIntake.setPower(STOP);
             }
-            if (gamepad2.a)
+            int UP_POSTION =0;
+            int DOWN_POSTION=0;
+            if (gamepad2.b)
             {
-                backLeft.setPower(1);
+                Grabber.setPosition(0);
             }
-            else if (gamepad2.b)
+            else if (gamepad2.a)
             {
-                frontLeft.setPower(BACKWARD);
+
             }
-            else if(gamepad2.x)
-            {
-                frontRight.setPower(1);
-            }
-            else if(gamepad2.y)
-            {
-                backRight.setPower(1);
-            }
+        }
+    }
+
+    public enum GrabberPositions{
+        UP_POSITION , DOWN_POSITION
+    }
+    public void SetPosition(final GrabberPositions POSITION  )
+    {
+        switch(POSITION)
+        {
+            case UP_POSITION:
+            Grabber.setPosition(0);
+            case DOWN_POSITION:
+            Grabber.setPosition(.5);
         }
     }
 
@@ -95,7 +124,7 @@ public class Mechanum extends LinearOpMode {
         }
         if (isItTooBig) {
             double greatest = 0;
-            for(double power :powers){
+            for(double power : powers){
 
                 if(Math.abs(power)>greatest){
                     greatest=Math.abs(power);
