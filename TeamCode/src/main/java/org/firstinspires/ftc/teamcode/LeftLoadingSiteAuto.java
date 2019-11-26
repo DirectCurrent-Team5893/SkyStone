@@ -191,6 +191,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
                         backLeft.getCurrentPosition(),
                         backRight.getCurrentPosition());
                 telemetry.update();
+
             }
 
             // Stop all motion;

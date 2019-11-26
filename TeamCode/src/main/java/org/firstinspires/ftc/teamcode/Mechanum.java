@@ -61,7 +61,15 @@ public class Mechanum extends LinearOpMode {
         int BACKWARD = -1;
 
         waitForStart();
+        int GrabberChanger =0;
+
+        if(.5==Grabber.getPosition())
+        {
+            GrabberChanger= GrabberChanger++;
+
+        }
         while (opModeIsActive()) {
+
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
             if (gamepad1.right_bumper)
             {
@@ -78,16 +86,44 @@ public class Mechanum extends LinearOpMode {
                 leftIntake.setPower(STOP);
                 rightIntake.setPower(STOP);
             }
-            int UP_POSTION =0;
-            int DOWN_POSTION=0;
-            if (gamepad2.b)
-            {
-                Grabber.setPosition(0);
-            }
-            else if (gamepad2.a)
-            {
 
+
+
+            GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.UP_POSITION,GrabberPositions.DOWN_POSITION};
+             if(gamepad2.b)
+             {
+
+                SetPosition(GRABBERPOSITIONS[GrabberChanger]);
+                GrabberChanger = GrabberChanger ++;
+                GrabberChanger=GrabberChanger % 2;
+             }
+
+             if(gamepad2.left_bumper)
+             {
+                 HorizontalLift.setPower(.9);
+             }
+             else if(gamepad2.left_trigger> .1)
+             {
+                 HorizontalLift.setPower(gamepad2.left_trigger);
+             }
+             else if(!gamepad2.left_bumper && gamepad2.left_trigger>.1)
+             {
+                 HorizontalLift.setPower(STOP);
+             }
+
+            if(gamepad2.right_bumper)
+            {
+                OuttakeLift.setPower(.9);
             }
+            else if(gamepad2.right_trigger> .1)
+            {
+                OuttakeLift.setPower(gamepad2.left_trigger);
+            }
+            else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
+            {
+                OuttakeLift.setPower(STOP);
+            }
+
         }
     }
 
@@ -96,6 +132,7 @@ public class Mechanum extends LinearOpMode {
     }
     public void SetPosition(final GrabberPositions POSITION  )
     {
+
         switch(POSITION)
         {
             case UP_POSITION:
