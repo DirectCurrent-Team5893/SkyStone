@@ -77,10 +77,27 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
+        // right 10 Inches with 5 Sec timeout
 
-        telemetry.addData("Path", "Complete");
+        encoderDrive(.6, 10,-10, 10,10, 5.0);
+        //left 10 inches with 5 sec timeout?
+
+        telemetry.addData("Initial Right Straif", "Begun");
         telemetry.update();
+        encoderDrive(.6, -26,26,-26,-26,5);
+        telemetry.addData("Initial Right Straif", "Complete");
+        telemetry.addData("move backward 16.5 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -16.5, -16.5, -16.5, -16.5, 5);
+        telemetry.addData("Move backward 16.5 inches", "Complete");
+        telemetry.addData("Straif Left 3 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 3, -3, 3, -3, 5);
+        telemetry.addData("Straif Left 3 inches", "Complete");
+        telemetry.update();
+
+
     }
     //    public void MovingStraight(double inches, String Status) {
 //        //name variables
