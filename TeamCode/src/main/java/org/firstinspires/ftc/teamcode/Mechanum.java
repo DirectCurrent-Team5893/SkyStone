@@ -44,7 +44,8 @@ public class Mechanum extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class,"back right wheel");
         frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
         frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
-
+        HorizontalLift = hardwareMap.get(DcMotor.class,"HL");
+        OuttakeLift = hardwareMap.get(DcMotor.class, "OL");
         Grabber = hardwareMap.get(Servo.class, "Grabber");
         LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
