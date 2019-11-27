@@ -31,7 +31,7 @@ public class Mechanum extends LinearOpMode {
     Servo RightBlockGrabber;
     Servo LeftBaseplateShover;
     Servo RightBaseplateShover;
-    Servo ShoveBlack;
+    Servo ShoveBlock;
 
 
     @Override
@@ -51,7 +51,7 @@ public class Mechanum extends LinearOpMode {
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
         LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
         RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
-        ShoveBlack = hardwareMap.get(Servo.class, "SB");
+        ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
