@@ -31,7 +31,8 @@ public class Mechanum extends LinearOpMode {
     Servo RightBlockGrabber;
     Servo LeftBaseplateShover;
     Servo RightBaseplateShover;
-    Servo ShoveBlack;
+    Servo ShoveBlock;
+
 
 
     @Override
@@ -51,24 +52,20 @@ public class Mechanum extends LinearOpMode {
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
         LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
         RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
-        ShoveBlack = hardwareMap.get(Servo.class, "SB");
+        ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
+        HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         int STOP = 0;
         int FORWARD = 1;
         int BACKWARD = -1;
+        int GrabberChanger =1;
 
         waitForStart();
-        int GrabberChanger =0;
 
-        if(.5==Grabber.getPosition())
-        {
-            GrabberChanger= GrabberChanger++;
-
-        }
         while (opModeIsActive()) {
 
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
@@ -105,9 +102,9 @@ public class Mechanum extends LinearOpMode {
              }
              else if(gamepad2.left_trigger> .1)
              {
-                 HorizontalLift.setPower(gamepad2.left_trigger);
+                 HorizontalLift.setPower(-gamepad2.left_trigger);
              }
-             else if(!gamepad2.left_bumper && gamepad2.left_trigger>.1)
+             else if(!gamepad2.left_bumper && gamepad2.left_trigger<.1)
              {
                  HorizontalLift.setPower(STOP);
              }
@@ -118,7 +115,7 @@ public class Mechanum extends LinearOpMode {
             }
             else if(gamepad2.right_trigger> .1)
             {
-                OuttakeLift.setPower(gamepad2.left_trigger);
+                OuttakeLift.setPower(-gamepad2.right_trigger);
             }
             else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
             {
@@ -137,9 +134,11 @@ public class Mechanum extends LinearOpMode {
         switch(POSITION)
         {
             case UP_POSITION:
-            Grabber.setPosition(0);
+            Grabber.setPosition(.9);
+            break;
             case DOWN_POSITION:
             Grabber.setPosition(.5);
+            break;
         }
     }
 
