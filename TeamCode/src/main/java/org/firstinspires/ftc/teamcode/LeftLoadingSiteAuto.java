@@ -22,6 +22,15 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
     private DcMotor backRight = null;
     private DcMotor rightIntake = null;
     private DcMotor leftIntake = null;
+    private DcMotor OuttakeLift = null;
+    private DcMotor HorizontalLift = null;
+
+    Servo Grabber;
+    Servo LeftBlockGrabber;
+    Servo RightBlockGrabber;
+    Servo LeftBaseplateShover;
+    Servo RightBaseplateShover;
+    Servo ShoveBlock;
 
 
     static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
@@ -39,6 +48,14 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class,"back right wheel");
         frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
         frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
+        HorizontalLift = hardwareMap.get(DcMotor.class,"HL");
+        OuttakeLift = hardwareMap.get(DcMotor.class, "OL");
+        Grabber = hardwareMap.get(Servo.class, "Grabber");
+        LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
+        RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
+        LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
+        RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
+        ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -75,12 +92,68 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+ //guides for straifing after testing
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        //encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
+        // right 10 Inches with 5 Sec timeout
+        //encoderDrive(.6, 10,-10, 10,10, 5.0);
+        //left 10 inches with 5 sec timeout?
 
-        telemetry.addData("Path", "Complete");
+        telemetry.addData("Initial Right Straif", "Begun");
         telemetry.update();
+        encoderDrive(.6, -26,26,-26,-26,5);
+        telemetry.addData("Initial Right Straif", "Complete");
+
+        telemetry.addData("move backward 16.5 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 5);
+        telemetry.addData("Move backward 16.5 inches", "Complete");
+
+        telemetry.addData("straif right 3.7 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 5);
+        telemetry.addData("straif right 3.7 inches", "Complete");
+
+        telemetry.addData("Lower Right Block Grabber", "Begun");
+        telemetry.update();
+        RightBlockGrabber.setPosition(.95);
+        telemetry.addData("Lower Right Block Grabber", "Complete");
+
+        telemetry.addData("Straif Left 3 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 3, -3, 3, 3, 5);
+        telemetry.addData("Straif Left 3 inches", "Complete");
+
+        telemetry.addData("move Forward 60 inches to the foundation", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 60,60,-60, 60,5);
+        telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
+
+        telemetry.addData("Raise Right Block Grabber", "Begun");
+        telemetry.update();
+        RightBlockGrabber.setPosition(0);
+        telemetry.addData("Raise Right Block Grabber", "Complete");
+
+        telemetry.addData("Lower Baseplate Movers", "Begun");
+        telemetry.update();
+        LeftBaseplateShover.setPosition (.95);
+        RightBaseplateShover.setPosition (.95);
+        telemetry.addData("Lower Baseplate Movers", "Complete");
+        telemetry.update();
+
+        telemetry.addData("straif 21 inches left", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 21,-21,21, 21,5);
+        telemetry.addData("straif 21 inches left", "Complete");
+
+        telemetry.addData("Raise Baseplate Movers", "Begun");
+        telemetry.update();
+        LeftBaseplateShover.setPosition (0);
+        RightBaseplateShover.setPosition (0);
+        telemetry.addData("Raise Baseplate Movers", "Complete");
+        telemetry.update();
+
     }
     //    public void MovingStraight(double inches, String Status) {
 //        //name variables
