@@ -135,17 +135,22 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(0);
         telemetry.addData("Raise Right Block Grabber", "Complete");
 
+        telemetry.addData("straif 21 inches left", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 21,-21,21, 21,5);
+        telemetry.addData("straif 21 inches left", "Complete");
+
+        telemetry.addData("turn in place 90 degrees", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 21,-21,21, 21,5);
+        telemetry.addData("straif 21 inches left", "Complete");
+
         telemetry.addData("Lower Baseplate Movers", "Begun");
         telemetry.update();
         LeftBaseplateShover.setPosition (.95);
         RightBaseplateShover.setPosition (.95);
         telemetry.addData("Lower Baseplate Movers", "Complete");
         telemetry.update();
-
-        telemetry.addData("straif 21 inches left", "Begun");
-        telemetry.update();
-        encoderDrive(.6, 21,-21,21, 21,5);
-        telemetry.addData("straif 21 inches left", "Complete");
 
         telemetry.addData("Raise Baseplate Movers", "Begun");
         telemetry.update();
