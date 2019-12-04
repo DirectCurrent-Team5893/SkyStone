@@ -134,7 +134,6 @@ public class VuforiaOne extends LinearOpMode {
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
         waitForStart();
-
         relicTrackables.activate();
 
         while (opModeIsActive()) {
@@ -146,7 +145,6 @@ public class VuforiaOne extends LinearOpMode {
              * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
              */
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            while(vuMark == RelicRecoveryVuMark.UNKNOWN)
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
                 /* Found an instance of the template. In the actual game, you will probably
