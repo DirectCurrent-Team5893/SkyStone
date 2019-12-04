@@ -247,10 +247,11 @@ public class Mechanum extends LinearOpMode {
         switch(POSITION)
         {
             case UP_POSITION:
-                RightBlockGrabber.setPosition(1);
+                RightBlockGrabber.setPosition(0);
+
                 break;
             case DOWN_POSITION:
-                RightBlockGrabber.setPosition(.3);
+                RightBlockGrabber.setPosition(.7);
                 break;
         }
     }
@@ -263,10 +264,10 @@ public class Mechanum extends LinearOpMode {
         {
             case UP_POSITION:
 
-                LeftBlockGrabber.setPosition(0);
+                LeftBlockGrabber.setPosition(1);
                 break;
             case DOWN_POSITION:
-                LeftBlockGrabber.setPosition(.7);
+                LeftBlockGrabber.setPosition(.3);
                 break;
         }
     }
