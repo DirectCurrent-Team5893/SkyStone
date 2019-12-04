@@ -230,12 +230,12 @@ public class Mechanum extends LinearOpMode {
         {
             case UP_POSITION:
                 RightBaseplateShover.setPosition(.8);
-                LeftBaseplateShover.setPosition(.1);
+                LeftBaseplateShover.setPosition(.05);
 
                 break;
             case DOWN_POSITION:
                 RightBaseplateShover.setPosition(.1);
-                LeftBaseplateShover.setPosition(.8);
+                LeftBaseplateShover.setPosition(.7);
                 break;
         }
     }
