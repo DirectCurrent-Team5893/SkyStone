@@ -229,13 +229,13 @@ public class Mechanum extends LinearOpMode {
           switch(POSITION)
         {
             case UP_POSITION:
-                RightBaseplateShover.setPosition(.7);
-                LeftBaseplateShover.setPosition(.2);
+                RightBaseplateShover.setPosition(.8);
+                LeftBaseplateShover.setPosition(0);
 
                 break;
             case DOWN_POSITION:
-                RightBaseplateShover.setPosition(.2);
-                LeftBaseplateShover.setPosition(.9);
+                RightBaseplateShover.setPosition(.1);
+                LeftBaseplateShover.setPosition(.8);
                 break;
         }
     }
@@ -247,11 +247,11 @@ public class Mechanum extends LinearOpMode {
         switch(POSITION)
         {
             case UP_POSITION:
-                RightBlockGrabber.setPosition(0);
+                RightBlockGrabber.setPosition(.7);
 
                 break;
             case DOWN_POSITION:
-                RightBlockGrabber.setPosition(.7);
+                RightBlockGrabber.setPosition(0);
                 break;
         }
     }
@@ -264,10 +264,10 @@ public class Mechanum extends LinearOpMode {
         {
             case UP_POSITION:
 
-                LeftBlockGrabber.setPosition(1);
+                LeftBlockGrabber.setPosition(.7);
                 break;
             case DOWN_POSITION:
-                LeftBlockGrabber.setPosition(.3);
+                LeftBlockGrabber.setPosition(0);
                 break;
         }
     }
