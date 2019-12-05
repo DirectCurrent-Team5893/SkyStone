@@ -267,7 +267,7 @@ public class Mechanum extends LinearOpMode {
                 LeftBlockGrabber.setPosition(.7);
                 break;
             case DOWN_POSITION:
-                LeftBlockGrabber.setPosition(0);
+                LeftBlockGrabber.setPosition(.1);
                 break;
         }
     }
