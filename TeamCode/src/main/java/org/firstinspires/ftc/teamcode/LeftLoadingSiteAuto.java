@@ -81,13 +81,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                frontLeft.getCurrentPosition(),
-                frontRight.getCurrentPosition(),
-                backLeft.getCurrentPosition(),
-                backRight.getCurrentPosition());
-        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -102,12 +95,12 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-<<<<<<< HEAD
+
         encoderDrive(.6, -26,26,-26,-26,5);
         telemetry.addData("Initial Right Strafe", "Complete");
 
 
-=======
+
         encoderDrive(.6, -26,26,-26,-26,10);
         telemetry.addData("Initial Right Straif", "Complete");
 
@@ -115,7 +108,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         telemetry.update();
         encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 10);
         telemetry.addData("Move backward 16.5 inches", "Complete");
->>>>>>> b7db704b1febaa845cac28171c742f2b7af515d2
 
         telemetry.addData("straif right 3.7 inches", "Begun");
         telemetry.update();
