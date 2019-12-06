@@ -94,13 +94,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                frontLeft.getCurrentPosition(),
-                frontRight.getCurrentPosition(),
-                backLeft.getCurrentPosition(),
-                backRight.getCurrentPosition());
-        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -153,11 +146,41 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(0);
         telemetry.addData("Raise Right Block Grabber", "Complete");
 
-        telemetry.addData("move backward 74 inches", "Begun");
+        telemetry.addData("move backward 72 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -74, -74, 74, -74, 10);
-        telemetry.addData("Move backward 74 inches", "Complete");
+        encoderDrive(.6, -72, -72, 72, -72, 10);
+        telemetry.addData("Move backward 72 inches", "Complete");
 
+        telemetry.addData("straif right 3.7 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
+        telemetry.addData("straif right 3.7 inches", "Complete");
+
+        telemetry.addData("Lower Right Block Grabber", "Begun");
+        telemetry.update();
+        RightBlockGrabber.setPosition(.7);
+        telemetry.addData("Lower Right Block Grabber", "Complete");
+
+        telemetry.addData("Straif Left 3 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 3, -3, 3, 3, 10);
+        telemetry.addData("Straif Left 3 inches", "Complete");
+
+        telemetry.addData("move Forward 68 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 68,68,-68, 68,10);
+        telemetry.addData("Move Forward 68 inches", "Complete");
+
+        telemetry.addData("Raise Right Block Grabber", "Begun");
+        telemetry.update();
+        RightBlockGrabber.setPosition(0);
+        telemetry.addData("Raise Right Block Grabber", "Complete");
+
+        telemetry.addData("move backward 10 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -10, -10, 10, -10, 10);
+        telemetry.addData("Move backward 10 inches", "Complete");
+        telemetry.update();
     }
     //    public void MovingStraight(double inches, String Status) {
 //        //name variables
