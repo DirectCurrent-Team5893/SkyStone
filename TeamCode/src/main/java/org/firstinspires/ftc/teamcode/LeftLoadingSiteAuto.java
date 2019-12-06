@@ -98,9 +98,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
- //guides for straifing after testing
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
+//Guides for strafeing
         //encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
         // right 10 Inches with 5 Sec timeout
         //encoderDrive(.6, 10,-10, 10,10, 5.0);
@@ -108,33 +106,28 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-
-        encoderDrive(.6, -26,26,-26,-26,5);
-        telemetry.addData("Initial Right Strafe", "Complete");
-
-
         encoderDrive(.6, -26,26,-26,-26,10);
-        telemetry.addData("Initial Right Straif", "Complete");
+        telemetry.addData("Initial Right Strafe", "Complete");
 
         telemetry.addData("move backward 16.5 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 10);
         telemetry.addData("Move backward 16.5 inches", "Complete");
 
-        telemetry.addData("straif right 3.7 inches", "Begun");
+        telemetry.addData("strafe right 3.7 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
-        telemetry.addData("straif right 3.7 inches", "Complete");
+        telemetry.addData("strafe right 3.7 inches", "Complete");
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
         telemetry.update();
         RightBlockGrabber.setPosition(.7);
         telemetry.addData("Lower Right Block Grabber", "Complete");
 
-        telemetry.addData("Straif Left 3 inches", "Begun");
+        telemetry.addData("Strafe Left 3 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, 3, -3, 3, 3, 10);
-        telemetry.addData("Straif Left 3 inches", "Complete");
+        telemetry.addData("Strafe Left 3 inches", "Complete");
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
@@ -151,20 +144,20 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -72, -72, 72, -72, 10);
         telemetry.addData("Move backward 72 inches", "Complete");
 
-        telemetry.addData("straif right 3.7 inches", "Begun");
+        telemetry.addData("strafe right 3.7 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
-        telemetry.addData("straif right 3.7 inches", "Complete");
+        telemetry.addData("strafe right 3.7 inches", "Complete");
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
         telemetry.update();
         RightBlockGrabber.setPosition(.7);
         telemetry.addData("Lower Right Block Grabber", "Complete");
 
-        telemetry.addData("Straif Left 3 inches", "Begun");
+        telemetry.addData("Strafe Left 3 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, 3, -3, 3, 3, 10);
-        telemetry.addData("Straif Left 3 inches", "Complete");
+        telemetry.addData("Strafe Left 3 inches", "Complete");
 
         telemetry.addData("move Forward 68 inches", "Begun");
         telemetry.update();
