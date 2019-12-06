@@ -81,6 +81,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
 
     @Override public void runOpMode() {
 
+
         /*
          * To start up Vuforia, tell it the view that we wish to use for camera monitor (on the RC phone);
          */

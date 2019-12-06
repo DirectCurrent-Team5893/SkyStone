@@ -111,7 +111,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move backward 16.5 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 10);
+        encoderDrive(.6, 16.5, 16.5, -16.5, 16.5, 10);
         telemetry.addData("Move backward 16.5 inches", "Complete");
 
         telemetry.addData("strafe right 3.7 inches", "Begun");

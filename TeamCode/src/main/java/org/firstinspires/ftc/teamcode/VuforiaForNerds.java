@@ -32,6 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -85,13 +88,32 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @TeleOp(name="VuforiaForNerds", group ="Concept")
 
 public class VuforiaForNerds extends LinearOpMode {
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor frontLeft = null;
+    private DcMotor frontRight = null;
 
-    // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
-    // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
-    // 2) Phone Orientation. Choices are: PHONE_IS_PORTRAIT = true (portrait) or PHONE_IS_PORTRAIT = false (landscape)
-    //
-    // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
-    //
+    private DcMotor backLeft = null;
+    private DcMotor backRight = null;
+    private DcMotor rightIntake = null;
+    private DcMotor leftIntake = null;
+    private DcMotor OuttakeLift = null;
+    private DcMotor HorizontalLift = null;
+
+    private
+    Servo Grabber;
+    Servo LeftBlockGrabber;
+    Servo RightBlockGrabber;
+    Servo LeftBaseplateShover;
+    Servo RightBaseplateShover;
+    Servo ShoveBlock;
+
+
+    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false  ;
 
@@ -99,8 +121,6 @@ public class VuforiaForNerds extends LinearOpMode {
     private static final String VUFORIA_KEY = "AUZDG8f/////AAABmaazVMUrgE3DsW62VUJjlMc1wra8JWNvNazE8edoKBKAtbY04213dls4wAW5jKyxCVXhGR0uR2AD90/bEtm+e7U5z63qpgQDnlDtEplsZwLZsNCsjguBCCGZuAcjvnbpfLuBQDVPJ9v0IepRczqFVg2LsMaZgjIJhYwrJOAS0xrNgDXy571FjcP9JTTsnofDkjL3vyi1tJgBWsIfCKNpkJBeMjtrM1GenDtHzwgEULtIv3XkRb0rIu1Xh/OF4N37wWOyEIm1NaT0hDJq5mHBWj/uxDnXIthdO7zxgLymdRxoWsHQg7IBfeWzp3apJnZog3OIVh7RSbn9X8b+zCgKdPGUli6K/NjBHCKIY4j/gnFm ";
 
 
-    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
-    // We will define some constants and conversions here
     private static final float mmPerInch        = 25.4f;
     private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
@@ -127,6 +147,47 @@ public class VuforiaForNerds extends LinearOpMode {
     private float phoneZRotate    = 0;
 
     @Override public void runOpMode() {
+
+        leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
+        rightIntake = hardwareMap.get(DcMotor.class,"right intake");
+        backLeft = hardwareMap.get(DcMotor.class,"back left wheel") ;
+        backRight = hardwareMap.get(DcMotor.class,"back right wheel");
+        frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
+        frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
+        HorizontalLift = hardwareMap.get(DcMotor.class,"HL");
+        OuttakeLift = hardwareMap.get(DcMotor.class, "OL");
+        Grabber = hardwareMap.get(Servo.class, "Grabber");
+        LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
+        RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
+        LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
+        RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
+        ShoveBlock = hardwareMap.get(Servo.class, "SB");
+
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Resetting Encoders");    //
+        telemetry.update();
+
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -300,7 +361,7 @@ public class VuforiaForNerds extends LinearOpMode {
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
 
-        // waitForStart();
+         waitForStart();
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
@@ -346,4 +407,78 @@ public class VuforiaForNerds extends LinearOpMode {
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
     }
+
+    public void encoderDrive(double speed,
+                             double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches,
+                             double timeoutS) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+            frontLeft.setTargetPosition(newFrontLeftTarget);
+            frontRight.setTargetPosition(newFrontRightTarget);
+            backLeft.setTargetPosition(newBackLeftTarget);
+            backRight.setTargetPosition(newBackRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            frontLeft.setPower(Math.abs(speed));
+            frontRight.setPower(Math.abs(speed));
+            backLeft.setPower(Math.abs(speed));
+            backRight.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newFrontLeftTarget,newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+
+                        frontLeft.getCurrentPosition(),
+                        frontRight.getCurrentPosition(),
+                        backLeft.getCurrentPosition(),
+                        backRight.getCurrentPosition());
+                telemetry.update();
+
+            }
+
+            // Stop all motion;
+
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after eah move
+        }
+    }
 }
+
