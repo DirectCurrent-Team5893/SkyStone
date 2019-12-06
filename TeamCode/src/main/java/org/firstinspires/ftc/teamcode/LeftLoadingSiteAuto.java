@@ -112,7 +112,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -26,26,-26,-26,5);
         telemetry.addData("Initial Right Strafe", "Complete");
 
-
         encoderDrive(.6, -26,26,-26,-26,10);
         telemetry.addData("Initial Right Straif", "Complete");
 
