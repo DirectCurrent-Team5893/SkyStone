@@ -124,10 +124,15 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(.7);
         telemetry.addData("Lower Right Block Grabber", "Complete");
 
-        telemetry.addData("Strafe Left 3 inches", "Begun");
+        while (RightBlockGrabber.isBusy)
+        {
+
+        }
+        
+        telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 3, -3, 3, 3, 10);
-        telemetry.addData("Strafe Left 3 inches", "Complete");
+        encoderDrive(.6, 4, -4, 4, 4, 10);
+        telemetry.addData("Strafe Left 4 inches", "Complete");
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
@@ -144,9 +149,9 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         encoderDrive(.6, 72, 72, -72, 72, 10);
         telemetry.addData("Move backward 72 inches", "Complete");
 
-        telemetry.addData("strafe right 3.7 inches", "Begun");
+        telemetry.addData("strafe right 4.7 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
+        encoderDrive(.6, -4.7, 4.7, -4.7, -4.7, 10);
         telemetry.addData("strafe right 3.7 inches", "Complete");
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
@@ -154,9 +159,9 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(.7);
         telemetry.addData("Lower Right Block Grabber", "Complete");
 
-        telemetry.addData("Strafe Left 3 inches", "Begun");
+        telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 3, -3, 3, 3, 10);
+        encoderDrive(.6, 4, -4, 4, 4, 10);
         telemetry.addData("Strafe Left 3 inches", "Complete");
 
         telemetry.addData("move Forward 68 inches", "Begun");
@@ -168,6 +173,11 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         telemetry.update();
         RightBlockGrabber.setPosition(0);
         telemetry.addData("Raise Right Block Grabber", "Complete");
+
+        while (RightBlockGrabber.isBusy)
+        {
+
+        }
 
         telemetry.addData("move backward 10 inches", "Begun");
         telemetry.update();
