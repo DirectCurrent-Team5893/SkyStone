@@ -105,7 +105,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -26,26,-26,-26,5);
         telemetry.addData("Initial Right Strafe", "Complete");
 
-new VuforiaForNerds().
+
 
         telemetry.addData("straif right 3.7 inches", "Begun");
         telemetry.update();
