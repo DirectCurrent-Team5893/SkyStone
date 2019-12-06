@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
-@Autonomous(name="LeftLoadingSite", group="Linear Opmode")
+@Autonomous(name="RightLoadingSite", group="Linear Opmode")
 
 public class LeftLoadingSiteAuto extends LinearOpMode {
 
@@ -104,19 +104,19 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         //encoderDrive(.6, 10,-10, 10,10, 5.0);
         //left 10 inches with 5 sec timeout?
 
-        telemetry.addData("Initial Right Strafe", "Begun");
+        telemetry.addData("Initial Left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -26,26,-26,-26,10);
-        telemetry.addData("Initial Right Strafe", "Complete");
+        encoderDrive(.6, 26,-26,26,26,10);
+        telemetry.addData("Initial Left Strafe", "Complete");
 
         telemetry.addData("move backward 16.5 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, 16.5, 16.5, -16.5, 16.5, 10);
         telemetry.addData("Move backward 16.5 inches", "Complete");
 
-        telemetry.addData("strafe right 3.7 inches", "Begun");
+        telemetry.addData("strafe left 3.7 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
+        encoderDrive(.6, 3.7, -3.7, 3.7, 3.7, 10);
         telemetry.addData("strafe right 3.7 inches", "Complete");
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
@@ -129,10 +129,10 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         }
 
-        telemetry.addData("Strafe Left 4 inches", "Begun");
+        telemetry.addData("Strafe Right 4 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 4, -4, 4, 4, 10);
-        telemetry.addData("Strafe Left 4 inches", "Complete");
+        encoderDrive(.6, -4, 4, -4, -4, 10);
+        telemetry.addData("Strafe Right 4 inches", "Complete");
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
