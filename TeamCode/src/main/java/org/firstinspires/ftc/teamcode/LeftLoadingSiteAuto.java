@@ -131,7 +131,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
-        encoderDrive(.6, 58,58,-58, 58,10);
+        encoderDrive(.6, -58,-58,58, -58,10);
         telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -141,7 +141,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move backward 72 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -72, -72, 72, -72, 10);
+        encoderDrive(.6, 72, 72, -72, 72, 10);
         telemetry.addData("Move backward 72 inches", "Complete");
 
         telemetry.addData("strafe right 3.7 inches", "Begun");
@@ -161,7 +161,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 68 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 68,68,-68, 68,10);
+        encoderDrive(.6, -68,-68,68, -68,10);
         telemetry.addData("Move Forward 68 inches", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -171,7 +171,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move backward 10 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -10, -10, 10, -10, 10);
+        encoderDrive(.6, 10, 10, -10, 10, 10);
         telemetry.addData("Move backward 10 inches", "Complete");
         telemetry.update();
     }
