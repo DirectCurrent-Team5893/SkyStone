@@ -7,7 +7,19 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
 @Autonomous(name="LeftLoadingSite", group="Linear Opmode")
@@ -25,6 +37,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
     private DcMotor OuttakeLift = null;
     private DcMotor HorizontalLift = null;
 
+    private
     Servo Grabber;
     Servo LeftBlockGrabber;
     Servo RightBlockGrabber;
@@ -98,7 +111,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         encoderDrive(.6, -26,26,-26,-26,5);
         telemetry.addData("Initial Right Strafe", "Complete");
-
 
 
         encoderDrive(.6, -26,26,-26,-26,10);
