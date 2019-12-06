@@ -102,14 +102,24 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
+<<<<<<< HEAD
         encoderDrive(.6, -26,26,-26,-26,5);
         telemetry.addData("Initial Right Strafe", "Complete");
 
 
+=======
+        encoderDrive(.6, -26,26,-26,-26,10);
+        telemetry.addData("Initial Right Straif", "Complete");
+
+        telemetry.addData("move backward 16.5 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 10);
+        telemetry.addData("Move backward 16.5 inches", "Complete");
+>>>>>>> b7db704b1febaa845cac28171c742f2b7af515d2
 
         telemetry.addData("straif right 3.7 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 5);
+        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
         telemetry.addData("straif right 3.7 inches", "Complete");
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
@@ -119,12 +129,12 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Straif Left 3 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 3, -3, 3, 3, 5);
+        encoderDrive(.6, 3, -3, 3, 3, 10);
         telemetry.addData("Straif Left 3 inches", "Complete");
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
-        encoderDrive(.6, 60,60,-60, 60,5);
+        encoderDrive(.6, 58,58,-58, 58,10);
         telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -132,29 +142,10 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(0);
         telemetry.addData("Raise Right Block Grabber", "Complete");
 
-        telemetry.addData("straif 21 inches left", "Begun");
+        telemetry.addData("move backward 74 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 21,-21,21, 21,5);
-        telemetry.addData("straif 21 inches left", "Complete");
-
-        telemetry.addData("turn in place 90 degrees", "Begun");
-        telemetry.update();
-        encoderDrive(.6, 21,-21,21, 21,5);
-        telemetry.addData("straif 21 inches left", "Complete");
-
-        telemetry.addData("Lower Baseplate Movers", "Begun");
-        telemetry.update();
-        LeftBaseplateShover.setPosition (.95);
-        RightBaseplateShover.setPosition (.95);
-        telemetry.addData("Lower Baseplate Movers", "Complete");
-        telemetry.update();
-
-        telemetry.addData("Raise Baseplate Movers", "Begun");
-        telemetry.update();
-        LeftBaseplateShover.setPosition (0);
-        RightBaseplateShover.setPosition (0);
-        telemetry.addData("Raise Baseplate Movers", "Complete");
-        telemetry.update();
+        encoderDrive(.6, -74, -74, 74, -74, 10);
+        telemetry.addData("Move backward 74 inches", "Complete");
 
     }
     //    public void MovingStraight(double inches, String Status) {
