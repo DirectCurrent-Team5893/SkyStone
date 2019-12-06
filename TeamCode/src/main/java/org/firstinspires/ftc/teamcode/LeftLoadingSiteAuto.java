@@ -100,15 +100,12 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         //encoderDrive(.6, 10,-10, 10,10, 5.0);
         //left 10 inches with 5 sec timeout?
 
-        telemetry.addData("Initial Right Straif", "Begun");
+        telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
         encoderDrive(.6, -26,26,-26,-26,5);
-        telemetry.addData("Initial Right Straif", "Complete");
+        telemetry.addData("Initial Right Strafe", "Complete");
 
-        telemetry.addData("move backward 16.5 inches", "Begun");
-        telemetry.update();
-        encoderDrive(.6, -16.5, -16.5, 16.5, -16.5, 5);
-        telemetry.addData("Move backward 16.5 inches", "Complete");
+new VuforiaForNerds().
 
         telemetry.addData("straif right 3.7 inches", "Begun");
         telemetry.update();

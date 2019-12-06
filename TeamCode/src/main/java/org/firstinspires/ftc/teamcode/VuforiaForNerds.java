@@ -82,8 +82,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@TeleOp(name="SKYSTONE Vuforia Nav", group ="Concept")
-@Disabled
+@TeleOp(name="VuforiaForNerds", group ="Concept")
+
 public class VuforiaForNerds extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -95,20 +95,9 @@ public class VuforiaForNerds extends LinearOpMode {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false  ;
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
-    private static final String VUFORIA_KEY =
-            " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+
+    private static final String VUFORIA_KEY = "AUZDG8f/////AAABmaazVMUrgE3DsW62VUJjlMc1wra8JWNvNazE8edoKBKAtbY04213dls4wAW5jKyxCVXhGR0uR2AD90/bEtm+e7U5z63qpgQDnlDtEplsZwLZsNCsjguBCCGZuAcjvnbpfLuBQDVPJ9v0IepRczqFVg2LsMaZgjIJhYwrJOAS0xrNgDXy571FjcP9JTTsnofDkjL3vyi1tJgBWsIfCKNpkJBeMjtrM1GenDtHzwgEULtIv3XkRb0rIu1Xh/OF4N37wWOyEIm1NaT0hDJq5mHBWj/uxDnXIthdO7zxgLymdRxoWsHQg7IBfeWzp3apJnZog3OIVh7RSbn9X8b+zCgKdPGUli6K/NjBHCKIY4j/gnFm ";
+
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
