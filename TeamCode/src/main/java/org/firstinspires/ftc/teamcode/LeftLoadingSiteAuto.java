@@ -127,7 +127,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Lower Right Block Grabber", "Begun");
         telemetry.update();
-        RightBlockGrabber.setPosition(.95);
+        RightBlockGrabber.setPosition(.7);
         telemetry.addData("Lower Right Block Grabber", "Complete");
 
         telemetry.addData("Straif Left 3 inches", "Begun");
