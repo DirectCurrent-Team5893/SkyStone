@@ -1,30 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcontroller.internal.FTC_5893_2019.CustomTenserFlow5893;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="LeftLoadingSite", group="Linear Opmode")
 
 public class LeftLoadingSiteAuto extends LinearOpMode {
+    private CustomTenserFlow5893 vision;
+
+    private List<Recognition> objects;
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -49,10 +45,12 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
     static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION*(2)*(Math.sqrt(2))) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+        vision = new CustomTenserFlow5893 (hardwareMap);
+        vision.init();
 
         //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
@@ -98,37 +96,66 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-//Guides for strafeing
-        //encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
-        // right 10 Inches with 5 Sec timeout
-        //encoderDrive(.6, 10,-10, 10,10, 5.0);
-        //left 10 inches with 5 sec timeout?
+
+
+/*
+        Guides for strafeing
+        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
+         right 10 Inches with 5 Sec timeout
+       encoderDrive(.6, 10,-10, 10,10, 5.0);
+        left 10 inches with 5 sec timeout?
+ */
 
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
         encoderDrive(.6, -26,26,-26,-26,10);
         telemetry.addData("Initial Right Strafe", "Complete");
 
-        telemetry.addData("move backward 16.5 inches", "Begun");
-        telemetry.update();
-        encoderDrive(.6, 16.5, 16.5, -16.5, 16.5, 10);
-        telemetry.addData("Move backward 16.5 inches", "Complete");
 
-        telemetry.addData("strafe right 3.7 inches", "Begun");
-        telemetry.update();
-        encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
-        telemetry.addData("strafe right 3.7 inches", "Complete");
+            objects = vision.getObjects();
+                if (objects != null) {
+                    telemetry.addData("Stones visible are", objects.size());
+                    int i = 0;
+                    for (Recognition object : objects) {
+                        telemetry.addData("Label is", object.getLabel());
+                        telemetry.addData("Confidence is", object.getConfidence());
+                        while(!object.getLabel().equals("Skystone"))
+                        {
+                            if(object.getLabel().equals("Skystone"))
+                            {
+                                telemetry.addData("strafe right 3.7 inches", "Begun");
+                                telemetry.update();
+                                encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
+                                telemetry.addData("strafe right 3.7 inches", "Complete");
+                                telemetry.addData("Lower Right Block Grabber", "Begun");
+                                telemetry.update();
+                                RightBlockGrabber.setPosition(.7);
+                                telemetry.addData("Lower Right Block Grabber", "Complete");
+                            }
+                            else if(!object.getLabel().equals("Skystone") && i<3)
+                            {
+                                telemetry.addData("SKYSTONE NOT FOUND","We be moving backward still");
+                                encoderDrive(.5,-7.9,-7.9,7.9,-7.9,0);
+                                i++;
+                            }
+                        }
 
-        telemetry.addData("Lower Right Block Grabber", "Begun");
-        telemetry.update();
-        RightBlockGrabber.setPosition(.7);
-        telemetry.addData("Lower Right Block Grabber", "Complete");
 
-        while (RightBlockGrabber.isBusy)
-        {
+                    }
+                    telemetry.update();
+                }
 
-        }
-        
+
+//        telemetry.addData("move backward 16.5 inches", "Begun");
+//        telemetry.update();
+//        encoderDrive(.6, 16.5, 16.5, -16.5, 16.5, 10);
+//        telemetry.addData("Move backward 16.5 inches", "Complete");
+
+
+
+
+
+
         telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, 4, -4, 4, 4, 10);
@@ -174,10 +201,6 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         RightBlockGrabber.setPosition(0);
         telemetry.addData("Raise Right Block Grabber", "Complete");
 
-        while (RightBlockGrabber.isBusy)
-        {
-
-        }
 
         telemetry.addData("move backward 10 inches", "Begun");
         telemetry.update();
