@@ -156,6 +156,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
 
 
+
         telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
         encoderDrive(.6, 4, -4, 4, 4, 10);
