@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -45,7 +46,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
     static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION*(2)*(Math.sqrt(2))) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -70,7 +71,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD]);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -108,10 +109,14 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -26,26,-26,-26,10);
+        encoderDrive(.6, -23,23,-23,-23,60);
         telemetry.addData("Initial Right Strafe", "Complete");
 
-
+        telemetry.addData("A little shove to help","Start");
+        encoderDrive(.6,-3.9,-3.9,3.9,-3.9,10);
+        telemetry.addData("A little shove to help","Completed because Sarah is always right");
+        telemetry.update();
+        telemetry.addLine("Vision Starts, and Anish career ends.");
             objects = vision.getObjects();
                 if (objects != null) {
                     telemetry.addData("Stones visible are", objects.size());
@@ -125,7 +130,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
                             {
                                 telemetry.addData("strafe right 3.7 inches", "Begun");
                                 telemetry.update();
-                                encoderDrive(.6, -3.7, 3.7, -3.7, -3.7, 10);
+                                encoderDrive(.6, -5.7, 5.7, -5.7, -5.7, 10);
                                 telemetry.addData("strafe right 3.7 inches", "Complete");
                                 telemetry.addData("Lower Right Block Grabber", "Begun");
                                 telemetry.update();
@@ -135,8 +140,11 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
                             else if(!object.getLabel().equals("Skystone") && i<3)
                             {
                                 telemetry.addData("SKYSTONE NOT FOUND","We be moving backward still");
-                                encoderDrive(.5,-7.9,-7.9,7.9,-7.9,0);
+                                encoderDrive(.5,-7.9,-7.9,7.9,-7.9,10);
                                 i++;
+                            } else if(!object.getLabel().equals("Skystone") && i>=3)
+                            {
+                                encoderDrive(.5,16,16,-16,16,10);
                             }
                         }
 
@@ -307,7 +315,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
+                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newFrontLeftTarget,newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
