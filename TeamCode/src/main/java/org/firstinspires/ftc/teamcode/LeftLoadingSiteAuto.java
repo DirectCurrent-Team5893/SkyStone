@@ -71,7 +71,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD]);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -112,12 +112,31 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -23,23,-23,-23,60);
         telemetry.addData("Initial Right Strafe", "Complete");
 
-        telemetry.addData("A little shove to help","Start");
-        encoderDrive(.6,-3.9,-3.9,3.9,-3.9,10);
-        telemetry.addData("A little shove to help","Completed because Sarah is always right");
-        telemetry.update();
-        telemetry.addLine("Vision Starts, and Anish career ends.");
+//        telemetry.addData("A little shove to help","Start");
+//        encoderDrive(.6,-3.9,-3.9,3.9,-3.9,10);
+//        telemetry.addData("A little shove to help","Completed because Sarah is always right");
+//        telemetry.update();
+//        telemetry.addLine("Vision Starts, and Anish career ends.");
+
             objects = vision.getObjects();
+       if(objects == null) {
+           while (objects == null) {
+               objects = vision.getObjects();
+               backLeft.setPower(-0.4);
+               backRight.setPower(-0.4);
+               frontLeft.setPower(0.4);
+               frontRight.setPower(-0.4);
+           }
+       }
+        else if(objects != null)
+       {
+           objects = vision.getObjects();
+           backLeft.setPower(0);
+           backRight.setPower(0);
+           frontLeft.setPower(0);
+           frontRight.setPower(0);
+       }
+
                 if (objects != null) {
                     telemetry.addData("Stones visible are", objects.size());
                     int i = 0;
@@ -139,11 +158,13 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
                             }
                             else if(!object.getLabel().equals("Skystone") && i<3)
                             {
+                                objects = vision.getObjects();
                                 telemetry.addData("SKYSTONE NOT FOUND","We be moving backward still");
                                 encoderDrive(.5,-7.9,-7.9,7.9,-7.9,10);
                                 i++;
                             } else if(!object.getLabel().equals("Skystone") && i>=3)
                             {
+                                objects = vision.getObjects();
                                 encoderDrive(.5,16,16,-16,16,10);
                             }
                         }
@@ -315,7 +336,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())) {
+                    (frontLeft.isBusy()&& frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newFrontLeftTarget,newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
