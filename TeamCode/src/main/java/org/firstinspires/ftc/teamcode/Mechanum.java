@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 
-@TeleOp(name="Mechanum", group="Linear Opmode")
+@TeleOp(name="MainTeleOp", group="Linear Opmode")
 
 public class Mechanum extends LinearOpMode {
 
@@ -175,31 +175,33 @@ public class Mechanum extends LinearOpMode {
 
              telemetry.update();
 
-             if(gamepad2.left_bumper)
-             {
-                 HorizontalLift.setPower(.9);
-             }
-             else if(gamepad2.left_trigger> .1)
-             {
-                 HorizontalLift.setPower(-gamepad2.left_trigger);
-             }
-             else if(!gamepad2.left_bumper && gamepad2.left_trigger<.1)
-             {
-                 HorizontalLift.setPower(STOP);
-             }
-
-            if(gamepad2.right_bumper)
-            {
-                OuttakeLift.setPower(.9);
-            }
-            else if(gamepad2.right_trigger> .1)
-            {
-                OuttakeLift.setPower(-gamepad2.right_trigger);
-            }
-            else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
-            {
-                OuttakeLift.setPower(STOP);
-            }
+//             if(gamepad2.left_bumper)
+//             {
+//                 HorizontalLift.setPower(.9);
+//             }
+//             else if(gamepad2.left_trigger> .1)
+//             {
+//                 HorizontalLift.setPower(-gamepad2.left_trigger);
+//             }
+//             else if(!gamepad2.left_bumper && gamepad2.left_trigger<.1)
+//             {
+//                 HorizontalLift.setPower(STOP);
+//             }
+             HorizontalLift.setPower(gamepad2.left_stick_y);
+             OuttakeLift.setPower(gamepad2.right_stick_y);
+//             if(gamepad2.left_stick_y>
+//            if(gamepad2.right_bumper)
+//            {
+//                OuttakeLift.setPower(.9);
+//            }
+//            else if(gamepad2.right_trigger> .1)
+//            {
+//                OuttakeLift.setPower(-gamepad2.right_trigger);
+//            }
+//            else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
+//            {
+//                OuttakeLift.setPower(STOP);
+//            }
                  telemetry.update();
         }
     }

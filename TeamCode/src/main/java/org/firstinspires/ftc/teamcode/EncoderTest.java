@@ -2,23 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.internal.FTC_5893_2019.CustomTenserFlow5893;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Autonomous(name = "EncoderTest", group = "Linear Opmode")
 
-@Autonomous(name = "LeftLoadingSite", group = "Linear Opmode")
-
-public class LeftLoadingSiteAuto extends LinearOpMode {
+public class EncoderTest extends LinearOpMode {
     private CustomTenserFlow5893 vision;
 
     private List<Recognition> objects;
@@ -50,10 +46,7 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        vision = new CustomTenserFlow5893(hardwareMap);
-        vision.init();
 
-        //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right intake");
         backLeft = hardwareMap.get(DcMotor.class, "back left wheel");
@@ -96,141 +89,22 @@ public class LeftLoadingSiteAuto extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        while(opModeIsActive()){
+        frontLeft.setPower(1);
+        backLeft.setPower(1);
+        frontRight.setPower(1);
+        backRight.setPower(1);
+        telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+        telemetry.addData("backLeft",backLeft.getCurrentPosition());
+        telemetry.addData("frontRight",frontRight.getCurrentPosition());
+        telemetry.addData("backright",backRight.getCurrentPosition());
 
-
-
-/*
-        Guides for strafeing
-        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
-         right 10 Inches with 5 Sec timeout
-       encoderDrive(.6, 10,-10, 10,10, 5.0);
-        left 10 inches with 5 sec timeout?
- */
-
-        telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -23, 23, -23, -23, 60);
-        telemetry.addData("Initial Right Strafe", "Complete");
-
-//        telemetry.addData("A little shove to help","Start");
-//        encoderDrive(.6,-3.9,-3.9,3.9,-3.9,10);
-//        telemetry.addData("A little shove to help","Completed because Sarah is always right");
-//        telemetry.update();
-//        telemetry.addLine("Vision Starts, and Anish career ends.");
-
-        objects = vision.getObjects();
-        if (objects == null) {
-            telemetry.addLine("Yahya is mean, and no block is seen");
-            while (objects == null) {
-                telemetry.addLine("no is block is here, but here is near");
-                objects = vision.getObjects();
-                backLeft.setPower(-0.4);
-                backRight.setPower(-0.4);
-                frontLeft.setPower(0.4);
-                frontRight.setPower(-0.4);
-            }
-        } else if (objects != null) {
-            telemetry.addLine("Block seen and sarah mean");
-            objects = vision.getObjects();
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
         }
 
 
-        if (objects != null) {
-            telemetry.addData("Stones visible are", objects.size());
-            int i = 0;
-            for (Recognition object : objects) {
-                telemetry.addData("Label is", object.getLabel());
-                telemetry.addData("Confidence is", object.getConfidence());
-                while (opModeIsActive()) {
-                    if (object.getLabel().equals("Skystone") && object.getConfidence() > .5) {
-                        telemetry.addData("strafe right 3.7 inches", "Begun");
-                        telemetry.update();
-                        encoderDrive(.6, -5.7, 5.7, -5.7, -5.7, 10);
-                        telemetry.addData("strafe right 3.7 inches", "Complete");
-                        telemetry.addData("Lower Right Block Grabber", "Begun");
-                        telemetry.update();
-                        RightBlockGrabber.setPosition(.7);
-                        telemetry.addData("Lower Right Block Grabber", "Complete");
-                    } else if ((!object.getLabel().equals("Skystone") || i < 3)) {
-                        objects = vision.getObjects();
-                        telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
-                        encoderDrive(.5, -7.9, -7.9, 7.9, -7.9, 10);
-                        i++;
-                    }
-                    if (!object.getLabel().equals("Skystone") && i >= 3) {
-                        objects = vision.getObjects();
-                        encoderDrive(.5, 16, 16, -16, 16, 10);
-                    }
-
-
-                }
-                telemetry.update();
-            }
-
-
-            telemetry.addData("move backward 16.5 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, 16.5, 16.5, -16.5, 16.5, 10);
-            telemetry.addData("Move backward 16.5 inches", "Complete");
-
-
-            telemetry.addData("Strafe Left 4 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, 4, -4, 4, 4, 10);
-            telemetry.addData("Strafe Left 4 inches", "Complete");
-
-            telemetry.addData("move Forward 60 inches to the foundation", "Begun");
-            telemetry.update();
-            encoderDrive(.6, -58, -58, 58, -58, 10);
-            telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
-
-            telemetry.addData("Raise Right Block Grabber", "Begun");
-            telemetry.update();
-            RightBlockGrabber.setPosition(0);
-            telemetry.addData("Raise Right Block Grabber", "Complete");
-
-            telemetry.addData("move backward 72 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, 72, 72, -72, 72, 10);
-            telemetry.addData("Move backward 72 inches", "Complete");
-
-            telemetry.addData("strafe right 4.7 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, -4.7, 4.7, -4.7, -4.7, 10);
-            telemetry.addData("strafe right 3.7 inches", "Complete");
-
-            telemetry.addData("Lower Right Block Grabber", "Begun");
-            telemetry.update();
-            RightBlockGrabber.setPosition(.7);
-            telemetry.addData("Lower Right Block Grabber", "Complete");
-
-            telemetry.addData("Strafe Left 4 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, 4, -4, 4, 4, 10);
-            telemetry.addData("Strafe Left 3 inches", "Complete");
-
-            telemetry.addData("move Forward 68 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, -68, -68, 68, -68, 10);
-            telemetry.addData("Move Forward 68 inches", "Complete");
-
-            telemetry.addData("Raise Right Block Grabber", "Begun");
-            telemetry.update();
-            RightBlockGrabber.setPosition(0);
-            telemetry.addData("Raise Right Block Grabber", "Complete");
-
-
-            telemetry.addData("move backward 10 inches", "Begun");
-            telemetry.update();
-            encoderDrive(.6, 10, 10, -10, 10, 10);
-            telemetry.addData("Move backward 10 inches", "Complete");
-            telemetry.update();
         }
-    }
+
 
     //    public void MovingStraight(double inches, String Status) {
 //        //name variables

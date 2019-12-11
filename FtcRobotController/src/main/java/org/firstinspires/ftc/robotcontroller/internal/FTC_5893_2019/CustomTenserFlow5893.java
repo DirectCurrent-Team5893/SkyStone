@@ -32,7 +32,6 @@ package org.firstinspires.ftc.robotcontroller.internal.FTC_5893_2019;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
@@ -46,15 +45,15 @@ import java.util.List;
 /**
  * This 2019-2020 OpMode illustrates the basics of using the TensorFlow Object Detection API to
  * determine the position of the Skystone game elements.
- *
+ * <p>
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
+ * <p>
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-public class CustomTenserFlow5893  {
-    public CustomTenserFlow5893(HardwareMap map){
+public class CustomTenserFlow5893 {
+    public CustomTenserFlow5893(HardwareMap map) {
         this.hardwareMap = map;
     }
 
@@ -90,85 +89,69 @@ public class CustomTenserFlow5893  {
      */
     private TFObjectDetector tfod;
 
-    public enum SkyStonePosition
-    {
-        LEFT,MIDDLE,RIGHT,UNKNOWN
+    public enum SkyStonePosition {
+        LEFT, MIDDLE, RIGHT, UNKNOWN
     }
-    public void init()
-    {
+
+    public void init() {
         initVuforia();
-        if(ClassFactory.getInstance().canCreateTFObjectDetector())
-        {
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         }
         /**
-     * Activate TensorFlow Object Detection before we wait for the start command.
-     * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-     **/
+         * Activate TensorFlow Object Detection before we wait for the start command.
+         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         **/
         if (tfod != null) {
-        tfod.activate();
+            tfod.activate();
+        }
     }
-    }
 
 
-
-        public List<Recognition> getObjects(){
-        if(tfod != null)
-        {
+    public List<Recognition> getObjects() {
+        if (tfod != null) {
             /*
             getUpdatedRecognitions() will return null if no new information is available
             the last time that call was made.
             */
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if(updatedRecognitions != null)
-        {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             return updatedRecognitions;
         }
-        }
         return null;
+    }
+
+    public static SkyStonePosition getPosition(List<Recognition> stones) {
+        SkyStonePosition position = SkyStonePosition.UNKNOWN;
+        ArrayList<Recognition> skystones = new ArrayList<>();
+        Iterator iterator = stones.iterator();
+        while (iterator.hasNext()) {
+            Recognition stone = (Recognition) iterator.next();
+            if (stone.getLabel().equals(("Skystone"))) {
+                skystones.add(stone);
+                skystones.remove(stone);
+            }
         }
-        public static SkyStonePosition getPosition(List<Recognition> stones)
-        {
-            SkyStonePosition position =SkyStonePosition.UNKNOWN;
-            ArrayList<Recognition> skystones = new ArrayList<>();
-            Iterator iterator = stones.iterator();
-            while (iterator.hasNext())
-            {
-                Recognition stone = (Recognition)iterator.next();
-                if(stone.getLabel().equals(("Skystone")))
-                {
-                    skystones.add(stone);
-                    skystones.remove(stone);
-                }
-            }
-        if (skystones.size() ==1 && stones.size() ==2)
-        {
-            if(skystones.get(0).getRight()>stones.get(0).getRight() && skystones.get(0).getRight() > stones.get(1).getRight())
-            {
+        if (skystones.size() == 1 && stones.size() == 2) {
+            if (skystones.get(0).getRight() > stones.get(0).getRight() && skystones.get(0).getRight() > stones.get(1).getRight()) {
                 position = SkyStonePosition.RIGHT;
-            }
-            else if (skystones.get(0).getRight() < stones.get(0).getRight() && skystones.get(0).getRight() < stones.get(1).getRight()){
+            } else if (skystones.get(0).getRight() < stones.get(0).getRight() && skystones.get(0).getRight() < stones.get(1).getRight()) {
                 position = SkyStonePosition.LEFT;
-            }
-            else{
+            } else {
                 position = SkyStonePosition.MIDDLE;
             }
-        }
-        else if (skystones.size() == 1){
-            if (skystones.get(0).getLeft() > 293 || skystones.get(0).getRight() > 540){
+        } else if (skystones.size() == 1) {
+            if (skystones.get(0).getLeft() > 293 || skystones.get(0).getRight() > 540) {
                 position = SkyStonePosition.RIGHT;
-            }
-            else if (skystones.get(0).getLeft() < 102 || skystones.get(0).getRight() <  344){
+            } else if (skystones.get(0).getLeft() < 102 || skystones.get(0).getRight() < 344) {
                 position = SkyStonePosition.LEFT;
-            }
-            else{
+            } else {
                 position = SkyStonePosition.MIDDLE;
             }
         }
 
 
-            return position;
-        }
+        return position;
+    }
 
 
     /**
