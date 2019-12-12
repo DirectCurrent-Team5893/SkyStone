@@ -354,13 +354,19 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
                     telemetry.addLine("Skystone detected");
                     telemetry.addData("strafe right 3.7 inches", "Begun");
                     telemetry.update();
-                    encoderDrive(.6, -5.7, 5.7, -5.7, -5.7, 10);
+                    encoderDrive(.6, -8, 8, -8, -8, 10);
                     telemetry.addData("strafe right 3.7 inches", "Complete");
                     telemetry.addData("Lower Right Block Grabber", "Begun");
                     telemetry.update();
                     RightBlockGrabber.setPosition(.7);
+
+                    while(RightBlockGrabber.getPosition()<=.7)
+                    {
+
+                    }
                     telemetry.addData("Lower Right Block Grabber", "Complete");
                     telemetry.addData("Position is", Positions[skystonePosition]);
+                    break;
                 } else if (!targetVisible && !skystoneVisible && skystonePosition<=3) {
                     telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
                     encoderDrive(.5, 7.9, 7.9, -7.9, 7.9, 10);
@@ -384,7 +390,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 4, -4, 4, 4, 10);
+            encoderDrive(.6, 8, -8, 8, 8, 10);
             telemetry.addData("Strafe Left 4 inches", "Complete");
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
@@ -404,7 +410,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("strafe right 4.7 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, -4.7, 4.7, -4.7, -4.7, 10);
+            encoderDrive(.6, -8, 8, -8, -8, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
 
             telemetry.addData("Lower Right Block Grabber", "Begun");
@@ -414,12 +420,12 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 4, -4, 4, 4, 10);
+            encoderDrive(.6, 8, -8, 8, 8, 10);
             telemetry.addData("Strafe Left 3 inches", "Complete");
 
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6,-72+8*Math.abs(skystonePosition-3), -72+8*Math.abs(skystonePosition-3), 72-8*Math.abs(skystonePosition-3), -72+8*Math.abs(skystonePosition-3), 10);
+            encoderDrive(.6,-72-8*Math.abs(skystonePosition-2), -72-8*Math.abs(skystonePosition-2), 72-8*Math.abs(skystonePosition-2), -72-8*Math.abs(skystonePosition-2), 10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -430,7 +436,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move backward 10 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 10+8*Math.abs(skystonePosition-3), 10+8*Math.abs(skystonePosition-3), -10-8*Math.abs(skystonePosition-3), 10+8*Math.abs(skystonePosition-3), 10);
+            encoderDrive(.6, 10+8*Math.abs(skystonePosition-2), 10+8*Math.abs(skystonePosition-2), -10-8*Math.abs(skystonePosition-2), 10+8*Math.abs(skystonePosition-2), 10);
             telemetry.addData("Move backward 10 inches", "Complete");
             telemetry.update();
 
