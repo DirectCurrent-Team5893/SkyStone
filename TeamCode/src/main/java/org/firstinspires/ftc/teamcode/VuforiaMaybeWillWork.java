@@ -326,7 +326,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
             telemetry.addLine("Vision Starts, and Anish career ends.");
 
             int skystonePosition = 1;
-            while(skystonePosition<3 && !skystoneVisible) {
+            while(!skystoneVisible) {
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -350,6 +350,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
                     }
                 }
                 if (targetVisible && skystoneVisible) {
+                    String[] Positions = {"UNKNOWN POSITION","LEFT POSITION","MIDDLE POSITION","RIGHT POSITION"};
                     telemetry.addLine("Skystone detected");
                     telemetry.addData("strafe right 3.7 inches", "Begun");
                     telemetry.update();
@@ -359,15 +360,15 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
                     telemetry.update();
                     RightBlockGrabber.setPosition(.7);
                     telemetry.addData("Lower Right Block Grabber", "Complete");
-                    break;
-
-                } else if (!targetVisible && !skystoneVisible && skystonePosition<3) {
+                    telemetry.addData("Position is", Positions[skystonePosition]);
+                } else if (!targetVisible && !skystoneVisible && skystonePosition<=3) {
                     telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
                     encoderDrive(.5, 7.9, 7.9, -7.9, 7.9, 10);
 
                     skystonePosition++;
                 }
                 else if(!targetVisible && !skystoneVisible && skystonePosition>3 ) {
+                    telemetry.addLine("Sarah is mean, and this code is might bean");
                     telemetry.update();
                     encoderDrive(.5, -16., -16, 16, -16, 10);
                     skystonePosition = 1;
@@ -388,7 +389,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
-            encoderDrive(.6, -58, -58, 58, -58, 10);
+            encoderDrive(.6, -58+8*Math.abs(skystonePosition-3), -58+Math.abs(skystonePosition-3), 58-Math.abs(skystonePosition-3), -58+Math.abs(skystonePosition-3), 10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -398,7 +399,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move backward 72 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 72, 72, -72, 72, 10);
+            encoderDrive(.6, 72-8*Math.abs(skystonePosition-3), 72-8*Math.abs(skystonePosition-3), -72+8*Math.abs(skystonePosition-3), 72-8*Math.abs(skystonePosition-3), 10);
             telemetry.addData("Move backward 72 inches", "Complete");
 
             telemetry.addData("strafe right 4.7 inches", "Begun");
@@ -418,7 +419,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, -68, -68, 68, -68, 10);
+            encoderDrive(.6,-72+8*Math.abs(skystonePosition-3), -72+8*Math.abs(skystonePosition-3), 72-8*Math.abs(skystonePosition-3), -72+8*Math.abs(skystonePosition-3), 10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -429,7 +430,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move backward 10 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 10, 10, -10, 10, 10);
+            encoderDrive(.6, 10+8*Math.abs(skystonePosition-3), 10+8*Math.abs(skystonePosition-3), -10-8*Math.abs(skystonePosition-3), 10+8*Math.abs(skystonePosition-3), 10);
             telemetry.addData("Move backward 10 inches", "Complete");
             telemetry.update();
 
