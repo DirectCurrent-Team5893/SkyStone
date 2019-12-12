@@ -363,13 +363,13 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
                 } else if (!targetVisible && !skystoneVisible && skystonePosition<3) {
                     telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
-                    encoderDrive(.5, -7.9, -7.9, 7.9, -7.9, 10);
+                    encoderDrive(.5, 7.9, 7.9, -7.9, 7.9, 10);
 
                     skystonePosition++;
                 }
                 else if(!targetVisible && !skystoneVisible && skystonePosition>3 ) {
                     telemetry.update();
-                    encoderDrive(.5, 16., 16, -16, 16, 10);
+                    encoderDrive(.5, -16., -16, 16, -16, 10);
                     skystonePosition = 1;
                 }
             }
