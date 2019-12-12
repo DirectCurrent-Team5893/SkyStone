@@ -123,6 +123,12 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -43, 43, -43, -43, 10);
         telemetry.addData("Strafe Right 43 inches", "Complete");
 
+        telemetry.addData("Raise foundation mover","Start");
+        LeftBaseplateShover.setPosition(0);
+        RightBaseplateShover.setPosition(1);
+        telemetry.addData("Raise Foundation mover","Completed");
+        telemetry.update();
+
         telemetry.addData("move Backward 18 inches to the foundation", "Begun");
         telemetry.update();
         encoderDrive(.6, 18,18,-18, 18,10);
