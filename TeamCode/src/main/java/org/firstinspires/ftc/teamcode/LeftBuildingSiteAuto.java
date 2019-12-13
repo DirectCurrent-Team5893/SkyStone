@@ -119,12 +119,12 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 28,-28,-28,-28,5);
+        encoderDrive(.6, 24,-24,-24,-24,5);
         telemetry.addData("left 90 degree turn", "Complete");
 
         telemetry.addData("move Forward 21 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -21,-21,21, -21,10);
+        encoderDrive(.6, 21,21,-21, 21,10);
         telemetry.addData("Move Forward 6 inches", "Complete");
 
         telemetry.addData("Lower foundation mover","Start");
@@ -145,7 +145,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 18 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -18,-18,18, -18,10);
+        encoderDrive(.6, 18,18,-18, 18,10);
         telemetry.addData("Move Forward 18 inches", "Complete");
 
         telemetry.addData("Raise foundation mover","Start");
@@ -161,7 +161,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Backward 44.5 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, 44.5,44.5,-44.5, 44.5,10);
+        encoderDrive(.6, -44.5,-44.5,44.5, -44.5,10);
         telemetry.addData("Move Backward 44.5 inches to park", "Complete");
     }
 

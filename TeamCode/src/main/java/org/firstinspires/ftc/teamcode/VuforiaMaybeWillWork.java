@@ -318,11 +318,11 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
             encoderDrive(.6, -23, 23, -23, -23, 60);
             telemetry.addData("Initial Right Strafe", "Complete");
 
-            telemetry.addData("A little shove to help", "Start");
-            encoderDrive(.6, -3.3, -3.3, 3.3, -3.3, 10);
-            telemetry.addData("A little shove to help", "Completed because Sarah is always right");
-            telemetry.update();
-            telemetry.addLine();
+//            telemetry.addData("A little shove to help", "Start");
+//            encoderDrive(.6, -3.3, -3.3, 3.3, -3.3, 10);
+//            telemetry.addData("A little shove to help", "Completed because Sarah is always right");
+//            telemetry.update();
+//            telemetry.addLine();
             telemetry.addLine("Vision Starts, and Anish career ends.");
 
             int skystonePosition = 1;
@@ -494,7 +494,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6,-72-8*Math.abs(skystonePosition-2), -72-8*Math.abs(skystonePosition-2), 72-8*Math.abs(skystonePosition-2), -72-8*Math.abs(skystonePosition-2), 10);
+            encoderDrive(.6,-72-8*Math.abs(skystonePosition-1), -72-8*Math.abs(skystonePosition-1), 72-8*Math.abs(skystonePosition-1), -72-8*Math.abs(skystonePosition-1), 10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -505,7 +505,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("move backward 10 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 10+8*Math.abs(skystonePosition-2), 10+8*Math.abs(skystonePosition-2), -10-8*Math.abs(skystonePosition-2), 10+8*Math.abs(skystonePosition-2), 10);
+            encoderDrive(.6, 10+8*Math.abs(skystonePosition-1), 10+8*Math.abs(skystonePosition-1), -10-8*Math.abs(skystonePosition-1), 10+8*Math.abs(skystonePosition-1), 10);
             telemetry.addData("Move backward 10 inches", "Complete");
             telemetry.update();
 
