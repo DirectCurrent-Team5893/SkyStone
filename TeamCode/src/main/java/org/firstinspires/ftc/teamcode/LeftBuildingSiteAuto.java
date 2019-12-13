@@ -154,12 +154,12 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.2, 40, -28, -29, 0);
+        arcTurn(.4, 41, -29, -30, 0);
         telemetry.addData("Arc", "Complete");
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -25, 25, -25, -25, 0);
+        encoderDrive(.6, -35, 35, -35, -35, 0);
         telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("move Forward 20 inches", "Begun");
@@ -177,13 +177,13 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -10, 10, -10, -10, 0);
+        encoderDrive(.6, -20, 20, -20, -20, 0);
         telemetry.addData("left Strafe", "Complete");
 
-        telemetry.addData("move Backward 47 inches to park", "Begun");
+        telemetry.addData("move Backward 48 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -47, -47, 47, -47, 0);
-        telemetry.addData("Move Backward 47 inches to park", "Complete");
+        encoderDrive(.6, -48, -48, 48, -48, 0);
+        telemetry.addData("Move Backward 48 inches to park", "Complete");
     }
 
     public void encoderDrive(double speed,
