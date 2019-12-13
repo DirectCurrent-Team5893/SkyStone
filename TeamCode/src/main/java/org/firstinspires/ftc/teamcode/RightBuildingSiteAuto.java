@@ -2,23 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.internal.FTC_5893_2019.CustomTenserFlow5893;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Autonomous(name = "RightBuildingSite", group = "Linear Opmode")
 
-@Autonomous(name = "LeftBuildingSite", group = "Linear Opmode")
-
-public class LeftBuildingSiteAuto extends LinearOpMode {
+public class RightBuildingSiteAuto extends LinearOpMode {
     private CustomTenserFlow5893 vision;
 
     private List<Recognition> objects;
@@ -116,16 +112,16 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Move Forward 6 inches", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("right Strafe", "Begun");
+        telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -10, 10, -10, -10, 0);
-        telemetry.addData("right Strafe", "Complete");
+        encoderDrive(.6, 10, -10, 10, 10, 0);
+        telemetry.addData("left Strafe", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("left 90 degree turn", "Begun");
+        telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 23, -23, -23, -23, 0);
-        telemetry.addData("left 90 degree turn", "Complete");
+        encoderDrive(.6, -23, 23, 23, 23, 0);
+        telemetry.addData("right 90 degree turn", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("move Forward 25 inches", "Begun");
@@ -143,35 +139,35 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
-        telemetry.addData("right Strafe", "Begun");
-        telemetry.update();
-        encoderDrive(.6, 7, -7, 7, 7, 0);
-        encoderDrive(.2, 10, -10, 10, 10, 0);
-        telemetry.addData("right Strafe", "Complete");
-        TurnOffAllMotors();
-
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -8, 8, -8, -8, 0);
+        encoderDrive(.6, -7, 7, -7, -7, 0);
+        encoderDrive(.2, -10, 10, -10, -10, 0);
+        telemetry.addData("left Strafe", "Complete");
+        TurnOffAllMotors();
+
+        telemetry.addData("right Strafe", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 8, -8, 8, 8, 0);
         telemetry.addData("left Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.4, 44, -32, -33, 0);
+        arcTurn(.4, -44, 32, 33, 0);
         telemetry.addData("Arc", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("left Strafe", "Begun");
+        telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -45, 45, -45, -45, 0);
-        telemetry.addData("left Strafe", "Complete");
+        encoderDrive(.6, 45, -45, 45, 45, 0);
+        telemetry.addData("right Strafe", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("left 45 degree turn", "Begun");
+        telemetry.addData("right 45 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 14, -14, -14, -14, 0);
-        telemetry.addData("left 45 degree turn", "Complete");
+        encoderDrive(.6, -14, 14, 14, 14, 0);
+        telemetry.addData("right 45 degree turn", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("Raise foundation mover", "Start");
@@ -182,10 +178,10 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
-        telemetry.addData("left Strafe", "Begun");
+        telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -5, 5, -5, -5, 0);
-        telemetry.addData("left Strafe", "Complete");
+        encoderDrive(.6, 5, -5, 5, 5, 0);
+        telemetry.addData("right Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("move Backward 48 inches to park", "Begun");
