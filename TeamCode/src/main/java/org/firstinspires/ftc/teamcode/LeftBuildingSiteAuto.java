@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="LeftBuildingSite", group="Linear Opmode")
+@Autonomous(name = "LeftBuildingSite", group = "Linear Opmode")
 
 public class LeftBuildingSiteAuto extends LinearOpMode {
     private CustomTenserFlow5893 vision;
@@ -43,30 +43,30 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
     Servo ShoveBlock;
 
 
-    static final double     COUNTS_PER_MOTOR_REV    = 537.6 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        vision = new CustomTenserFlow5893 (hardwareMap);
+        vision = new CustomTenserFlow5893(hardwareMap);
         vision.init();
 
         //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
-        rightIntake = hardwareMap.get(DcMotor.class,"right intake");
-        backLeft = hardwareMap.get(DcMotor.class,"back left wheel") ;
-        backRight = hardwareMap.get(DcMotor.class,"back right wheel");
-        frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
-        frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
-        HorizontalLift = hardwareMap.get(DcMotor.class,"HL");
+        rightIntake = hardwareMap.get(DcMotor.class, "right intake");
+        backLeft = hardwareMap.get(DcMotor.class, "back left wheel");
+        backRight = hardwareMap.get(DcMotor.class, "back right wheel");
+        frontRight = hardwareMap.get(DcMotor.class, "Front Right wheel");
+        frontLeft = hardwareMap.get(DcMotor.class, "Front Left wheel");
+        HorizontalLift = hardwareMap.get(DcMotor.class, "HL");
         OuttakeLift = hardwareMap.get(DcMotor.class, "OL");
         Grabber = hardwareMap.get(Servo.class, "Grabber");
-        LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
+        LeftBlockGrabber = hardwareMap.get(Servo.class, "LBG");
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
-        LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
-        RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
+        LeftBaseplateShover = hardwareMap.get(Servo.class, "LBS");
+        RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
         ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
         backLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -109,35 +109,36 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -6,-6,6, -6,5);
+        encoderDrive(.6, -6, -6, 6, -6, 5);
         telemetry.addData("Move Forward 6 inches", "Complete");
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -10,10,-10,-10,5);
+        encoderDrive(.6, -10, 10, -10, -10, 5);
         telemetry.addData("right Strafe", "Complete");
 
         telemetry.addData("left 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 23,-23,-23,-23,5);
+        encoderDrive(.6, 23, -23, -23, -23, 5);
         telemetry.addData("left 90 degree turn", "Complete");
 
         telemetry.addData("move Forward 23 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 23,23,-23, 23,10);
+        encoderDrive(.6, 23, 23, -23, 23, 10);
         telemetry.addData("Move Forward 23 inches", "Complete");
 
-        telemetry.addData("Lower foundation mover","Start");
+        telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(.7);
         RightBaseplateShover.setPosition(.2);
-        telemetry.addData("Lower Foundation mover","Completed");
+        telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
 
-        while(LeftBaseplateShover.getPosition()!=.7 && RightBaseplateShover.getPosition() !=.2)
-        {
-
+        while (LeftBaseplateShover.getPosition() != .7 || RightBaseplateShover.getPosition() != .2) {
+            backLeft.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            frontRight.setPower(0);
         }
-
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
@@ -146,28 +147,27 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 20 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 20,20,-20, 20,10);
+        encoderDrive(.6, 20, 20, -20, 20, 10);
         telemetry.addData("Move Forward 18 inches", "Complete");
 
-        telemetry.addData("Raise foundation mover","Start");
+        telemetry.addData("Raise foundation mover", "Start");
         LeftBaseplateShover.setPosition(0);
         RightBaseplateShover.setPosition(1);
-        telemetry.addData("Raise Foundation mover","Completed");
+        telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
 
-        while(LeftBaseplateShover.getPosition()!=0 && RightBaseplateShover.getPosition() !=1)
-        {
+        while (LeftBaseplateShover.getPosition() != 0 && RightBaseplateShover.getPosition() != 1) {
 
         }
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, 20,-20,20,20,5);
+        encoderDrive(.6, 20, -20, 20, 20, 5);
         telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("move Backward 47 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -47,-47,47, -47,10);
+        encoderDrive(.6, -47, -47, 47, -47, 10);
         telemetry.addData("Move Backward 47 inches to park", "Complete");
     }
 
@@ -183,10 +183,10 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
-            newFrontRightTarget = frontRight.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
-            newBackLeftTarget = backLeft.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
-            newBackRightTarget = backRight.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
             frontLeft.setTargetPosition(newFrontLeftTarget);
             frontRight.setTargetPosition(newFrontRightTarget);
             backLeft.setTargetPosition(newBackLeftTarget);
@@ -216,8 +216,8 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
                     (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newFrontLeftTarget,newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
+                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
 
                         frontLeft.getCurrentPosition(),
                         frontRight.getCurrentPosition(),
@@ -243,9 +243,10 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             //  sleep(250);   // optional pause after eah move
         }
     }
-    public void arcTurn (double speed,
-                             double frontLeftInches, double frontRightInches, double backRightInches,
-                             double timeoutS) {
+
+    public void arcTurn(double speed,
+                        double frontLeftInches, double frontRightInches, double backRightInches,
+                        double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;
@@ -255,9 +256,9 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
-            newFrontRightTarget = frontRight.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
-            newBackRightTarget = backRight.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
             frontLeft.setTargetPosition(newFrontLeftTarget);
             frontRight.setTargetPosition(newFrontRightTarget);
             backRight.setTargetPosition(newBackRightTarget);
@@ -278,8 +279,8 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
                     (frontLeft.isBusy() || frontRight.isBusy()) || backRight.isBusy()) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newFrontLeftTarget, newFrontRightTarget, newBackRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
+                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newFrontRightTarget, newBackRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
 
                         frontLeft.getCurrentPosition(),
                         frontRight.getCurrentPosition(),
