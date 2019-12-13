@@ -455,7 +455,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
-        encoderDrive(.6, -58 + 8 * Math.abs(skystonePosition - 3), -58 + Math.abs(skystonePosition - 3), 58 - Math.abs(skystonePosition - 3), -58 + Math.abs(skystonePosition - 3), 10);
+        encoderDrive(.6, -58 -frontLeftInchesMoved, -58 -frontRightInchesMoved, 58 + backLeftInchesMoved, -58 -backRightInchesMoved, 10);
         telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -465,7 +465,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
         telemetry.addData("move backward 72 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 72 - 8 * Math.abs(skystonePosition - 3), 72 - 8 * Math.abs(skystonePosition - 3), -72 + 8 * Math.abs(skystonePosition - 3), 72 - 8 * Math.abs(skystonePosition - 3), 10);
+        encoderDrive(.6, 72 +frontLeftInchesMoved, 72 - frontRightInchesMoved, -72 - backLeftInchesMoved, 72 + backRightInchesMoved, 10);
         telemetry.addData("Move backward 72 inches", "Complete");
 
         telemetry.addData("strafe right 4.7 inches", "Begun");
@@ -486,7 +486,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
         telemetry.addData("move Forward 68 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -72 - 8 * Math.abs(skystonePosition - 1), -72 - 8 * Math.abs(skystonePosition - 1), 72 - 8 * Math.abs(skystonePosition - 1), -72 - 8 * Math.abs(skystonePosition - 1), 10);
+        encoderDrive(.6, -72 -frontLeftInchesMoved, -72 - frontRightInchesMoved, 72 +backLeftInchesMoved, -72 - backRightInchesMoved, 10);
         telemetry.addData("Move Forward 68 inches", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -497,7 +497,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
         telemetry.addData("move backward 10 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 10 + 8 * Math.abs(skystonePosition), 10 + 8 * Math.abs(skystonePosition), -10 - 8 * Math.abs(skystonePosition), 10 + 8 * Math.abs(skystonePosition), 10);
+        encoderDrive(.6, 10 +frontLeftInchesMoved, 10 + frontRightInchesMoved, -10 - backLeftInchesMoved, 10 + backRightInchesMoved, 10);
         telemetry.addData("Move backward 10 inches", "Complete");
         telemetry.update();
 

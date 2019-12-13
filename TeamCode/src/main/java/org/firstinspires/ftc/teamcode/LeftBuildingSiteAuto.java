@@ -184,16 +184,16 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         Thread.sleep(1500);
 
 
-        telemetry.addData("left Strafe", "Begun");
+        telemetry.addData("left 15 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, -5, 5, -5, -5, 0);
-        telemetry.addData("left Strafe", "Complete");
+        encoderDrive(.6, 6, -6, -6, -6, 0);
+        telemetry.addData("left 15 degree turn", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("move Backward 48 inches to park", "Begun");
+        telemetry.addData("move Backward 44 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -48, -48, 48, -48, 0);
-        telemetry.addData("Move Backward 48 inches to park", "Complete");
+        encoderDrive(.6, -44, -44, 44, -44, 0);
+        telemetry.addData("Move Backward 44 inches to park", "Complete");
         TurnOffAllMotors();
     }
 
