@@ -133,19 +133,20 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Lower Foundation mover","Completed");
         telemetry.update();
 
-        while(LeftBaseplateShover.getPosition()!=.7)
+        while(LeftBaseplateShover.getPosition()!=.7 && RightBaseplateShover.getPosition() !=.2)
         {
 
         }
+
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
         arcTurn(.6, 39, -27, -28, 10);
         telemetry.addData("Arc", "Complete");
 
-        telemetry.addData("move Forward 18 inches", "Begun");
+        telemetry.addData("move Forward 20 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 18,18,-18, 18,10);
+        encoderDrive(.6, 20,20,-20, 20,10);
         telemetry.addData("Move Forward 18 inches", "Complete");
 
         telemetry.addData("Raise foundation mover","Start");
@@ -154,15 +155,20 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Raise Foundation mover","Completed");
         telemetry.update();
 
-        while(LeftBaseplateShover.getPosition()!=0)
+        while(LeftBaseplateShover.getPosition()!=0 && RightBaseplateShover.getPosition() !=1)
         {
 
         }
 
-        telemetry.addData("move Backward 44.5 inches to park", "Begun");
+        telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -44.5,-44.5,44.5, -44.5,10);
-        telemetry.addData("Move Backward 44.5 inches to park", "Complete");
+        encoderDrive(.6, 20,-20,20,20,5);
+        telemetry.addData("left Strafe", "Complete");
+
+        telemetry.addData("move Backward 47 inches to park", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -47,-47,47, -47,10);
+        telemetry.addData("Move Backward 47 inches to park", "Complete");
     }
 
     public void encoderDrive(double speed,
