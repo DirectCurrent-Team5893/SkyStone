@@ -154,12 +154,12 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.4, 42, -30, -31, 0);
+        arcTurn(.4, 44, -32, -33, 0);
         telemetry.addData("Arc", "Complete");
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -35, 35, -35, -35, 0);
+        encoderDrive(.6, -45, 45, -45, -45, 0);
         telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("move Forward 20 inches", "Begun");
