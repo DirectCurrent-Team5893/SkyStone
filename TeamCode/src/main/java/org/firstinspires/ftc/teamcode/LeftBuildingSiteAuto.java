@@ -133,12 +133,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
 
-        while (LeftBaseplateShover.getPosition() != .7 || RightBaseplateShover.getPosition() != .2) {
-            backLeft.setPower(0);
-            frontLeft.setPower(0);
-            backRight.setPower(0);
-            frontRight.setPower(0);
-        }
+        Thread.sleep(3000);
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
