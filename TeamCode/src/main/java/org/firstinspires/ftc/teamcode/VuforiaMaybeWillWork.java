@@ -377,7 +377,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
                         telemetry.addLine("Skystone detected");
                         telemetry.addData("strafe right 3.7 inches", "Begun");
                         telemetry.update();
-                        encoderDrive(.6, -10, 10, -10, -10, 10);
+                        encoderDrive(.6, -12, 12, -12, -12, 10);
                         telemetry.addData("strafe right 3.7 inches", "Complete");
                         telemetry.addData("Lower Right Block Grabber", "Begun");
                         telemetry.update();
@@ -459,7 +459,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-            encoderDrive(.6, 10, -10, 10, 10, 10);
+            encoderDrive(.6, 12, -12, 12, 12, 10);
             telemetry.addData("Strafe Left 4 inches", "Complete");
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
