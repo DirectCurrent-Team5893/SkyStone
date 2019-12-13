@@ -68,8 +68,7 @@ public class Mechanum extends LinearOpMode {
         int baseplateChanger =1;
         int rightBlockMover =1;
         int leftBlockMover =1;
-
-
+        
         boolean gamepad2bHeld = false;
         boolean gamepad1aHeld = false;
         boolean gamepad1xHeld = false;
@@ -171,9 +170,6 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.b){
                 gamepad1bHeld = false;
             }
-
-
-             telemetry.update();
 
 //             if(gamepad2.left_bumper)
 //             {
