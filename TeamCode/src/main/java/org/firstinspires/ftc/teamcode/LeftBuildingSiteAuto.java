@@ -273,7 +273,6 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
                         double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
-        int newBackLeftTarget;
         int newBackRightTarget;
 
         // Ensure that the opmode is still active
