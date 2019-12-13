@@ -93,6 +93,11 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        telemetry.addData("Reset foundation mover", "Start");
+        LeftBaseplateShover.setPosition(0);
+        RightBaseplateShover.setPosition(1);
+        telemetry.addData("Reset Foundation mover", "Completed");
+        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -109,23 +114,24 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -6, -6, 6, -6, 5);
+        encoderDrive(.6, -6, -6, 6, -6, 0);
         telemetry.addData("Move Forward 6 inches", "Complete");
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -10, 10, -10, -10, 5);
+        encoderDrive(.6, -10, 10, -10, -10, 0);
         telemetry.addData("right Strafe", "Complete");
 
         telemetry.addData("left 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 23, -23, -23, -23, 5);
+        encoderDrive(.6, 23, -23, -23, -23, 0);
         telemetry.addData("left 90 degree turn", "Complete");
 
-        telemetry.addData("move Forward 23 inches", "Begun");
+        telemetry.addData("move Forward 25 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 23, 23, -23, 23, 10);
-        telemetry.addData("Move Forward 23 inches", "Complete");
+        encoderDrive(.6, 21, 21, -21, 21, 0);
+        encoderDrive(.2, 4, 4, -4, 4, 0);
+        telemetry.addData("Move Forward 25 inches", "Complete");
 
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(.7);
@@ -133,16 +139,32 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
 
-        Thread.sleep(3000);
+        Thread.sleep(1500);
+
+        telemetry.addData("right Strafe", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 7, -7, 7, 7, 0);
+        encoderDrive(.2, 10, -10, 10, 10, 0);
+        telemetry.addData("right Strafe", "Complete");
+
+        telemetry.addData("left Strafe", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -8, 8, -8, -8, 0);
+        telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.6, 39, -27, -28, 10);
+        arcTurn(.2, 40, -28, -29, 0);
         telemetry.addData("Arc", "Complete");
+
+        telemetry.addData("left Strafe", "Begun");
+        telemetry.update();
+        encoderDrive(.6, -25, 25, -25, -25, 0);
+        telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("move Forward 20 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 20, 20, -20, 20, 10);
+        encoderDrive(.6, 20, 20, -20, 20, 0);
         telemetry.addData("Move Forward 18 inches", "Complete");
 
         telemetry.addData("Raise foundation mover", "Start");
@@ -151,18 +173,16 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
 
-        while (LeftBaseplateShover.getPosition() != 0 && RightBaseplateShover.getPosition() != 1) {
-
-        }
+        Thread.sleep(1500);
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, 20, -20, 20, 20, 5);
+        encoderDrive(.6, -10, 10, -10, -10, 0);
         telemetry.addData("left Strafe", "Complete");
 
         telemetry.addData("move Backward 47 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -47, -47, 47, -47, 10);
+        encoderDrive(.6, -47, -47, 47, -47, 0);
         telemetry.addData("Move Backward 47 inches to park", "Complete");
     }
 
