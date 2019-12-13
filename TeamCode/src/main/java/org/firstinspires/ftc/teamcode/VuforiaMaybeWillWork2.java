@@ -84,7 +84,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name = "WillVuforiaWork", group = "Concept")
+@Autonomous(name = "AnishIsDeepluInLoveWithJoel!", group = "Concept")
 public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -386,6 +386,10 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
                     backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
                     String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
                     telemetry.addLine("Skystone detected");
+                    backLeft.setPower(0);
+                    backRight.setPower(0);
+                    frontLeft.setPower(0);
+                    frontRight.setPower(0);
                     telemetry.addData("strafe right 3.7 inches", "Begun");
                     telemetry.update();
                     encoderDrive(.6, -12, 12, -12, -12, 10);
@@ -402,6 +406,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
                     break;
                 }
             } else if (!targetVisible && !skystoneVisible && skystonePosition <= 3) {
+
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -425,6 +430,28 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
                     }
                 }
                 if (!targetVisible && !skystoneVisible ) {
+                    for (VuforiaTrackable trackable : allTrackables) {
+                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                        telemetry.addData("Visible Target", trackable.getName());
+                        targetVisible = true;
+
+                        if (trackable.getName().equals("Stone Target")) {
+                            telemetry.addLine("Stone Target is Life");
+                            skystoneVisible = true;
+                            telemetry.addData("skystoneVisible", skystoneVisible);
+
+                        } else {
+                            targetVisible = true;
+                        }
+                        // getUpdatedRobotLocation() will return null if no new information is available since
+                        // the last time that call was made, or if the trackable is not currently visible.
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+                        break;
+                    }
+                }
                     telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
                     frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
                     frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
