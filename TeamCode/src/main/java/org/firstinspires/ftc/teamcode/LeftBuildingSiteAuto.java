@@ -117,10 +117,10 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         encoderDrive(.6, -10,10,-10,-10,5);
         telemetry.addData("right Strafe", "Complete");
 
-        telemetry.addData("right 90 degree turn", "Begun");
+        telemetry.addData("left 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, -14,14,14,14,5);
-        telemetry.addData("right 90 degree turn", "Complete");
+        encoderDrive(.6, 28,-28,-28,-28,5);
+        telemetry.addData("left 90 degree turn", "Complete");
 
         telemetry.addData("move Forward 21 inches", "Begun");
         telemetry.update();
