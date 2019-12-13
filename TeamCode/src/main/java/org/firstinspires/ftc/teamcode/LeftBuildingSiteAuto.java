@@ -102,8 +102,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-
-
+        
 /*
         Guides for strafeing
         encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
