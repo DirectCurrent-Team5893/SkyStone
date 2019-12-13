@@ -191,7 +191,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Backward 44 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -44, -44, 44, -44, 0);
+        encoderDrive(.6, -38, -38, 38, -38, 0);
         telemetry.addData("Move Backward 44 inches to park", "Complete");
         TurnOffAllMotors();
     }
