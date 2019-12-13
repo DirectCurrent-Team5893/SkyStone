@@ -119,7 +119,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, -78,78,78,78,5);
+        encoderDrive(.6, -14,14,14,14,5);
         telemetry.addData("right 90 degree turn", "Complete");
 
         telemetry.addData("move Forward 21 inches", "Begun");
@@ -140,7 +140,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.6, -77.782179822, 26.7035375555, 28.2743338823, 10);
+        arcTurn(.6, -39, 27, 28, 10);
         telemetry.addData("Arc", "Complete");
 
         telemetry.addData("move Forward 18 inches", "Begun");
