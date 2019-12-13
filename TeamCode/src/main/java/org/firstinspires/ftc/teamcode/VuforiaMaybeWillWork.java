@@ -319,7 +319,7 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
             telemetry.addData("Initial Right Strafe", "Complete");
 
             telemetry.addData("A little shove to help", "Start");
-            encoderDrive(.6, -3.9, -3.9, 3.9, -3.9, 10);
+            encoderDrive(.6, -3.3, -3.3, 3.3, -3.3, 10);
             telemetry.addData("A little shove to help", "Completed because Sarah is always right");
             telemetry.update();
             telemetry.addLine();
@@ -350,11 +350,12 @@ telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man cr
                     }
                 }
                 if (targetVisible && skystoneVisible) {
+                    
                     String[] Positions = {"UNKNOWN POSITION","LEFT POSITION","MIDDLE POSITION","RIGHT POSITION"};
                     telemetry.addLine("Skystone detected");
                     telemetry.addData("strafe right 3.7 inches", "Begun");
                     telemetry.update();
-                    encoderDrive(.6, -8, 8, -8, -8, 10);
+                    encoderDrive(.6, -10, 10, -10, -10, 10);
                     telemetry.addData("strafe right 3.7 inches", "Complete");
                     telemetry.addData("Lower Right Block Grabber", "Begun");
                     telemetry.update();
