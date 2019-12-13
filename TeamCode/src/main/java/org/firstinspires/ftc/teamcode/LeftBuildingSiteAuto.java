@@ -180,7 +180,9 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
 
+
         Thread.sleep(1500);
+
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
