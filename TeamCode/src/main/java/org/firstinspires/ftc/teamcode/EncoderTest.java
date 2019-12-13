@@ -86,21 +86,47 @@ public class EncoderTest extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
         // Wait for the game to start (driver presses PLAY)
+
+        double frontleft=frontLeft.getCurrentPosition();
+        telemetry.addData("initial front left", frontleft);
+        double frontright=frontRight.getCurrentPosition();
+        telemetry.addData("initial front right", frontright);
+        double backleft=backLeft.getCurrentPosition();
+        telemetry.addData("initial back left", backleft);
+        double backright=backRight.getCurrentPosition();
+        telemetry.addData("initial back right", backright);
         waitForStart();
         while(opModeIsActive()){
-        frontLeft.setPower(1);
-        backLeft.setPower(1);
-        frontRight.setPower(1);
-        backRight.setPower(1);
+
+        frontLeft.setTargetPosition(2000);
+        backLeft.setTargetPosition(2000);
+        frontRight.setTargetPosition(2000);
+        backRight.setTargetPosition(2000);
         telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
         telemetry.addData("backLeft",backLeft.getCurrentPosition());
         telemetry.addData("frontRight",frontRight.getCurrentPosition());
         telemetry.addData("backright",backRight.getCurrentPosition());
 
+
         telemetry.update();
-        }
+
+
+            frontLeft.setTargetPosition(0);
+            backLeft.setTargetPosition(0);
+            frontRight.setTargetPosition(0);
+            backRight.setTargetPosition(0);
+            telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+            telemetry.addData("backLeft",backLeft.getCurrentPosition());
+            telemetry.addData("frontRight",frontRight.getCurrentPosition());
+            telemetry.addData("backright",backRight.getCurrentPosition());
+
+
+            telemetry.update();
+
+
+
+                }
 
 
         }
