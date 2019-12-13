@@ -179,10 +179,9 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         RightBaseplateShover.setPosition(1);
         telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
-
+        TurnOffAllMotors();
 
         Thread.sleep(1500);
-
 
         telemetry.addData("left 15 degree turn", "Begun");
         telemetry.update();
