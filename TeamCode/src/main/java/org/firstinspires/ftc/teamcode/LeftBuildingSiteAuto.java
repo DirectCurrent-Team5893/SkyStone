@@ -185,11 +185,6 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
-        telemetry.addData("left Strafe", "Begun");
-        telemetry.update();
-        encoderDrive(.6, -20, 20, -20, -20, 0);
-        telemetry.addData("left Strafe", "Complete");
-
         telemetry.addData("move Backward 48 inches to park", "Begun");
         telemetry.update();
         encoderDrive(.6, -48, -48, 48, -48, 0);
