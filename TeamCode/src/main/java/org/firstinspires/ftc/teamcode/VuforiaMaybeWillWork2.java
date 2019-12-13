@@ -430,10 +430,10 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
                     frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
                     backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
                     backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
-                    frontLeft.setPower(.5);
-                    frontRight.setPower(.5);
-                    backLeft.setPower(-.5);
-                    backRight.setPower(.5);
+                    frontLeft.setPower(.2);
+                    frontRight.setPower(.2);
+                    backLeft.setPower(-.2);
+                    backRight.setPower(.2);
                 }
             }
         }
