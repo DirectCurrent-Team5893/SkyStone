@@ -84,7 +84,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name = "AnishIsDeepluInLoveWithJoel!", group = "Concept")
+@Autonomous(name = "Anish Is Deeplu In Love With Joel!", group = "Concept")
 public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -312,7 +312,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
         telemetry.update();
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -27, 27, -27, -27, 60);
+        encoderDrive(.6, -24, 24, -24, -24, 60);
         telemetry.addData("Initial Right Strafe", "Complete");
 
 //            telemetry.addData("A little shove to help", "Start");
