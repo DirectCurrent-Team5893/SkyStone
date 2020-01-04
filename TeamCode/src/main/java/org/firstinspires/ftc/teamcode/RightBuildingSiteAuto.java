@@ -12,12 +12,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
 
 
-@Autonomous(name = "RightBuildingSite", group = "Linear Opmode")
+@Autonomous(name = "Red(Right)BuildingSite(Platform)", group = "Linear Opmode")
 
 public class RightBuildingSiteAuto extends LinearOpMode {
-    private CustomTenserFlow5893 vision;
-
-    private List<Recognition> objects;
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -46,8 +43,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        vision = new CustomTenserFlow5893(hardwareMap);
-        vision.init();
+
 
         //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
@@ -136,6 +132,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         RightBaseplateShover.setPosition(.2);
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
+        TurnOffAllMotors();
 
         Thread.sleep(1500);
 
@@ -185,10 +182,10 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("left 15 degree turn", "Complete");
         TurnOffAllMotors();
 
-        telemetry.addData("move Backward 44 inches to park", "Begun");
+        telemetry.addData("move Backward 34 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -38, -38, 38, -38, 0);
-        telemetry.addData("Move Backward 44 inches to park", "Complete");
+        encoderDrive(.6, -34, -34, 34, -34, 0);
+        telemetry.addData("Move Backward 34 inches to park", "Complete");
         TurnOffAllMotors();
     }
 

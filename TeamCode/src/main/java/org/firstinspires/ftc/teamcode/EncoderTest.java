@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -99,10 +100,10 @@ public class EncoderTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
 
-        frontLeft.setTargetPosition(2000);
-        backLeft.setTargetPosition(2000);
-        frontRight.setTargetPosition(2000);
-        backRight.setTargetPosition(2000);
+        frontLeft.setTargetPosition(frontLeft.getCurrentPosition()+2000);
+        backLeft.setTargetPosition(backLeft.getCurrentPosition()+2000);
+        frontRight.setTargetPosition(frontRight.getCurrentPosition()+2000);
+        backRight.setTargetPosition(backRight.getCurrentPosition()+2000);
         telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
         telemetry.addData("backLeft",backLeft.getCurrentPosition());
         telemetry.addData("frontRight",frontRight.getCurrentPosition());

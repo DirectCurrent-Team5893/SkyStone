@@ -30,11 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -87,9 +84,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name = "WillVuforiaWork", group = "Concept")
-@Disabled
-public class VuforiaMaybeWillWork extends LinearOpMode {
+@Autonomous(name = "BlueBlockSide", group = "Concept")
+public class BlueSiteAutoSarahV extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
     // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
@@ -264,7 +260,7 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
-        telemetry.addLine("Joel is the Ideal Human Being, and Anish is definitely man crushing on him. ");
+        telemetry.addLine("Robot Initialized");
         waitForStart();
 
         // Note: To use the remote camera preview:
@@ -316,7 +312,7 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
         telemetry.update();
         telemetry.addData("Initial Right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -27, 27, -27, -27, 60);
+        encoderDrive(.6, -22, 22, -22, -22, 60);
         telemetry.addData("Initial Right Strafe", "Complete");
 
 //            telemetry.addData("A little shove to help", "Start");
@@ -327,6 +323,16 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
         telemetry.addLine("Vision Starts, and Anish career ends.");
 
         int skystonePosition = 1;
+        double frontRightInitialEncoders = 0;
+        double frontLeftInitialEncoders = 0;
+        double backRightInitialEncoders = 0;
+        double backLeftInitialEncoders =0;
+
+        double frontRightFinalEncoders = 0;
+        double frontLeftFinalEncoders = 0;
+        double backRightFinalEncoders = 0;
+        double backLeftFinalEncoders = 0;
+
         while (!skystoneVisible) {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -351,106 +357,48 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
                 }
             }
             if (targetVisible && skystoneVisible) {
-                for (VuforiaTrackable trackable : allTrackables) {
-                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                        telemetry.addData("Visible Target", trackable.getName());
-                        targetVisible = true;
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
 
-                        if (trackable.getName().equals("Stone Target")) {
-                            telemetry.addLine("Stone Target is Life");
-                            skystoneVisible = true;
-                            telemetry.addData("skystoneVisible", skystoneVisible);
+//                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
+//                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
+//                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
+//                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
+                String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
+                telemetry.addLine("Skystone detected");
 
-                        } else {
-                            targetVisible = true;
-                        }
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        break;
-                    }
-                }
-                if (targetVisible && skystoneVisible) {
-                    String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
-                    telemetry.addLine("Skystone detected");
-                    telemetry.addData("strafe right 3.7 inches", "Begun");
-                    telemetry.update();
-                    encoderDrive(.6, -12, 12, -12, -12, 10);
-                    telemetry.addData("strafe right 3.7 inches", "Complete");
-                    telemetry.addData("Lower Right Block Grabber", "Begun");
-                    telemetry.update();
-                    RightBlockGrabber.setPosition(.75);
+                telemetry.addData("strafe right 3.7 inches", "Begun");
+                telemetry.update();
+                encoderDrive(.6, -14, 14, -14, -14, 10);
+                telemetry.addData("strafe right 3.7 inches", "Complete");
+                telemetry.addData("Lower Right Block Grabber", "Begun");
+                telemetry.update();
+                RightBlockGrabber.setPosition(.8);
+                sleep(1500);
+                telemetry.addData("Lower Right Block Grabber", "Complete");
+                telemetry.addData("Position is", Positions[skystonePosition]);
+                break;
+            } else if (!targetVisible && !skystoneVisible) {
 
-                    while (RightBlockGrabber.getPosition() <= .7) {
 
-                    }
-                    telemetry.addData("Lower Right Block Grabber", "Complete");
-                    telemetry.addData("Position is", Positions[skystonePosition]);
-                    break;
-                }
-            } else if (!targetVisible && !skystoneVisible && skystonePosition <= 3) {
-                for (VuforiaTrackable trackable : allTrackables) {
-                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                        telemetry.addData("Visible Target", trackable.getName());
-                        targetVisible = true;
-
-                        if (trackable.getName().equals("Stone Target")) {
-                            telemetry.addLine("Stone Target is Life");
-                            skystoneVisible = true;
-                            telemetry.addData("skystoneVisible", skystoneVisible);
-
-                        } else {
-                            targetVisible = true;
-                        }
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        break;
-                    }
-                }
-                if (!targetVisible && !skystoneVisible && skystonePosition <= 3) {
-                    telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
-                    encoderDrive(.5, 6.9, 6.9, -6.9, 6.9, 10);
-
-                    skystonePosition++;
-                }
-            } else if (!targetVisible && !skystoneVisible && skystonePosition > 3) {
-                for (VuforiaTrackable trackable : allTrackables) {
-                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                        telemetry.addData("Visible Target", trackable.getName());
-                        targetVisible = true;
-
-                        if (trackable.getName().equals("Stone Target")) {
-                            telemetry.addLine("Stone Target is Life");
-                            skystoneVisible = true;
-                            telemetry.addData("skystoneVisible", skystoneVisible);
-
-                        } else {
-                            targetVisible = true;
-                        }
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        break;
-                    }
-                }
-                if (!targetVisible && !skystoneVisible && skystonePosition > 3) {
-                    telemetry.addLine("Sarah is mean, and this code is might bean");
-                    telemetry.update();
-                    encoderDrive(.5, -16., -16, 16, -16, 10);
-                    skystonePosition = 1;
-                }
+                telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
+//                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
+//                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
+//                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
+//                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
+                frontLeft.setPower(.12);
+                frontRight.setPower(.12);
+                backLeft.setPower(-.12);
+                backRight.setPower(.12);
             }
         }
+
+        double frontRightInchesMoved = (frontRightFinalEncoders - frontRightInitialEncoders) / COUNTS_PER_INCH;
+        double backRightInchesMoved = (backRightFinalEncoders - backRightInitialEncoders) / COUNTS_PER_INCH;
+        double frontLeftInchesMoved = (frontLeftFinalEncoders - frontLeftInitialEncoders) / COUNTS_PER_INCH;
+        double backLeftInchesMoved = (backLeftFinalEncoders - backLeftInitialEncoders) / COUNTS_PER_INCH;
 
 //        telemetry.addData("move backward 16.5 inches", "Begun");
 //        telemetry.update();
@@ -460,13 +408,14 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
 
         telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 12, -12, 12, 12, 10);
+        encoderDrive(.6, 14, -14, 14, 14, 10);
         telemetry.addData("Strafe Left 4 inches", "Complete");
 
         telemetry.addData("move Forward 60 inches to the foundation", "Begun");
         telemetry.update();
-        encoderDrive(.6, -58 + 8 * Math.abs(skystonePosition - 3), -58 + Math.abs(skystonePosition - 3), 58 - Math.abs(skystonePosition - 3), -58 + Math.abs(skystonePosition - 3), 10);
+        encoderDrive(1, -58, -58, 58, -58, 10);
         telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
+
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
         telemetry.update();
@@ -475,28 +424,40 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
 
         telemetry.addData("move backward 72 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 72 - 8 * Math.abs(skystonePosition - 3), 72 - 8 * Math.abs(skystonePosition - 3), -72 + 8 * Math.abs(skystonePosition - 3), 72 - 8 * Math.abs(skystonePosition - 3), 10);
+        encoderDrive(1, 82, 82, -82, 82, 10);
         telemetry.addData("Move backward 72 inches", "Complete");
-
-        telemetry.addData("strafe right 4.7 inches", "Begun");
-        telemetry.update();
-        encoderDrive(.6, -12, 12, -12, -12, 10);
-        telemetry.addData("strafe right 3.7 inches", "Complete");
-
-        telemetry.addData("Lower Right Block Grabber", "Begun");
-        telemetry.update();
-        RightBlockGrabber.setPosition(.8);
-        while (!(RightBlockGrabber.getPosition() == .8))
-            telemetry.addData("Lower Right Block Grabber", "Complete");
 
         telemetry.addData("Strafe Left 4 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 12, -12, 12, 12, 12);
+        encoderDrive(.6, 4.5, -4.5, 4.5, 4.5, 12);
         telemetry.addData("Strafe Left 3 inches", "Complete");
+
+
+
+
+                    String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
+                    telemetry.addLine("Skystone detected");
+                    encoderDrive(.5, -1.5, -1.5, 1.5, -1.5, 10);
+                    telemetry.addData("strafe right 3.7 inches", "Begun");
+                    telemetry.update();
+                    encoderDrive(.6, -14, 14, -14, -14, 10);
+                    telemetry.addData("strafe right 3.7 inches", "Complete");
+                    telemetry.addData("Lower Right Block Grabber", "Begun");
+                    telemetry.update();
+                    RightBlockGrabber.setPosition(.8);
+                    sleep(1500);
+                    telemetry.addData("Lower Right Block Grabber", "Complete");
+                    telemetry.addData("Position is", Positions[skystonePosition]);
+
+
+        telemetry.addData("Strafe Left 4 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 16, -16, 16, 16, 10);
+        telemetry.addData("Strafe Left 4 inches", "Complete");
 
         telemetry.addData("move Forward 68 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -72 - 8 * Math.abs(skystonePosition - 1), -72 - 8 * Math.abs(skystonePosition - 1), 72 - 8 * Math.abs(skystonePosition - 1), -72 - 8 * Math.abs(skystonePosition - 1), 10);
+        encoderDrive(1, -80, -80, 80, -80, 10);
         telemetry.addData("Move Forward 68 inches", "Complete");
 
         telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -507,7 +468,7 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
 
         telemetry.addData("move backward 10 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 10 + 8 * Math.abs(skystonePosition), 10 + 8 * Math.abs(skystonePosition), -10 - 8 * Math.abs(skystonePosition), 10 + 8 * Math.abs(skystonePosition), 10);
+        encoderDrive(1, 16, 16, -16, 16, 10);
         telemetry.addData("Move backward 10 inches", "Complete");
         telemetry.update();
 
@@ -543,6 +504,7 @@ public class VuforiaMaybeWillWork extends LinearOpMode {
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
             // reset the timeout time and start motion.
             runtime.reset();

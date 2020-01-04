@@ -9,11 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-
-
-
-
-@TeleOp(name="MainTeleOp", group="Linear Opmode")
+@TeleOp(name = "MainTeleOp", group = "Linear Opmode")
 
 public class Mechanum extends LinearOpMode {
 
@@ -36,24 +32,23 @@ public class Mechanum extends LinearOpMode {
     Servo ShoveBlock;
 
 
-
     @Override
     public void runOpMode() {
 
 //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
-        rightIntake = hardwareMap.get(DcMotor.class,"right intake");
-        backLeft = hardwareMap.get(DcMotor.class,"back left wheel") ;
-        backRight = hardwareMap.get(DcMotor.class,"back right wheel");
-        frontRight = hardwareMap.get(DcMotor.class,"Front Right wheel");
-        frontLeft = hardwareMap.get(DcMotor.class,"Front Left wheel");
-        HorizontalLift = hardwareMap.get(DcMotor.class,"HL");
+        rightIntake = hardwareMap.get(DcMotor.class, "right intake");
+        backLeft = hardwareMap.get(DcMotor.class, "back left wheel");
+        backRight = hardwareMap.get(DcMotor.class, "back right wheel");
+        frontRight = hardwareMap.get(DcMotor.class, "Front Right wheel");
+        frontLeft = hardwareMap.get(DcMotor.class, "Front Left wheel");
+        HorizontalLift = hardwareMap.get(DcMotor.class, "HL");
         OuttakeLift = hardwareMap.get(DcMotor.class, "OL");
         Grabber = hardwareMap.get(Servo.class, "Grabber");
-        LeftBlockGrabber = hardwareMap.get(Servo.class,"LBG");
+        LeftBlockGrabber = hardwareMap.get(Servo.class, "LBG");
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
-        LeftBaseplateShover = hardwareMap.get(Servo.class,"LBS");
-        RightBaseplateShover = hardwareMap.get(Servo.class,"RBS");
+        LeftBaseplateShover = hardwareMap.get(Servo.class, "LBS");
+        RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
         ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
         backLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -64,40 +59,49 @@ public class Mechanum extends LinearOpMode {
         int STOP = 0;
         int FORWARD = 1;
         int BACKWARD = -1;
-        int grabberChanger =1;
-        int baseplateChanger =1;
-        int rightBlockMover =1;
-        int leftBlockMover =1;
+        int grabberChanger = 1;
+        int baseplateChanger = 1;
+        int rightBlockMover = 1;
+        int leftBlockMover = 1;
 
         boolean gamepad2bHeld = false;
         boolean gamepad1aHeld = false;
         boolean gamepad1xHeld = false;
         boolean gamepad1bHeld = false;
+        boolean gamepad1dpadDownHeld = false;
         int ranMethod = 0;
 
+        double IntakePower = 1;
         waitForStart();
 
         while (opModeIsActive()) {
 
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            if (gamepad1.right_bumper)
-            {
-                leftIntake.setPower(FORWARD);
-                rightIntake.setPower(BACKWARD);
-            }
-            else if (gamepad1.left_bumper)
-            {
-                leftIntake.setPower(BACKWARD);
-                rightIntake.setPower(FORWARD);
-            }
-            else
-            {
+            if (gamepad1.right_bumper) {
+                leftIntake.setPower(IntakePower);
+                rightIntake.setPower(-IntakePower);
+            } else if (gamepad1.left_bumper) {
+                leftIntake.setPower(-.5);
+                rightIntake.setPower(.5);
+            } else {
                 leftIntake.setPower(STOP);
                 rightIntake.setPower(STOP);
             }
+            if (gamepad1.dpad_down && !gamepad1dpadDownHeld) {
+                gamepad1dpadDownHeld = true;
+                if (IntakePower == 1) {
+                    IntakePower = .3;
+                } else {
+                    IntakePower = 1;
+                }
+            }
+            if (!gamepad1.dpad_down) {
+                gamepad1dpadDownHeld = false;
+            }
 
 
-            GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.DOWN_POSITION,GrabberPositions.UP_POSITION};
+
+            GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.DOWN_POSITION, GrabberPositions.UP_POSITION};
             telemetry.addData("gamepad2.b is", gamepad2.b);
             telemetry.addData("gamepad2b held is", gamepad2bHeld);
             telemetry.addData("grabber changer is", grabberChanger);
@@ -108,66 +112,60 @@ public class Mechanum extends LinearOpMode {
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
 
 
-             if(gamepad2.b && gamepad2bHeld == false)
-             {
-                 ranMethod ++;
+            if (gamepad2.b && gamepad2bHeld == false) {
+                ranMethod++;
                 gamepad2bHeld = true;
                 telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
                 SetPosition(GRABBERPOSITIONS[grabberChanger]);
-                grabberChanger ++;
-                grabberChanger=grabberChanger % 2;
-             }
-            if (!gamepad2.b){
+                grabberChanger++;
+                grabberChanger = grabberChanger % 2;
+            }
+            if (!gamepad2.b) {
                 gamepad2bHeld = false;
             }
-            BaseplateMoverPositions[] BASEPLATEMOVERPOSITIONS = {BaseplateMoverPositions.DOWN_POSITION,BaseplateMoverPositions.UP_POSITION};
+            BaseplateMoverPositions[] BASEPLATEMOVERPOSITIONS = {BaseplateMoverPositions.DOWN_POSITION, BaseplateMoverPositions.UP_POSITION};
 
-            if(gamepad1.a && gamepad1aHeld == false)
-            {
-                ranMethod ++;
+            if (gamepad1.a && gamepad1aHeld == false) {
+                ranMethod++;
                 gamepad1aHeld = true;
                 telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
                 SetBaseplateMoverPosition(BASEPLATEMOVERPOSITIONS[baseplateChanger]);
-                baseplateChanger ++;
-                baseplateChanger=baseplateChanger % 2;
+                baseplateChanger++;
+                baseplateChanger = baseplateChanger % 2;
             }
-            if (!gamepad1.a){
+            if (!gamepad1.a) {
                 gamepad1aHeld = false;
             }
 
 
+            leftBlockMoverPositions[] LEFTBLOCKMOVERPOSITIONS = {leftBlockMoverPositions.DOWN_POSITION, leftBlockMoverPositions.UP_POSITION};
 
-
-            leftBlockMoverPositions[] LEFTBLOCKMOVERPOSITIONS = {leftBlockMoverPositions.DOWN_POSITION,leftBlockMoverPositions.UP_POSITION};
-
-            if(gamepad1.x && gamepad1xHeld == false)
-            {
-                ranMethod ++;
+            if (gamepad1.x && gamepad1xHeld == false) {
+                ranMethod++;
                 gamepad1xHeld = true;
                 telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
                 SetLeftBlockMoverPosition(LEFTBLOCKMOVERPOSITIONS[leftBlockMover]);
-                leftBlockMover ++;
-                leftBlockMover=leftBlockMover % 2;
+                leftBlockMover++;
+                leftBlockMover = leftBlockMover % 2;
             }
-            if (!gamepad1.x){
+            if (!gamepad1.x) {
                 gamepad1xHeld = false;
             }
 
 
-            rightBlockMoverPositions [] RIGHTBLOCKMOVERPOSITIONS ={rightBlockMoverPositions.UP_POSITION,rightBlockMoverPositions.DOWN_POSITION};
-            if(gamepad1.b && gamepad1bHeld == false)
-            {
+            rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
+            if (gamepad1.b && gamepad1bHeld == false) {
 
                 gamepad1bHeld = true;
 
                 SetRightBlockMoverPosition(RIGHTBLOCKMOVERPOSITIONS[rightBlockMover]);
-                rightBlockMover ++;
-                rightBlockMover=rightBlockMover % 2;
+                rightBlockMover++;
+                rightBlockMover = rightBlockMover % 2;
             }
-            if (!gamepad1.b){
+            if (!gamepad1.b) {
                 gamepad1bHeld = false;
             }
 
@@ -183,8 +181,8 @@ public class Mechanum extends LinearOpMode {
 //             {
 //                 HorizontalLift.setPower(STOP);
 //             }
-             HorizontalLift.setPower(gamepad2.left_stick_y);
-             OuttakeLift.setPower(gamepad2.right_stick_y);
+            HorizontalLift.setPower(gamepad2.left_stick_y);
+            OuttakeLift.setPower(gamepad2.right_stick_y);
 //             if(gamepad2.left_stick_y>
 //            if(gamepad2.right_bumper)
 //            {
@@ -198,36 +196,34 @@ public class Mechanum extends LinearOpMode {
 //            {
 //                OuttakeLift.setPower(STOP);
 //            }
-                 telemetry.update();
+            telemetry.update();
         }
     }
 
-    public enum GrabberPositions{
-        UP_POSITION , DOWN_POSITION
+    public enum GrabberPositions {
+        UP_POSITION, DOWN_POSITION
     }
-    public void SetPosition(final GrabberPositions POSITION  )
-    {
+
+    public void SetPosition(final GrabberPositions POSITION) {
         double targetPosition;
-        switch(POSITION)
-        {
+        switch (POSITION) {
             case UP_POSITION:
                 Grabber.setPosition(.9);
-                targetPosition=.9;
+                targetPosition = .9;
                 break;
             case DOWN_POSITION:
                 Grabber.setPosition(.5);
-                targetPosition=.5;
+                targetPosition = .5;
                 break;
         }
     }
 
-    public enum BaseplateMoverPositions{
-        UP_POSITION , DOWN_POSITION
+    public enum BaseplateMoverPositions {
+        UP_POSITION, DOWN_POSITION
     }
-    public void SetBaseplateMoverPosition(final BaseplateMoverPositions POSITION  )
-    {
-          switch(POSITION)
-        {
+
+    public void SetBaseplateMoverPosition(final BaseplateMoverPositions POSITION) {
+        switch (POSITION) {
             case UP_POSITION:
                 RightBaseplateShover.setPosition(1);
                 LeftBaseplateShover.setPosition(0);
@@ -239,13 +235,13 @@ public class Mechanum extends LinearOpMode {
                 break;
         }
     }
-    public enum rightBlockMoverPositions{
-        UP_POSITION , DOWN_POSITION
+
+    public enum rightBlockMoverPositions {
+        UP_POSITION, DOWN_POSITION
     }
-    public void SetRightBlockMoverPosition(final rightBlockMoverPositions POSITION  )
-    {
-        switch(POSITION)
-        {
+
+    public void SetRightBlockMoverPosition(final rightBlockMoverPositions POSITION) {
+        switch (POSITION) {
             case UP_POSITION:
                 RightBlockGrabber.setPosition(.7);
 
@@ -255,13 +251,13 @@ public class Mechanum extends LinearOpMode {
                 break;
         }
     }
-    public enum leftBlockMoverPositions{
-        UP_POSITION , DOWN_POSITION
+
+    public enum leftBlockMoverPositions {
+        UP_POSITION, DOWN_POSITION
     }
-    public void SetLeftBlockMoverPosition(final leftBlockMoverPositions POSITION  )
-    {
-        switch(POSITION)
-        {
+
+    public void SetLeftBlockMoverPosition(final leftBlockMoverPositions POSITION) {
+        switch (POSITION) {
             case UP_POSITION:
 
                 LeftBlockGrabber.setPosition(.7);
@@ -292,35 +288,31 @@ public class Mechanum extends LinearOpMode {
         //scale all the powers so that the motor isn't set to a value above one
         if (isItTooBig) {
             double greatest = 0;
-            for(double power : powers){
+            for (double power : powers) {
 
-                if(Math.abs(power)>greatest){
-                    greatest=Math.abs(power);
+                if (Math.abs(power) > greatest) {
+                    greatest = Math.abs(power);
                 }
 
             }
-            leftBackPower =leftBackPower/greatest;
-            leftFrontPower =leftFrontPower/greatest;
-            rightBackPower =rightBackPower/greatest;
-            rightFrontPower =rightFrontPower/greatest;
+            leftBackPower = leftBackPower / greatest;
+            leftFrontPower = leftFrontPower / greatest;
+            rightBackPower = rightBackPower / greatest;
+            rightFrontPower = rightFrontPower / greatest;
         }
         boolean stop = true;
-        for (double power : powers)
-        {
+        for (double power : powers) {
 
-            if(Math.abs(power)>.1)
-            {
+            if (Math.abs(power) > .1) {
                 stop = false;
             }
         }
-        if (stop)
-        {
+        if (stop) {
             frontRight.setPower(0);
             backRight.setPower(0);
             backLeft.setPower(0);
             frontLeft.setPower(0);
-        }
-        else {
+        } else {
             frontRight.setPower(rightFrontPower);
             backRight.setPower(rightBackPower);
             backLeft.setPower(leftBackPower);
@@ -335,9 +327,10 @@ public class Mechanum extends LinearOpMode {
         telemetry.addData("Back left power ", leftBackPower);
         //telemetry.update();
     }
+
     private double checkValue(double hardInput) {
-        hardInput = Range.clip(hardInput, -1,1);
-        hardInput = Math.pow(hardInput,3);
+        hardInput = Range.clip(hardInput, -1, 1);
+        hardInput = Math.pow(hardInput, 3);
         return hardInput;
     }
 }

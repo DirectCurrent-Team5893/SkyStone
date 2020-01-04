@@ -16,12 +16,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name = "LeftBuildingSite", group = "Linear Opmode")
+@Autonomous(name = "Blue(Left)BuildingSite(Platform)", group = "Linear Opmode")
 
 public class LeftBuildingSiteAuto extends LinearOpMode {
-    private CustomTenserFlow5893 vision;
-
-    private List<Recognition> objects;
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -50,8 +47,6 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        vision = new CustomTenserFlow5893(hardwareMap);
-        vision.init();
 
         //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
@@ -187,6 +182,12 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.update();
         encoderDrive(.6, -6, 6, 6, 6, 0);
         telemetry.addData("left 15 degree turn", "Complete");
+        TurnOffAllMotors();
+
+        telemetry.addData("move Forward 5 inches", "Begun");
+        telemetry.update();
+        encoderDrive(.6, 5, 5, -5, 5, 0);
+        telemetry.addData("Move Forward 5 inches", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("move Backward 44 inches to park", "Begun");
