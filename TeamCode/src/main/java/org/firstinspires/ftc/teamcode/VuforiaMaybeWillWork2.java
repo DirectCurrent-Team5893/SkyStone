@@ -407,7 +407,7 @@ public class VuforiaMaybeWillWork2 extends LinearOpMode {
 
                 telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
 //                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
-//                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
+//                frontRightFinalE`ncoders = Math.abs(frontRight.getCurrentPosition());
 //                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
 //                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
                 frontLeft.setPower(.1);

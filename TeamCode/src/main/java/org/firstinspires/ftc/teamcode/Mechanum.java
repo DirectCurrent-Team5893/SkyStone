@@ -111,7 +111,6 @@ public class Mechanum extends LinearOpMode {
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
 
-
             if (gamepad2.b && gamepad2bHeld == false) {
                 ranMethod++;
                 gamepad2bHeld = true;
@@ -183,6 +182,8 @@ public class Mechanum extends LinearOpMode {
 //             }
             HorizontalLift.setPower(gamepad2.left_stick_y);
             OuttakeLift.setPower(gamepad2.right_stick_y);
+            telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
+            telemetry.update();
 //             if(gamepad2.left_stick_y>
 //            if(gamepad2.right_bumper)
 //            {
@@ -333,5 +334,44 @@ public class Mechanum extends LinearOpMode {
         hardInput = Math.pow(hardInput, 3);
         return hardInput;
     }
+    public void VerticalLiftPostions(double speed, int VerticalLiftPostions,double Timeout) {
+        int newTargetVerticalLiftPositions;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()+(VerticalLiftPostions));
+
+            frontLeft.setTargetPosition(newTargetVerticalLiftPositions);
+            // Turn On RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // reset the timeout time and start motion.
+            runtime.reset();
+            frontLeft.setPower(Math.abs(speed));
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < Timeout) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newTargetVerticalLiftPositions);
+                telemetry.addData("Path2", "Running at %7d :%7d",
+
+                        frontLeft.getCurrentPosition());
+                telemetry.update();
+
+            }
+
+            frontLeft.setPower(0);
+
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
 }
 
