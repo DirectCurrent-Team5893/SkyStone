@@ -55,6 +55,7 @@ public class Mechanum extends LinearOpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         int STOP = 0;
         int FORWARD = 1;
@@ -69,6 +70,8 @@ public class Mechanum extends LinearOpMode {
         boolean gamepad1xHeld = false;
         boolean gamepad1bHeld = false;
         boolean gamepad1dpadDownHeld = false;
+        boolean gamepad2dpadUpHeld = false;
+        boolean gamepad2dpadDownHeld = false;
         int ranMethod = 0;
 
         double IntakePower = 1;
@@ -154,6 +157,27 @@ public class Mechanum extends LinearOpMode {
                 gamepad1xHeld = false;
             }
 
+            if (gamepad2.dpad_up && gamepad2dpadUpHeld == false) {
+                ranMethod++;
+                gamepad2dpadUpHeld = true;
+                if(OuttakeLift.getCurrentPosition()<=50)
+                {
+                    VerticalLiftPostions(.6,1,0);
+                }
+                VerticalLiftPostions(.6,2,0);
+            }
+            if (!gamepad2.dpad_down) {
+                gamepad2dpadDownHeld = false;
+            }
+            if (gamepad2.dpad_down && gamepad2dpadDownHeld == false) {
+                ranMethod++;
+                gamepad2dpadDownHeld = true;
+                OuttakeLift.setTargetPosition(0);
+                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            if (!gamepad2.dpad_down) {
+                gamepad2dpadDownHeld = false;
+            }
 
             rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
             if (gamepad1.b && gamepad1bHeld == false) {
@@ -181,7 +205,7 @@ public class Mechanum extends LinearOpMode {
 //                 HorizontalLift.setPower(STOP);
 //             }
             HorizontalLift.setPower(gamepad2.left_stick_y);
-            OuttakeLift.setPower(gamepad2.right_stick_y);
+            //OuttakeLift.setPower(gamepad2.right_stick_y);
             telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
             telemetry.update();
 //             if(gamepad2.left_stick_y>
@@ -341,14 +365,14 @@ public class Mechanum extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()+(VerticalLiftPostions));
+            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()+(-457*(VerticalLiftPostions-1)));
 
-            frontLeft.setTargetPosition(newTargetVerticalLiftPositions);
+            OuttakeLift.setTargetPosition(newTargetVerticalLiftPositions);
             // Turn On RUN_TO_POSITION
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // reset the timeout time and start motion.
             runtime.reset();
-            frontLeft.setPower(Math.abs(speed));
+            OuttakeLift.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -362,14 +386,17 @@ public class Mechanum extends LinearOpMode {
                 telemetry.addData("Path1", "Running to %7d :%7d", newTargetVerticalLiftPositions);
                 telemetry.addData("Path2", "Running at %7d :%7d",
 
-                        frontLeft.getCurrentPosition());
+                        OuttakeLift.getCurrentPosition());
                 telemetry.update();
 
             }
 
-            frontLeft.setPower(0);
-
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            OuttakeLift.setPower(0);
+            if(VerticalLiftPostions ==1)
+            {
+                OuttakeLift.setTargetPosition(OuttakeLift.getCurrentPosition()-477);
+            }
+           OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
