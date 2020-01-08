@@ -114,6 +114,7 @@ public class Mechanum extends LinearOpMode {
             telemetry.addData("changing position LeftBlockMover is ", leftBlockMover);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
+            telemetry.addData("Manual Mode",manualMode);
 
             if (gamepad2.b && gamepad2bHeld == false) {
                 ranMethod++;
@@ -165,7 +166,7 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.x) {
                 gamepad1xHeld = false;
             }
-            if(){
+            if(!manualMode){
             if (gamepad2.dpad_up && !gamepad2dpadUpHeld) {
                 ranMethod++;
                 gamepad2dpadUpHeld = true;
@@ -233,7 +234,7 @@ public class Mechanum extends LinearOpMode {
 //                 HorizontalLift.setPower(STOP);
 //             }
             HorizontalLift.setPower(gamepad2.left_stick_y);
-            if(!gamepad2.dpad_down || !gamepad2.dpad_up||!OuttakeLift.isBusy()) {
+            if(manualMode) {
                 OuttakeLift.setPower(gamepad2.right_stick_y);
             }
             telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
@@ -380,6 +381,7 @@ public class Mechanum extends LinearOpMode {
         telemetry.addData("Front left power ", leftFrontPower);
         telemetry.addData("Back right power ", rightBackPower);
         telemetry.addData("Back left power ", leftBackPower);
+
         //telemetry.update();
     }
 
