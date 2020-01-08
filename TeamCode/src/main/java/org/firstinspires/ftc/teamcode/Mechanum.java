@@ -74,6 +74,7 @@ public class Mechanum extends LinearOpMode {
         boolean gamepad2dpadDownHeld = false;
         boolean manualMode = false;
         boolean gamepad2rightStickButtonHeld = false;
+        boolean gamepad2rightStickYHeld = false;
         int ranMethod = 0;
         int ranMethodV2 = 0;
 
@@ -174,7 +175,7 @@ public class Mechanum extends LinearOpMode {
                 ranMethodV2++;
                 ranMethod++;
                 gamepad2dpadUpHeld = true;
-                if (OuttakeLift.getCurrentPosition() <= -50) {
+                if (OuttakeLift.getCurrentPosition() >= -50) {
                     ranMethodV2++;
                     OuttakeLift.setTargetPosition(-477);
                     OuttakeLift.setPower(.6);
@@ -190,7 +191,7 @@ public class Mechanum extends LinearOpMode {
 
                     OuttakeLift.setPower(0);
                 } else {
-                    VerticalLiftPostions(.6, 0);
+                    VerticalLiftPostions(.6, 10);
                 }
             }
             if (!gamepad2.dpad_up) {
@@ -210,7 +211,9 @@ public class Mechanum extends LinearOpMode {
                     telemetry.update();
 
                 }
+                OuttakeLift.setPower(0);
                 OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
             if (!gamepad2.dpad_down) {
                 gamepad2dpadDownHeld = false;
@@ -228,25 +231,20 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.b) {
                 gamepad1bHeld = false;
             }
-
-//             if(gamepad2.left_bumper)
-//             {
-//                 HorizontalLift.setPower(.9);
-//             }
-//             else if(gamepad2.left_trigger> .1)
-//             {
-//                 HorizontalLift.setPower(-gamepad2.left_trigger);
-//             }
-//             else if(!gamepad2.left_bumper && gamepad2.left_trigger<.1)
-//             {
-//                 HorizontalLift.setPower(STOP);
-//             }
             HorizontalLift.setPower(gamepad2.left_stick_y);
             if(manualMode) {
-                OuttakeLift.setPower(gamepad2.right_stick_y);
+
+                    OuttakeLift.setPower(gamepad2.right_stick_y);
+
+                }
+            if(gamepad2.left_stick_button)
+            {
+                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
+
             telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
             telemetry.update();
+
 //             if(gamepad2.left_stick_y>
 //            if(gamepad2.right_bumper)
 //            {
