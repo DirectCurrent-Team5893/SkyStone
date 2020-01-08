@@ -143,7 +143,7 @@ public class Mechanum extends LinearOpMode {
             }
             if(gamepad2.right_stick_button && !gamepad2rightStickButtonHeld)
             {
-                gamepad2rightStickButtonHeld = true
+                gamepad2rightStickButtonHeld = true;
                 manualMode=!manualMode;
             }
             if(!gamepad2.right_stick_button)
