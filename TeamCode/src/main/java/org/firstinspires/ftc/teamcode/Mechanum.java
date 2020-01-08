@@ -75,6 +75,7 @@ public class Mechanum extends LinearOpMode {
         boolean manualMode = false;
         boolean gamepad2rightStickButtonHeld = false;
         int ranMethod = 0;
+        int ranMethodV2 = 0;
 
         double IntakePower = 1;
         waitForStart();
@@ -110,6 +111,7 @@ public class Mechanum extends LinearOpMode {
             telemetry.addData("gamepad2b held is", gamepad2bHeld);
             telemetry.addData("grabber changer is", grabberChanger);
             telemetry.addData("Ran method is", ranMethod);
+            telemetry.addData("Ran MethodV2 is ", ranMethodV2);
             telemetry.addData("changing position RightBlockMover is ", rightBlockMover);
             telemetry.addData("changing position LeftBlockMover is ", leftBlockMover);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
@@ -167,12 +169,16 @@ public class Mechanum extends LinearOpMode {
                 gamepad1xHeld = false;
             }
             if(!manualMode){
-            if (gamepad2.dpad_up && !gamepad2dpadUpHeld) {
+
+                if (gamepad2.dpad_up && !gamepad2dpadUpHeld) {
+                ranMethodV2++;
                 ranMethod++;
                 gamepad2dpadUpHeld = true;
-                if (OuttakeLift.getCurrentPosition() <= 50) {
-
-                    OuttakeLift.setTargetPosition(477);
+                if (OuttakeLift.getCurrentPosition() <= -50) {
+                    ranMethodV2++;
+                    OuttakeLift.setTargetPosition(-477);
+                    OuttakeLift.setPower(.6);
+                    OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     while (opModeIsActive() &&
                             (OuttakeLift.isBusy())) {
                         // Display it for the driver.
@@ -184,16 +190,18 @@ public class Mechanum extends LinearOpMode {
 
                     OuttakeLift.setPower(0);
                 } else {
-                    VerticalLiftPostions(.6, 1, 0);
+                    VerticalLiftPostions(.6, 0);
                 }
             }
-            if (!gamepad2.dpad_down) {
-                gamepad2dpadDownHeld = false;
+            if (!gamepad2.dpad_up) {
+                gamepad2dpadUpHeld = false;
             }
             if (gamepad2.dpad_down && !gamepad2dpadDownHeld) {
                 ranMethod++;
                 gamepad2dpadDownHeld = true;
                 OuttakeLift.setTargetPosition(0);
+                OuttakeLift.setPower(.6);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while (opModeIsActive() &&
                         (OuttakeLift.isBusy())) {
                     // Display it for the driver.
@@ -390,14 +398,14 @@ public class Mechanum extends LinearOpMode {
         hardInput = Math.pow(hardInput, 3);
         return hardInput;
     }
-    public void VerticalLiftPostions(double speed, int VerticalLiftPostions,double Timeout) {
+    public void VerticalLiftPostions(double speed,double Timeout) {
         int newTargetVerticalLiftPositions;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()+(457*(VerticalLiftPostions)));
+            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()-(457));
 
             OuttakeLift.setTargetPosition(newTargetVerticalLiftPositions);
             // Turn On RUN_TO_POSITION
@@ -424,10 +432,6 @@ public class Mechanum extends LinearOpMode {
             }
 
             OuttakeLift.setPower(0);
-            if(VerticalLiftPostions ==1)
-            {
-                OuttakeLift.setTargetPosition(OuttakeLift.getCurrentPosition()-477);
-            }
            OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
