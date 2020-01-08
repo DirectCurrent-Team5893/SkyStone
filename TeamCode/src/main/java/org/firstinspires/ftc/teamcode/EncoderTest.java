@@ -71,61 +71,66 @@ public class EncoderTest extends LinearOpMode {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        HorizontalLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
 
-        double frontleft=frontLeft.getCurrentPosition();
-        telemetry.addData("initial front left", frontleft);
-        double frontright=frontRight.getCurrentPosition();
-        telemetry.addData("initial front right", frontright);
-        double backleft=backLeft.getCurrentPosition();
-        telemetry.addData("initial back left", backleft);
-        double backright=backRight.getCurrentPosition();
-        telemetry.addData("initial back right", backright);
+//        double frontleft=frontLeft.getCurrentPosition();
+//        telemetry.addData("initial front left", frontleft);
+//        double frontright=frontRight.getCurrentPosition();
+//        telemetry.addData("initial front right", frontright);
+//        double backleft=backLeft.getCurrentPosition();
+//        telemetry.addData("initial back left", backleft);
+//        double backright=backRight.getCurrentPosition();
+//        telemetry.addData("initial back right", backright);
+        double horizantalLift=HorizontalLift.getCurrentPosition();
+        telemetry.addData("initial horizantal Lift", horizantalLift);
         waitForStart();
         while(opModeIsActive()){
 
-        frontLeft.setTargetPosition(frontLeft.getCurrentPosition()+2000);
-        backLeft.setTargetPosition(backLeft.getCurrentPosition()+2000);
-        frontRight.setTargetPosition(frontRight.getCurrentPosition()+2000);
-        backRight.setTargetPosition(backRight.getCurrentPosition()+2000);
-        telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
-        telemetry.addData("backLeft",backLeft.getCurrentPosition());
-        telemetry.addData("frontRight",frontRight.getCurrentPosition());
-        telemetry.addData("backright",backRight.getCurrentPosition());
-
+//        frontLeft.setTargetPosition(frontLeft.getCurrentPosition()+2000);
+//        backLeft.setTargetPosition(backLeft.getCurrentPosition()+2000);
+//        frontRight.setTargetPosition(frontRight.getCurrentPosition()+2000);
+//        backRight.setTargetPosition(backRight.getCurrentPosition()+2000);
+        HorizontalLift.setTargetPosition(HorizontalLift.getCurrentPosition()+100);
+//        telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+//        telemetry.addData("backLeft",backLeft.getCurrentPosition());
+//        telemetry.addData("frontRight",frontRight.getCurrentPosition());
+//        telemetry.addData("backright",backRight.getCurrentPosition());
+        telemetry.addData("horizantalLift",HorizontalLift.getCurrentPosition());
 
         telemetry.update();
 
 
-            frontLeft.setTargetPosition(0);
-            backLeft.setTargetPosition(0);
-            frontRight.setTargetPosition(0);
-            backRight.setTargetPosition(0);
-            telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
-            telemetry.addData("backLeft",backLeft.getCurrentPosition());
-            telemetry.addData("frontRight",frontRight.getCurrentPosition());
-            telemetry.addData("backright",backRight.getCurrentPosition());
-
+//            frontLeft.setTargetPosition(0);
+//            backLeft.setTargetPosition(0);
+//            frontRight.setTargetPosition(0);
+//            backRight.setTargetPosition(0);
+            HorizontalLift.setTargetPosition (0);
+//            telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+//            telemetry.addData("backLeft",backLeft.getCurrentPosition());
+//            telemetry.addData("frontRight",frontRight.getCurrentPosition());
+//            telemetry.addData("backright",backRight.getCurrentPosition());
+            telemetry.addData("horizantalLift",HorizontalLift.getCurrentPosition());
 
             telemetry.update();
-
-
 
                 }
 
