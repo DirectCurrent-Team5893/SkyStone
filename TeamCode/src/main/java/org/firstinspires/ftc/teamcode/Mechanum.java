@@ -78,7 +78,7 @@ public class Mechanum extends LinearOpMode {
         int ranMethod = 0;
         int ranMethodV2 = 0;
 
-        double IntakePower = 1;
+        double IntakePower = .5;
         waitForStart();
 
         while (opModeIsActive()) {
@@ -88,8 +88,8 @@ public class Mechanum extends LinearOpMode {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);
             } else if (gamepad1.left_bumper) {
-                leftIntake.setPower(-.5);
-                rightIntake.setPower(.5);
+                leftIntake.setPower(-.3);
+                rightIntake.setPower(.3);
             } else {
                 leftIntake.setPower(STOP);
                 rightIntake.setPower(STOP);
