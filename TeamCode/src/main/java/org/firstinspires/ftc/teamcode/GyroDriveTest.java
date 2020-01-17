@@ -179,14 +179,10 @@ public class GyroDriveTest extends LinearOpMode {
 
         gyro.resetZAxisIntegrator();
         waitForStart();
-        gyroDrive(DRIVE_SPEED, -36.0, -36,-36,-36,0,100);// Drive FWD 12 inches at 45 degrees
+        gyroDrive(DRIVE_SPEED, 36.0, 36,36,36,0,100);// Drive FWD 12 inches at 45 degrees
         gyroTurn(TURN_SPEED,180.0);
         sleep(1000);
-        gyroDrive(DRIVE_SPEED, -18.0, -18,-18,-18,0,100);
-        gyroTurn(TURN_SPEED,180.0);
-        sleep(1000);
-        gyroDrive(DRIVE_SPEED,15,15,15,15,0,100);
-        sleep(1000);
+
         //gyroDrive(DRIVE_SPEED,-15.0,-15.0,-15.0,-15.0,45,100);
 
 
@@ -277,7 +273,8 @@ public class GyroDriveTest extends LinearOpMode {
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())
+            ) {
 
 
                 // adjust relative speed based on heading error.

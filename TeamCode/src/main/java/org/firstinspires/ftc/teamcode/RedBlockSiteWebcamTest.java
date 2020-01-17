@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,6 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -87,7 +89,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="RedBlockSideWebcam", group ="Concept")
+@Autonomous(name="RedBlockSideWebcamTest", group ="Concept")
 public class RedBlockSiteWebcamTest extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
@@ -137,7 +139,6 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     WebcamName webcamName = null;
-
     private boolean targetVisible = false;
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
@@ -176,8 +177,12 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
 
-    ElapsedTime timer = new ElapsedTime();
+
+
     @Override public void runOpMode() {
+    ElapsedTime timer = new ElapsedTime();
+    telemetry.addLine("Timer is made");
+    telemetry.update();
         /*
          * Retrieve the camera we are to use.
          */
@@ -199,8 +204,8 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
 
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam");
+        telemetry.addLine("Config Finish");
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -297,17 +302,19 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
-
+telemetry.addLine("Vuforia SetUp");
         // WARNING:
         // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
+        telemetry.addLine("motor direction");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
+        telemetry.addLine("reseting Encoders");
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -322,7 +329,6 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
         // make sure the gyro is calibrated before continuing
         timer.reset();
         while (!isStopRequested() && gyro.isCalibrating())  {
-            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             sleep(50);
             idle();
         }
@@ -332,10 +338,6 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
-
-
-
-
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
@@ -344,8 +346,9 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
 
         gyro.resetZAxisIntegrator();
         waitForStart();
-
-
+        targetsSkyStone.activate();
+        boolean skystoneVisible = false;
+        targetVisible = false;
 
 
 
@@ -353,9 +356,7 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
 
-        targetsSkyStone.activate();
-        boolean skystoneVisible = false;
-        targetVisible = false;
+
         while (!isStopRequested()) {
 
 
@@ -364,7 +365,7 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
             telemetry.update();
             telemetry.addData("Initial Right Strafe", "Begun");
             telemetry.update();
-            gyroDrive(.6, 23, -23, 23, 23, 0,100);
+            encoderDrive(.6, 23, -23, 23, 23, 60);
             telemetry.addData("Initial Right Strafe", "Complete");
 
             telemetry.addLine("Vision Starts");
@@ -435,12 +436,12 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
                     telemetry.addLine("Skystone detected");
                     telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                     telemetry.update();
-                    gyroDrive(3, -3, -3, 3, -3, 0,10);
+                    gyroDrive(3, -3, -3, -3, -3, 0,10);
                     telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
                     telemetry.addData("strafe right 3.7 inches", "Begun");
                     telemetry.update();
-                    gyroDrive(.6, 15, -15, 15, 15, 0,10);
+                    encoderDrive(.6, 15, -15, 15, 15, 10);
                     telemetry.addData("strafe right 3.7 inches", "Complete");
                     telemetry.addData("Lower Right Block Grabber", "Begun");
                     telemetry.update();
@@ -478,12 +479,13 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-           gyroDrive(.4, -14, 14, -14, -14, 0,10);
+            encoderDrive(.4, -14, 14, -14, -14, 10);
             telemetry.addData("Strafe Left 4 inches", "Complete");
+
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
-            gyroDrive(1, -50-averageInchesMoved, -50-averageInchesMoved, 50+averageInchesMoved, -50-averageInchesMoved, 0,10);
+            gyroDrive(1, -50-averageInchesMoved, -50-averageInchesMoved, -50-averageInchesMoved, -50-averageInchesMoved, 0,10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -493,29 +495,28 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
 
             telemetry.addData("move backward 72 inches", "Begun");
             telemetry.update();
-            gyroDrive(1, 75+averageInchesMoved, 75+averageInchesMoved, -75-averageInchesMoved, 75+averageInchesMoved, 0,10);
+            gyroDrive(1, 75+averageInchesMoved, 75+averageInchesMoved, 75+averageInchesMoved, 75+averageInchesMoved, 0,10);
             telemetry.addData("Move backward 72 inches", "Complete");
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
-            gyroDrive(3, -3, -3, 3, -3, 0,10);
+            gyroDrive(3, -3, -3, -3, -3, 0,10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
-            gyroDrive(.6, 15, -15, 15, 15, 0,10);
+            encoderDrive(.6, 15, -15, 15, 15, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
-            telemetry.addData("Lower Right Block Grabber", "Begun");
             telemetry.update();
             LeftBlockGrabber.setPosition(.1);
             sleep(1500);
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
-            gyroDrive(.6, -15, 15, -15, -15, 0,10);
+            encoderDrive(.6, -15, 15, -15, -15, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
             telemetry.addData("Lower Right Block Grabber", "Complete");
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            gyroDrive(1, -80, -80, 80, -80, 0,10);
+            gyroDrive(1, -80, -80, -80, -80, 0,10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
@@ -536,7 +537,7 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
             telemetry.update();
         }
 
-        // Disable Tracking when we are done;
+        // Disable Tracking when we are done
         targetsSkyStone.deactivate();
     }
     /**
@@ -789,5 +790,83 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
     public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
     }
+    public void encoderDrive(double speed,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches,
+                             double timeoutS) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
 
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
+            frontLeft.setTargetPosition(newFrontLeftTarget);
+            frontRight.setTargetPosition(newFrontRightTarget);
+            backLeft.setTargetPosition(newBackLeftTarget);
+            backRight.setTargetPosition(newBackRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            frontLeft.setPower(Math.abs(speed));
+            frontRight.setPower(Math.abs(speed));
+            backLeft.setPower(Math.abs(speed));
+            backRight.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
+
+                        frontLeft.getCurrentPosition(),
+                        frontRight.getCurrentPosition(),
+                        backLeft.getCurrentPosition(),
+                        backRight.getCurrentPosition());
+                telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+                telemetry.addData("backLeft", backLeft.getCurrentPosition());
+                telemetry.addData("frontRight", frontRight.getCurrentPosition());
+                telemetry.addData("backright", backRight.getCurrentPosition());
+
+                telemetry.update();
+
+            }
+
+            // Stop all motion;
+
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after eah move
+        }
+    }
 }
