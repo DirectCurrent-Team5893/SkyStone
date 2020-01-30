@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -85,6 +86,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 
 @Autonomous(name = "RedBlockSide", group = "Concept")
+@Disabled
 public class RedBlockSites extends LinearOpMode {
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
@@ -585,10 +587,10 @@ public class RedBlockSites extends LinearOpMode {
         telemetry.update();
         LeftBlockGrabber.setPosition(.1);
         sleep(1500);
-        telemetry.addData("strafe right 3.7 inches", "Begun");
-        telemetry.update();
-        encoderDrive(.6, -15, 15, -15, -15, 10);
-        telemetry.addData("strafe right 3.7 inches", "Complete");
+            telemetry.addData("strafe right 3.7 inches", "Begun");
+            telemetry.update();
+            encoderDrive(.6, -15, 15, -15, -15, 10);
+            telemetry.addData("strafe right 3.7 inches", "Complete");
         telemetry.addData("Lower Right Block Grabber", "Complete");
         telemetry.addData("move Forward 68 inches", "Begun");
         telemetry.update();

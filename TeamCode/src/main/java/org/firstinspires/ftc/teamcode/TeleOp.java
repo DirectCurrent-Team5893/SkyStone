@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp(name = "MainTeleOp", group = "Linear Opmode")
-@Disabled
-public class Mechanum extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "MainTeleOp", group = "Linear Opmode")
+
+public class TeleOp extends LinearOpMode {
 
     //define the motors
     private ElapsedTime runtime = new ElapsedTime();
@@ -31,6 +28,7 @@ public class Mechanum extends LinearOpMode {
     Servo LeftBaseplateShover;
     Servo RightBaseplateShover;
     Servo ShoveBlock;
+    Servo CapstoneDeployment;
 
 
     @Override
@@ -50,14 +48,15 @@ public class Mechanum extends LinearOpMode {
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
         LeftBaseplateShover = hardwareMap.get(Servo.class, "LBS");
         RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
-        ShoveBlock = hardwareMap.get(Servo.class, "SB");
-
+        CapstoneDeployment = hardwareMap.get(Servo.class,"CD");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         double MAX_SPEED = 1;
+        double FAST_MODE =1;
+        double SLOW_MODE =0.3;
         int STOP = 0;
         int FORWARD = 1;
         int BACKWARD = -1;
@@ -65,15 +64,19 @@ public class Mechanum extends LinearOpMode {
         int baseplateChanger = 1;
         int rightBlockMover = 1;
         int leftBlockMover = 1;
+        int CapstoneDeploymentChanger = 1;
 
         boolean gamepad2bHeld = false;
         boolean gamepad1aHeld = false;
+        boolean gamepad2aHeld = false;
+        boolean gamepad2xHeld = false;
         boolean gamepad1xHeld = false;
         boolean gamepad1bHeld = false;
+        boolean gamepad1yHeld = false;
         boolean gamepad1dpadDownHeld = false;
         boolean gamepad2dpadUpHeld = false;
         boolean gamepad2dpadDownHeld = false;
-        boolean manualMode = false;
+        boolean manualMode = true;
         boolean gamepad2rightStickButtonHeld = false;
         boolean gamepad2rightStickYHeld = false;
         int ranMethod = 0;
@@ -84,7 +87,7 @@ public class Mechanum extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
             if (gamepad1.right_bumper) {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);
@@ -106,8 +109,22 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.dpad_down) {
                 gamepad1dpadDownHeld = false;
             }
-
-
+            if(gamepad1.y && !gamepad1yHeld)
+            {
+                gamepad1yHeld = true;
+                if(MAX_SPEED == FAST_MODE)
+                {
+                    MAX_SPEED = SLOW_MODE;
+                }
+                else if (MAX_SPEED == SLOW_MODE)
+                {
+                    MAX_SPEED = FAST_MODE;
+                }
+            }
+            if(!gamepad1.y)
+            {
+                gamepad1yHeld = false;
+            }
             GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.DOWN_POSITION, GrabberPositions.UP_POSITION};
             telemetry.addData("gamepad2.b is", gamepad2.b);
             telemetry.addData("gamepad2b held is", gamepad2bHeld);
@@ -119,7 +136,19 @@ public class Mechanum extends LinearOpMode {
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("Manual Mode",manualMode);
+            CapstoneDeploymentPositions [] CAPSTONEDEPLOYMENTPOSITIONS = {CapstoneDeploymentPositions.DOWN_POSITION,CapstoneDeploymentPositions.UP_POSITION};
+            if (gamepad2.x && gamepad2xHeld == false) {
+                ranMethod++;
+                gamepad2xHeld = true;
+                telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
+                SetCapstoneDeploymentPosition(CAPSTONEDEPLOYMENTPOSITIONS[CapstoneDeploymentChanger]);
+                CapstoneDeploymentChanger++;
+                CapstoneDeploymentChanger = CapstoneDeploymentChanger % 2;
+            }
+            if (!gamepad2.x) {
+                gamepad2xHeld = false;
+            }
             if (gamepad2.b && gamepad2bHeld == false) {
                 ranMethod++;
                 gamepad2bHeld = true;
@@ -146,7 +175,19 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.a) {
                 gamepad1aHeld = false;
             }
-            if(gamepad2.right_stick_button && !gamepad2rightStickButtonHeld)
+            if (gamepad2.a && !gamepad2aHeld) {
+                ranMethod++;
+                gamepad2aHeld = true;
+                telemetry.addData("changing position GrabberChanger is ", grabberChanger);
+
+                SetBaseplateMoverPosition(BASEPLATEMOVERPOSITIONS[baseplateChanger]);
+                baseplateChanger++;
+                baseplateChanger = baseplateChanger % 2;
+            }
+            if (!gamepad2.a) {
+                gamepad2aHeld = false;
+            }
+        if(gamepad2.right_stick_button && !gamepad2rightStickButtonHeld)
             {
                 gamepad2rightStickButtonHeld = true;
                 manualMode=!manualMode;
@@ -170,11 +211,13 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad1.x) {
                 gamepad1xHeld = false;
             }
+            if(gamepad2.y)
+            {
+                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
             if(!manualMode){
 
-                if (gamepad2.dpad_up && !gamepad2dpadUpHeld) {
-                ranMethodV2++;
-                ranMethod++;
+                if (gamepad2.dpad_up && !gamepad2dpadUpHeld && !manualMode) {
                 gamepad2dpadUpHeld = true;
                 if (OuttakeLift.getCurrentPosition() >= -50) {
                     ranMethodV2++;
@@ -182,23 +225,91 @@ public class Mechanum extends LinearOpMode {
                     OuttakeLift.setPower(.6);
                     OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     while (opModeIsActive() &&
-                            (OuttakeLift.isBusy())) {
+                            (OuttakeLift.isBusy()) && !manualMode) {
                         // Display it for the driver.
                         telemetry.addData("Go Up",
                                 OuttakeLift.getCurrentPosition());
                         telemetry.update();
 
+                        drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+
+                        if (gamepad1.right_bumper) {
+                            leftIntake.setPower(IntakePower);
+                            rightIntake.setPower(-IntakePower);
+                        } else if (gamepad1.left_bumper) {
+                            leftIntake.setPower(-.3);
+                            rightIntake.setPower(.3);
+                        } else {
+                            leftIntake.setPower(STOP);
+                            rightIntake.setPower(STOP);
+                        }
+
+                        HorizontalLift.setPower(gamepad2.left_stick_y);
+
+
                     }
 
                     OuttakeLift.setPower(0);
                 } else {
-                    VerticalLiftPostions(.6, 10);
+                    VerticalLiftPostions(.6, 10,manualMode);
                 }
             }
             if (!gamepad2.dpad_up) {
                 gamepad2dpadUpHeld = false;
             }
-            if (gamepad2.dpad_down && !gamepad2dpadDownHeld) {
+            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && !manualMode) {
+                ranMethod++;
+                gamepad2dpadDownHeld = true;
+                OuttakeLift.setTargetPosition(0);
+                OuttakeLift.setPower(.6);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while (opModeIsActive() &&
+                        (OuttakeLift.isBusy())) {
+                    // Display it for the driver.
+                    telemetry.addData("Go Up",
+                    OuttakeLift.getCurrentPosition());
+                    telemetry.update();
+                    drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+
+                    if (gamepad1.right_bumper) {
+                        leftIntake.setPower(IntakePower);
+                        rightIntake.setPower(-IntakePower);
+                    } else if (gamepad1.left_bumper) {
+                        leftIntake.setPower(-.3);
+                        rightIntake.setPower(.3);
+                    } else {
+                        leftIntake.setPower(STOP);
+                        rightIntake.setPower(STOP);
+                    }
+
+                    HorizontalLift.setPower(gamepad2.left_stick_y);
+
+
+                }
+                OuttakeLift.setPower(0);
+                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            if (!gamepad2.dpad_down) {
+
+                gamepad2dpadDownHeld = false;
+            }
+
+        }
+            rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
+            if (gamepad1.b && gamepad1bHeld == false) {
+
+                gamepad1bHeld = true;
+
+                SetRightBlockMoverPosition(RIGHTBLOCKMOVERPOSITIONS[rightBlockMover]);
+                rightBlockMover++;
+                rightBlockMover = rightBlockMover % 2;
+            }
+            if (!gamepad1.b) {
+                gamepad1bHeld = false;
+            }
+
+            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y<.1) {
                 ranMethod++;
                 gamepad2dpadDownHeld = true;
                 OuttakeLift.setTargetPosition(0);
@@ -219,32 +330,18 @@ public class Mechanum extends LinearOpMode {
             if (!gamepad2.dpad_down) {
                 gamepad2dpadDownHeld = false;
             }
-        }
-            rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
-            if (gamepad1.b && gamepad1bHeld == false) {
 
-                gamepad1bHeld = true;
 
-                SetRightBlockMoverPosition(RIGHTBLOCKMOVERPOSITIONS[rightBlockMover]);
-                rightBlockMover++;
-                rightBlockMover = rightBlockMover % 2;
-            }
-            if (!gamepad1.b) {
-                gamepad1bHeld = false;
-            }
+            OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            OuttakeLift.setPower(gamepad2.right_stick_y);
+            telemetry.addData("Lift Power", gamepad2.right_stick_y);
             HorizontalLift.setPower(gamepad2.left_stick_y);
-            if(manualMode) {
-
-                    OuttakeLift.setPower(gamepad2.right_stick_y);
-
-                }
-            if(gamepad2.left_stick_button)
-            {
-                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-
             telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
             telemetry.update();
+
+
+
+
 
 //             if(gamepad2.left_stick_y>
 //            if(gamepad2.right_bumper)
@@ -271,12 +368,26 @@ public class Mechanum extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.9);
-                targetPosition = .9;
+                Grabber.setPosition(.7);
                 break;
             case DOWN_POSITION:
-                Grabber.setPosition(.5);
-                targetPosition = .5;
+                Grabber.setPosition(.3);
+                break;
+        }
+    }
+    public enum CapstoneDeploymentPositions {
+        UP_POSITION, DOWN_POSITION
+    }
+
+    public void SetCapstoneDeploymentPosition(final CapstoneDeploymentPositions POSITION) {
+        double targetPosition;
+        switch (POSITION) {
+            case UP_POSITION:
+                CapstoneDeployment.setPosition(0);
+
+                break;
+            case DOWN_POSITION:
+                CapstoneDeployment.setPosition(.8);
                 break;
         }
     }
@@ -306,11 +417,11 @@ public class Mechanum extends LinearOpMode {
     public void SetRightBlockMoverPosition(final rightBlockMoverPositions POSITION) {
         switch (POSITION) {
             case UP_POSITION:
-                RightBlockGrabber.setPosition(.7);
+                RightBlockGrabber.setPosition(0);
 
                 break;
             case DOWN_POSITION:
-                RightBlockGrabber.setPosition(0);
+                RightBlockGrabber.setPosition(.8);
                 break;
         }
     }
@@ -332,11 +443,11 @@ public class Mechanum extends LinearOpMode {
     }
 
 
-    private void drivetrain(double forward, double right, double turn) {
+    private void drivetrain(double forward, double right, double turn,double MAX_SPEED) {
 
-        forward = checkValue(forward);
-        right = checkValue(right);
-        turn = checkValue(turn);
+        forward = checkValue(forward,MAX_SPEED);
+        right = checkValue(right,MAX_SPEED);
+        turn = checkValue(turn,MAX_SPEED);
         double leftFrontPower = forward - right - turn;
         double leftBackPower = forward + right - turn;
         double rightFrontPower = forward + right + turn;
@@ -392,21 +503,23 @@ public class Mechanum extends LinearOpMode {
         //telemetry.update();
     }
 
-    private double checkValue(double hardInput) {
-        hardInput = Range.clip(hardInput, -1, 1);
-        hardInput = Math.pow(hardInput, 3);
+    private double checkValue(double hardInput,double MAX_SPEED) {
+        hardInput = Range.clip(hardInput, -MAX_SPEED, MAX_SPEED);
+        if(MAX_SPEED == 1) {
+            hardInput = Math.pow(hardInput, 3);
+        }
         return hardInput;
     }
-    public void VerticalLiftPostions(double speed,double Timeout) {
-        int newTargetVerticalLiftPositions;
+    public void VerticalLiftPostions(double speed,double Timeout,boolean manualMode) {
+        int newTargetVerticalLiftPosition;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTargetVerticalLiftPositions =(OuttakeLift.getCurrentPosition()-(457));
+            newTargetVerticalLiftPosition =(OuttakeLift.getCurrentPosition()-457);
 
-            OuttakeLift.setTargetPosition(newTargetVerticalLiftPositions);
+            OuttakeLift.setTargetPosition(newTargetVerticalLiftPosition);
             // Turn On RUN_TO_POSITION
             OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // reset the timeout time and start motion.
@@ -420,12 +533,10 @@ public class Mechanum extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < Timeout) &&
-                    (OuttakeLift.isBusy())) {
+                    (OuttakeLift.isBusy()) && !manualMode) {
                 // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newTargetVerticalLiftPositions);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-
-                        OuttakeLift.getCurrentPosition());
+                telemetry.addData("Path1", newTargetVerticalLiftPosition);
+                telemetry.addData("Path2",  OuttakeLift.getCurrentPosition());
                 telemetry.update();
 
             }

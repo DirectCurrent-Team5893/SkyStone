@@ -31,16 +31,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -89,8 +86,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="RedBlockSideWebcamTest", group ="Concept")
-public class RedBlockSiteWebcamTest extends LinearOpMode {
+@Autonomous(name="BlueBlockSide", group ="Concept")
+public class BlueBlockSiteWebcamTest extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -177,8 +174,9 @@ public class RedBlockSiteWebcamTest extends LinearOpMode {
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
+    double DOWN_POSITION = 1;
     double STRAFE_TO_BLOCK = 17;
-    public double amountError =0.64;
+    public double amountError = 0.64;
 
 
     @Override public void runOpMode() {
@@ -354,6 +352,7 @@ telemetry.addLine("Vuforia SetUp");
 
 
 
+
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
@@ -361,7 +360,7 @@ telemetry.addLine("Vuforia SetUp");
 
 
 
-            gyroDrive(DRIVE_SPEED, -6, -6,-6, -6, 0,100);
+            gyroDrive(DRIVE_SPEED, 6, 6,6, 6, 0,100);
             telemetry.update();
             telemetry.addData("Initial Right Strafe", "Begun");
             telemetry.update();
@@ -438,7 +437,7 @@ telemetry.addLine("Vuforia SetUp");
                     gyroTurn(TURN_SPEED,0);
                     telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                     telemetry.update();
-                    gyroDrive(DRIVE_SPEED, -3, -3, -3, -3, 0,10);
+                  gyroDrive(DRIVE_SPEED, -1, -1, -1, -1, 0,10);
                     telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
                     telemetry.addData("strafe right 3.7 inches", "Begun");
@@ -447,7 +446,7 @@ telemetry.addLine("Vuforia SetUp");
                     telemetry.addData("strafe right 3.7 inches", "Complete");
                     telemetry.addData("Lower Right Block Grabber", "Begun");
                     telemetry.update();
-                    LeftBlockGrabber.setPosition(.1);
+                    RightBlockGrabber.setPosition(DOWN_POSITION);
                     sleep(1500);
                     telemetry.addData("Lower Right Block Grabber", "Complete");
                     telemetry.addData("Position is", Positions[skystonePosition]);
@@ -460,44 +459,53 @@ telemetry.addLine("Vuforia SetUp");
 //                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
 //                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
 //                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
-                    encoderDrive(DRIVE_SPEED,4,4,4,4,5);
+                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    encoderDrive(DRIVE_SPEED,-4,-4,-4,-4,5);
                     numOfTimesMoved ++;
                     backLeftFinalEncoders = backLeft.getCurrentPosition();
                     backRightFinalEncoders = backRight.getCurrentPosition();
                     frontLeftFinalEncoders = frontLeft.getCurrentPosition();
                     frontRightFinalEncoders = frontRight.getCurrentPosition();
+
+
                 }
             }
-
-            double frontRightInchesMoved = (frontRightFinalEncoders - frontRightInitialEncoders) / COUNTS_PER_INCH;
-            double backRightInchesMoved = (backRightFinalEncoders - backRightInitialEncoders) / COUNTS_PER_INCH;
-            double frontLeftInchesMoved = (frontLeftFinalEncoders - frontLeftInitialEncoders) / COUNTS_PER_INCH;
-            double backLeftInchesMoved = (backLeftFinalEncoders - backLeftInitialEncoders) / COUNTS_PER_INCH;
-            double averageInchesMoved = (frontLeftInchesMoved + backLeftInchesMoved + frontRightInchesMoved + backRightInchesMoved)/4;
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            double frontRightInchesMoved = Math.abs((frontRightFinalEncoders - frontRightInitialEncoders) / COUNTS_PER_INCH);
+            double backRightInchesMoved = Math.abs((backRightFinalEncoders - backRightInitialEncoders) / COUNTS_PER_INCH);
+            double frontLeftInchesMoved = Math.abs((frontLeftFinalEncoders - frontLeftInitialEncoders) / COUNTS_PER_INCH);
+            double backLeftInchesMoved = Math.abs(backLeftFinalEncoders - backLeftInitialEncoders) / COUNTS_PER_INCH;
+            double averageInchesMoved = Math.abs((frontLeftInchesMoved + backLeftInchesMoved + frontRightInchesMoved + backRightInchesMoved)/4);
             telemetry.addData("numOfTimesMoved",numOfTimesMoved);
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-            encoderDrive(DRIVE_SPEED, -14, 14, 14, -14, 10);
+            encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
             telemetry.addData("Strafe Left 4 inches", "Complete");
 
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, -30-averageInchesMoved, -30-averageInchesMoved, -30-averageInchesMoved, -30-averageInchesMoved, 0,10);
+            gyroDrive(DRIVE_SPEED, 32+averageInchesMoved, 32+averageInchesMoved, 32+averageInchesMoved, 32+averageInchesMoved, 0,10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
             telemetry.update();
-            LeftBlockGrabber.setPosition(1);
+            RightBlockGrabber.setPosition(0);
             telemetry.addData("Raise Right Block Grabber", "Complete");
             gyroTurn(TURN_SPEED,0);
             telemetry.addData("move backward 72 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, 54+averageInchesMoved, 54+averageInchesMoved, 54+averageInchesMoved, 54+averageInchesMoved, 0,10);
+            gyroDrive(DRIVE_SPEED, -56-averageInchesMoved, -56-averageInchesMoved, -56-averageInchesMoved, -56-averageInchesMoved, 0,10);
             if(numOfTimesMoved>5)
             {
-                gyroDrive(DRIVE_SPEED,3,3,3,3,0,100);
+                gyroDrive(DRIVE_SPEED,-3,-3,-3,-3,0,100);
             }
             telemetry.addData("Move backward 72 inches", "Complete");
             gyroTurn(TURN_SPEED,0);
@@ -507,10 +515,14 @@ telemetry.addLine("Vuforia SetUp");
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
+            if(numOfTimesMoved< 6)
+            {
+                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0, 10);
+            }
             encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
             telemetry.update();
-            LeftBlockGrabber.setPosition(.1);
+            RightBlockGrabber.setPosition(DOWN_POSITION);
             sleep(1500);
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
@@ -521,36 +533,37 @@ telemetry.addLine("Vuforia SetUp");
             telemetry.addData("Lower Right Block Grabber", "Complete");
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, -54-averageInchesMoved, -54-averageInchesMoved, -54-averageInchesMoved,-54 -averageInchesMoved, 0,10);
+            gyroDrive(DRIVE_SPEED, 54+averageInchesMoved, 54+averageInchesMoved, 54+averageInchesMoved,54+averageInchesMoved, 0,10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
             telemetry.update();
-            LeftBlockGrabber.setPosition(1);
+            RightBlockGrabber.setPosition(.1);
             telemetry.addData("Raise Right Block Grabber", "Complete");
 
             gyroTurn(TURN_SPEED,0);
             if (numOfTimesMoved <=3){
-             gyroDrive(DRIVE_SPEED,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,0,10);
+             gyroDrive(DRIVE_SPEED,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,0,10);
                 gyroTurn(TURN_SPEED,0);
                 telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                 telemetry.update();
-                //gyroDrive(3, -3, -3, -3, -3, 0,10);
+                //gyroDrive(3, -3, -3, -3, -3, 0,DRIVE_SPEED0);
                 telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
                 telemetry.addData("strafe right 3.7 inches", "Begun");
                 telemetry.update();
-                encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
+                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0,10);
+                encoderDrive(DRIVE_SPEED, 14, -14, -14, 14, 10);
                 telemetry.addData("strafe right 3.7 inches", "Complete");
                 telemetry.update();
-                LeftBlockGrabber.setPosition(.1);
+                RightBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(1500);
                 encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
-                gyroDrive(DRIVE_SPEED,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,0,10);
-                LeftBlockGrabber.setPosition(1);
+                gyroDrive(DRIVE_SPEED,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,0,10);
+                RightBlockGrabber.setPosition(.1);
             }
             else if(numOfTimesMoved<6 && numOfTimesMoved>3)
             {
-                gyroDrive(DRIVE_SPEED,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,0,10);
+                gyroDrive(DRIVE_SPEED,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,0,10);
                 gyroTurn(TURN_SPEED,0);
                 telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                 telemetry.update();
@@ -558,18 +571,19 @@ telemetry.addLine("Vuforia SetUp");
                 telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
                 telemetry.addData("strafe right 3.7 inches", "Begun");
                 telemetry.update();
+                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0,10);
                 encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
                 telemetry.addData("strafe right 3.7 inches", "Complete");
                 telemetry.update();
-                LeftBlockGrabber.setPosition(.1);
-                sleep(1500);
+                RightBlockGrabber.setPosition(DOWN_POSITION);
+                sleep(1250);
                 encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
-                gyroDrive(DRIVE_SPEED,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,0,10);
-                LeftBlockGrabber.setPosition(1);
+                gyroDrive(DRIVE_SPEED,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,0,10);
+                RightBlockGrabber.setPosition(.1);
             }
             telemetry.addData("move backward 10 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, 16, 16, 16, 16, 0,10);
+            gyroDrive(DRIVE_SPEED, -12, -18, -18, -12, 0,10);
             telemetry.addData("Move backward 10 inches", "Complete");
             telemetry.update();
 
@@ -582,6 +596,7 @@ telemetry.addLine("Vuforia SetUp");
         // Disable Tracking when we are done
         targetsSkyStone.deactivate();
     }
+
     /**
      *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
      *  Move will stop if either of these conditions occur:
@@ -695,9 +710,9 @@ telemetry.addLine("Vuforia SetUp");
                         +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
                         +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
                 if(ErrorAmount<amountError)
-           {
-               goodEnough = true;
-           }
+                {
+                    goodEnough = true;
+                }
             }
 
             // Stop all motion;

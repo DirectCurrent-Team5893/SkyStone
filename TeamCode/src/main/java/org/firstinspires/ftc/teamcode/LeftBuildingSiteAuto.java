@@ -198,13 +198,16 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
     }
 
     public void encoderDrive(double speed,
-                             double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches,
                              double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;
         int newBackRightTarget;
 
+        double ErrorAmount;
+        boolean goodEnough = false;
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
@@ -224,6 +227,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
             // reset the timeout time and start motion.
             runtime.reset();
             frontLeft.setPower(Math.abs(speed));
@@ -239,7 +243,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())) {
+                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())&& !goodEnough) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
@@ -249,8 +253,21 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
                         frontRight.getCurrentPosition(),
                         backLeft.getCurrentPosition(),
                         backRight.getCurrentPosition());
+                telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+                telemetry.addData("backLeft", backLeft.getCurrentPosition());
+                telemetry.addData("frontRight", frontRight.getCurrentPosition());
+                telemetry.addData("backright", backRight.getCurrentPosition());
+
                 telemetry.update();
 
+                ErrorAmount = ((Math.abs(((newBackLeftTarget)-(backLeft.getCurrentPosition())))
+                        +(Math.abs(((newFrontLeftTarget)-(frontLeft.getCurrentPosition()))))
+                        +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
+                        +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
+                if(ErrorAmount<.4)
+                {
+                    goodEnough = true;
+                }
             }
 
             // Stop all motion;

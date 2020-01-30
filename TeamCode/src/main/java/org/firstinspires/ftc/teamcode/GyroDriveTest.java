@@ -74,7 +74,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Pushbot: Auto Drive By Gyro", group="Pushbot")
-
+@Disabled
 public class GyroDriveTest extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -186,8 +186,6 @@ public class GyroDriveTest extends LinearOpMode {
         //gyroDrive(DRIVE_SPEED,-15.0,-15.0,-15.0,-15.0,45,100);
 
 
-
-        ;
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
@@ -376,6 +374,18 @@ public class GyroDriveTest extends LinearOpMode {
         backLeft.setPower(0);
         backRight.setPower(0);
         frontRight.setPower(0);
+    }
+
+    public void gyroArc(double speed, double angle,String Direction)
+    {
+        if(Direction == "Left" || Direction == "left")
+        {
+
+
+            if (gyro.getHeading() <= angle) {
+
+            }
+        }
     }
 
     /**

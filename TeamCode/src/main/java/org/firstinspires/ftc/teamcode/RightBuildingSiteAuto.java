@@ -104,25 +104,25 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, -6, -6, 6, -6, 0);
+        encoderDrive(.7, -6, -6, 6, -6, 0);
         telemetry.addData("Move Forward 6 inches", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, 10, -10, 10, 10, 0);
+        encoderDrive(.7, 10, -10, 10, 10, 0);
         telemetry.addData("left Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, -23, 23, 23, 23, 0);
+        encoderDrive(.7, -23, 23, 23, 23, 0);
         telemetry.addData("right 90 degree turn", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("move Forward 25 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 21, 21, -21, 21, 0);
+        encoderDrive(.7, 21, 21, -21, 21, 0);
         encoderDrive(.2, 4, 4, -4, 4, 0);
         telemetry.addData("Move Forward 25 inches", "Complete");
         TurnOffAllMotors();
@@ -138,32 +138,32 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, -7, 7, -7, -7, 0);
+        encoderDrive(.8, -7, 7, -7, -7, 0);
         encoderDrive(.2, -10, 10, -10, -10, 0);
         telemetry.addData("left Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, 8, -8, 8, 8, 0);
+        encoderDrive(.8, 8, -8, 8, 8, 0);
         telemetry.addData("left Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        arcTurn(.4, -44, 32, 33, 0);
+        arcTurn(.6, -44, 32, 33, 0);
         telemetry.addData("Arc", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.6, 45, -45, 45, 45, 0);
+        encoderDrive(.8, 45, -45, 45, 45, 0);
         telemetry.addData("right Strafe", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("right 45 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, -14, 14, 14, 14, 0);
+        encoderDrive(.8, -14, 14, 14, 14, 0);
         telemetry.addData("right 45 degree turn", "Complete");
         TurnOffAllMotors();
 
@@ -178,25 +178,28 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left 15 degree turn", "Begun");
         telemetry.update();
-        encoderDrive(.6, 6, -6, -6, -6, 0);
+        encoderDrive(.7, 6, -6, -6, -6, 0);
         telemetry.addData("left 15 degree turn", "Complete");
         TurnOffAllMotors();
 
         telemetry.addData("move Backward 34 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.6, -34, -34, 34, -34, 0);
+        encoderDrive(.7, -34, -34, 34, -34, 0);
         telemetry.addData("Move Backward 34 inches to park", "Complete");
         TurnOffAllMotors();
     }
 
     public void encoderDrive(double speed,
-                             double frontLeftInches, double frontRightInches, double backLeftInches, double backRightInches,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches,
                              double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;
         int newBackRightTarget;
 
+        double ErrorAmount;
+        boolean goodEnough = false;
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
@@ -216,6 +219,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
             // reset the timeout time and start motion.
             runtime.reset();
             frontLeft.setPower(Math.abs(speed));
@@ -231,7 +235,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())) {
+                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())&& !goodEnough) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
@@ -241,8 +245,21 @@ public class RightBuildingSiteAuto extends LinearOpMode {
                         frontRight.getCurrentPosition(),
                         backLeft.getCurrentPosition(),
                         backRight.getCurrentPosition());
+                telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+                telemetry.addData("backLeft", backLeft.getCurrentPosition());
+                telemetry.addData("frontRight", frontRight.getCurrentPosition());
+                telemetry.addData("backright", backRight.getCurrentPosition());
+
                 telemetry.update();
 
+                ErrorAmount = ((Math.abs(((newBackLeftTarget)-(backLeft.getCurrentPosition())))
+                        +(Math.abs(((newFrontLeftTarget)-(frontLeft.getCurrentPosition()))))
+                        +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
+                        +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
+                if(ErrorAmount<.4)
+                {
+                    goodEnough = true;
+                }
             }
 
             // Stop all motion;

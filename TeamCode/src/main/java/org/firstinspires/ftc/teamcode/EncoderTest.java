@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Autonomous(name = "EncoderTest", group = "Linear Opmode")
-
+//@Disabled
 public class EncoderTest extends LinearOpMode {
     private CustomTenserFlow5893 vision;
 
@@ -100,8 +100,7 @@ public class EncoderTest extends LinearOpMode {
 //        telemetry.addData("initial back left", backleft);
 //        double backright=backRight.getCurrentPosition();
 //        telemetry.addData("initial back right", backright);
-        double horizantalLift=HorizontalLift.getCurrentPosition();
-        telemetry.addData("initial horizantal Lift", horizantalLift);
+
         waitForStart();
         while(opModeIsActive()){
 
@@ -109,26 +108,24 @@ public class EncoderTest extends LinearOpMode {
 //        backLeft.setTargetPosition(backLeft.getCurrentPosition()+2000);
 //        frontRight.setTargetPosition(frontRight.getCurrentPosition()+2000);
 //        backRight.setTargetPosition(backRight.getCurrentPosition()+2000);
-        HorizontalLift.setTargetPosition(HorizontalLift.getCurrentPosition()+100);
-//        telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
-//        telemetry.addData("backLeft",backLeft.getCurrentPosition());
-//        telemetry.addData("frontRight",frontRight.getCurrentPosition());
-//        telemetry.addData("backright",backRight.getCurrentPosition());
-        telemetry.addData("horizantalLift",HorizontalLift.getCurrentPosition());
+
+        telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+        telemetry.addData("backLeft",backLeft.getCurrentPosition());
+        telemetry.addData("frontRight",frontRight.getCurrentPosition());
+        telemetry.addData("backright",backRight.getCurrentPosition());
+
 
         telemetry.update();
 
 
-//            frontLeft.setTargetPosition(0);
-//            backLeft.setTargetPosition(0);
-//            frontRight.setTargetPosition(0);
-//            backRight.setTargetPosition(0);
-            HorizontalLift.setTargetPosition (0);
-//            telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
-//            telemetry.addData("backLeft",backLeft.getCurrentPosition());
-//            telemetry.addData("frontRight",frontRight.getCurrentPosition());
-//            telemetry.addData("backright",backRight.getCurrentPosition());
-            telemetry.addData("horizantalLift",HorizontalLift.getCurrentPosition());
+            frontLeft.setTargetPosition(0);
+            backLeft.setTargetPosition(0);
+            frontRight.setTargetPosition(0);
+            backRight.setTargetPosition(0);
+            telemetry.addData("frontLeft",frontLeft.getCurrentPosition());
+            telemetry.addData("backLeft",backLeft.getCurrentPosition());
+            telemetry.addData("frontRight",frontRight.getCurrentPosition());
+            telemetry.addData("backright",backRight.getCurrentPosition());
 
             telemetry.update();
 
