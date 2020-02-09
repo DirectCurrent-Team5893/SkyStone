@@ -369,10 +369,10 @@ public class TeleOp extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.7);
+                Grabber.setPosition(.5);
                 break;
             case DOWN_POSITION:
-                Grabber.setPosition(.3);
+                Grabber.setPosition(.4);
                 break;
         }
     }
