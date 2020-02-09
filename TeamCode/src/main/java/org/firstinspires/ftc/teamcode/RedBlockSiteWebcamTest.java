@@ -386,7 +386,7 @@ telemetry.addLine("Vuforia SetUp");
             backLeftInitialEncoders = backLeft.getCurrentPosition();
             backRightInitialEncoders = backRight.getCurrentPosition();
             gyroTurn(TURN_SPEED,0);
-            while (!skystoneVisible && !isStopRequested()) {
+            while (!skystoneVisible && !isStopRequested() || numOfTimesMoved <= 6) {
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -423,7 +423,7 @@ telemetry.addLine("Vuforia SetUp");
                     telemetry.addData("Visible Target", "none");
                 }
 
-                if (targetVisible && skystoneVisible) {
+                if ((targetVisible && skystoneVisible) || numOfTimesMoved>=6 ) {
                     backLeft.setPower(0);
                     backRight.setPower(0);
                     frontLeft.setPower(0);
