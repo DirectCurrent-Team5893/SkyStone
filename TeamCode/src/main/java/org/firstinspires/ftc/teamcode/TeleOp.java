@@ -22,7 +22,6 @@ public class TeleOp extends LinearOpMode {
     private DcMotor OuttakeLift = null;
     private DcMotor HorizontalLift = null;
 
-    //define the servos
     Servo Grabber;
     Servo LeftBlockGrabber;
     Servo RightBlockGrabber;
@@ -49,14 +48,18 @@ public class TeleOp extends LinearOpMode {
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
         LeftBaseplateShover = hardwareMap.get(Servo.class, "LBS");
         RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
+<<<<<<< HEAD
         CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
 
         //make motors all run forward
+=======
+        CapstoneDeployment = hardwareMap.get(Servo.class,"CD");
+>>>>>>> parent of 913a779... added comments for code printing
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
-        //set the way the lift stops
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+<<<<<<< HEAD
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,6 +73,9 @@ public class TeleOp extends LinearOpMode {
 
         //call variables
 
+=======
+        OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+>>>>>>> parent of 913a779... added comments for code printing
         double MAX_SPEED = 1;
         double FAST_MODE = 1;
         double SLOW_MODE = 0.3;
@@ -103,8 +109,12 @@ public class TeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+<<<<<<< HEAD
             //assigns power and buttons to intake
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+=======
+            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+>>>>>>> parent of 913a779... added comments for code printing
             if (gamepad1.right_bumper) {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);
@@ -123,7 +133,6 @@ public class TeleOp extends LinearOpMode {
                     IntakePower = 1;
                 }
             }
-            //button hed function allows for switch between a slow and fast mode on the intake
             if (!gamepad1.dpad_down) {
                 gamepad1dpadDownHeld = false;
             }
@@ -138,7 +147,6 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad1.y) {
                 gamepad1yHeld = false;
             }
-            //allows switch positions to be enabled through one button rather than two
             GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.DOWN_POSITION, GrabberPositions.UP_POSITION};
             telemetry.addData("gamepad2.b is", gamepad2.b);
             telemetry.addData("gamepad2b held is", gamepad2bHeld);
@@ -175,7 +183,6 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad2.b) {
                 gamepad2bHeld = false;
             }
-            //baseplate mover one button switch position code
             BaseplateMoverPositions[] BASEPLATEMOVERPOSITIONS = {BaseplateMoverPositions.DOWN_POSITION, BaseplateMoverPositions.UP_POSITION};
 
             if (gamepad1.a && gamepad1aHeld == false) {
@@ -210,7 +217,6 @@ public class TeleOp extends LinearOpMode {
                 gamepad2rightStickButtonHeld = false;
             }
 
-            //one button change position code for left block mover
             leftBlockMoverPositions[] LEFTBLOCKMOVERPOSITIONS = {leftBlockMoverPositions.DOWN_POSITION, leftBlockMoverPositions.UP_POSITION};
 
             if (gamepad1.x && gamepad1xHeld == false) {
@@ -228,10 +234,14 @@ public class TeleOp extends LinearOpMode {
             if (gamepad2.y) {
                 OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
+<<<<<<< HEAD
 
             //code to switch between levels on vertical lift and manual mode
             if (!manualMode) {
 
+=======
+            if(!manualMode){
+>>>>>>> parent of 913a779... added comments for code printing
 
                 if (gamepad2.dpad_up && !gamepad2dpadUpHeld && !manualMode) {
                     gamepad2dpadUpHeld = true;
@@ -312,8 +322,12 @@ public class TeleOp extends LinearOpMode {
                 }
 
 
+<<<<<<< HEAD
             }
             //One button switch for right block mover positions
+=======
+        }
+>>>>>>> parent of 913a779... added comments for code printing
             rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
             if (gamepad1.b && gamepad1bHeld == false) {
 
@@ -326,8 +340,13 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad1.b) {
                 gamepad1bHeld = false;
             }
+<<<<<<< HEAD
             //lift levels code
             if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y < .1) {
+=======
+
+            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y<.1) {
+>>>>>>> parent of 913a779... added comments for code printing
                 ranMethod++;
                 gamepad2dpadDownHeld = true;
                 OuttakeLift.setTargetPosition(0);
@@ -356,15 +375,40 @@ public class TeleOp extends LinearOpMode {
             HorizontalLift.setPower(gamepad2.left_stick_y);
             telemetry.addData("OuttakeLift", OuttakeLift.getCurrentPosition());
             telemetry.update();
+
+
+
+
+
+//             if(gamepad2.left_stick_y>
+//            if(gamepad2.right_bumper)
+//            {
+//                OuttakeLift.setPower(.9);
+//            }
+//            else if(gamepad2.right_trigger> .1)
+//            {
+//                OuttakeLift.setPower(-gamepad2.right_trigger);
+//            }
+//            else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
+//            {
+//                OuttakeLift.setPower(STOP);
+//            }
+            telemetry.update();
         }
     }
 
+<<<<<<< HEAD
     //enum for Grabber position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public enum GrabberPositions {
         UP_POSITION, DOWN_POSITION
     }
 
+<<<<<<< HEAD
     //function for setting position
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public void SetPosition(final GrabberPositions POSITION) {
         double targetPosition;
         switch (POSITION) {
@@ -376,13 +420,19 @@ public class TeleOp extends LinearOpMode {
                 break;
         }
     }
+<<<<<<< HEAD
 
     //enum for Capstone servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public enum CapstoneDeploymentPositions {
         UP_POSITION, DOWN_POSITION
     }
 
+<<<<<<< HEAD
     //function for setting position
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public void SetCapstoneDeploymentPosition(final CapstoneDeploymentPositions POSITION) {
         double targetPosition;
         switch (POSITION) {
@@ -396,12 +446,18 @@ public class TeleOp extends LinearOpMode {
         }
     }
 
+<<<<<<< HEAD
     //enum for Baseplate mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public enum BaseplateMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
 
+<<<<<<< HEAD
     //function for setting position of the servos
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public void SetBaseplateMoverPosition(final BaseplateMoverPositions POSITION) {
         switch (POSITION) {
             case UP_POSITION:
@@ -416,12 +472,18 @@ public class TeleOp extends LinearOpMode {
         }
     }
 
+<<<<<<< HEAD
     //enum for right side block mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public enum rightBlockMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
 
+<<<<<<< HEAD
     //function for setting position of the servo
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public void SetRightBlockMoverPosition(final rightBlockMoverPositions POSITION) {
         switch (POSITION) {
             case UP_POSITION:
@@ -434,12 +496,18 @@ public class TeleOp extends LinearOpMode {
         }
     }
 
+<<<<<<< HEAD
     //enum for left side block mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public enum leftBlockMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
 
+<<<<<<< HEAD
     //function for setting position of the servos
+=======
+>>>>>>> parent of 913a779... added comments for code printing
     public void SetLeftBlockMoverPosition(final leftBlockMoverPositions POSITION) {
         switch (POSITION) {
             case UP_POSITION:
@@ -452,8 +520,13 @@ public class TeleOp extends LinearOpMode {
         }
     }
 
+<<<<<<< HEAD
     //mechanum drive train motion calculation function
     private void drivetrain(double forward, double right, double turn, double MAX_SPEED) {
+=======
+
+    private void drivetrain(double forward, double right, double turn,double MAX_SPEED) {
+>>>>>>> parent of 913a779... added comments for code printing
 
         forward = checkValue(forward, MAX_SPEED);
         right = checkValue(right, MAX_SPEED);
@@ -520,8 +593,12 @@ public class TeleOp extends LinearOpMode {
         }
         return hardInput;
     }
+<<<<<<< HEAD
 
     public void VerticalLiftPostions(double speed, double Timeout, boolean manualMode,double MAX_SPEED,double IntakePower) {
+=======
+    public void VerticalLiftPostions(double speed,double Timeout,boolean manualMode) {
+>>>>>>> parent of 913a779... added comments for code printing
         int newTargetVerticalLiftPosition;
 
         // Ensure that the opmode is still active
