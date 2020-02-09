@@ -162,6 +162,7 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
     static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    //variable that allows code to measure in inches rather than encoder counts
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
@@ -186,6 +187,7 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
+        //hardware mapping
         leftIntake = hardwareMap.get(DcMotor.class, "Left Intake");
         rightIntake = hardwareMap.get(DcMotor.class, "right intake");
         backLeft = hardwareMap.get(DcMotor.class, "back left wheel");
@@ -385,7 +387,12 @@ telemetry.addLine("Vuforia SetUp");
             backLeftInitialEncoders = backLeft.getCurrentPosition();
             backRightInitialEncoders = backRight.getCurrentPosition();
             gyroTurn(TURN_SPEED,0);
+<<<<<<< HEAD
             while (!skystoneVisible && !isStopRequested() && numOfTimesMoved <= 6) {
+=======
+            //checks for visibility of a skystone
+            while (!skystoneVisible && !isStopRequested()) {
+>>>>>>> 913a7793b8344bd0293f84cadb4131b3a884c847
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -408,6 +415,7 @@ telemetry.addLine("Vuforia SetUp");
                         break;
                     }
                 }
+                //instructs robot on next actions after finding the skystone
                 if (targetVisible) {
                     // express position (translation) of robot in inches.
                     VectorF translation = lastLocation.getTranslation();
@@ -428,10 +436,7 @@ telemetry.addLine("Vuforia SetUp");
                     frontLeft.setPower(0);
                     frontRight.setPower(0);
 
-//                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
-//                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
-//                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
-//                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
+                    //declares position so motion relative to the original block location is correct
                     String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
                     telemetry.addLine("Skystone detected");
                     gyroTurn(TURN_SPEED,0);
