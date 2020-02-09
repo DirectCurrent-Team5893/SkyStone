@@ -388,9 +388,12 @@ telemetry.addLine("Vuforia SetUp");
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             while (!skystoneVisible && !isStopRequested() && numOfTimesMoved <= 6) {
 =======
             //checks for visibility of a skystone
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======

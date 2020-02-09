@@ -50,9 +50,13 @@ public class TeleOp extends LinearOpMode {
         RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
 
         //make motors all run forward
+=======
+        CapstoneDeployment = hardwareMap.get(Servo.class,"CD");
+>>>>>>> parent of 913a779... added comments for code printing
 =======
         CapstoneDeployment = hardwareMap.get(Servo.class,"CD");
 >>>>>>> parent of 913a779... added comments for code printing
@@ -63,6 +67,7 @@ public class TeleOp extends LinearOpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -78,6 +83,9 @@ public class TeleOp extends LinearOpMode {
 
         //call variables
 
+=======
+        OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+>>>>>>> parent of 913a779... added comments for code printing
 =======
         OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 >>>>>>> parent of 913a779... added comments for code printing
@@ -119,9 +127,12 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             //assigns power and buttons to intake
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 =======
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
@@ -247,11 +258,14 @@ public class TeleOp extends LinearOpMode {
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             //code to switch between levels on vertical lift and manual mode
             if (!manualMode) {
 
 =======
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
             if(!manualMode){
@@ -338,8 +352,12 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             }
             //One button switch for right block mover positions
+=======
+        }
+>>>>>>> parent of 913a779... added comments for code printing
 =======
         }
 >>>>>>> parent of 913a779... added comments for code printing
@@ -360,9 +378,12 @@ public class TeleOp extends LinearOpMode {
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             //lift levels code
             if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y < .1) {
 =======
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 
@@ -434,12 +455,34 @@ public class TeleOp extends LinearOpMode {
 //                OuttakeLift.setPower(STOP);
 //            }
             telemetry.update();
+
+
+
+
+
+//             if(gamepad2.left_stick_y>
+//            if(gamepad2.right_bumper)
+//            {
+//                OuttakeLift.setPower(.9);
+//            }
+//            else if(gamepad2.right_trigger> .1)
+//            {
+//                OuttakeLift.setPower(-gamepad2.right_trigger);
+//            }
+//            else if(!gamepad2.right_bumper && gamepad2.right_trigger<.1)
+//            {
+//                OuttakeLift.setPower(STOP);
+//            }
+            telemetry.update();
         }
     }
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //enum for Grabber position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -450,7 +493,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //function for setting position
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -468,8 +514,11 @@ public class TeleOp extends LinearOpMode {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     //enum for Capstone servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -480,7 +529,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //function for setting position
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -500,7 +552,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //enum for Baseplate mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -511,7 +566,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //function for setting position of the servos
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -532,7 +590,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //enum for right side block mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -543,7 +604,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //function for setting position of the servo
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -562,7 +626,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //enum for left side block mover servo position switch
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -573,7 +640,10 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //function for setting position of the servos
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 =======
@@ -592,9 +662,12 @@ public class TeleOp extends LinearOpMode {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     //mechanum drive train motion calculation function
     private void drivetrain(double forward, double right, double turn, double MAX_SPEED) {
 =======
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
 
@@ -668,9 +741,12 @@ public class TeleOp extends LinearOpMode {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     public void VerticalLiftPostions(double speed, double Timeout, boolean manualMode,double MAX_SPEED,double IntakePower) {
 =======
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
     public void VerticalLiftPostions(double speed,double Timeout,boolean manualMode) {
