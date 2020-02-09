@@ -49,7 +49,7 @@ public class TeleOp extends LinearOpMode {
         RightBlockGrabber = hardwareMap.get(Servo.class, "RBG");
         LeftBaseplateShover = hardwareMap.get(Servo.class, "LBS");
         RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
-        CapstoneDeployment = hardwareMap.get(Servo.class,"CD");
+        CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
 
         //make motors all run forward
         backLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -57,22 +57,22 @@ public class TeleOp extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         //set the way the lift stops
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-<<<<<<< HEAD
+
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-=======
+
         //reset encoders
         OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //call variables
->>>>>>> 913a7793b8344bd0293f84cadb4131b3a884c847
+
         double MAX_SPEED = 1;
-        double FAST_MODE =1;
-        double SLOW_MODE =0.3;
+        double FAST_MODE = 1;
+        double SLOW_MODE = 0.3;
         int STOP = 0;
         int FORWARD = 1;
         int BACKWARD = -1;
@@ -104,7 +104,7 @@ public class TeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             //assigns power and buttons to intake
-            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
             if (gamepad1.right_bumper) {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);
@@ -127,20 +127,15 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad1.dpad_down) {
                 gamepad1dpadDownHeld = false;
             }
-            if(gamepad1.y && !gamepad1yHeld)
-            {
+            if (gamepad1.y && !gamepad1yHeld) {
                 gamepad1yHeld = true;
-                if(MAX_SPEED == FAST_MODE)
-                {
+                if (MAX_SPEED == FAST_MODE) {
                     MAX_SPEED = SLOW_MODE;
-                }
-                else if (MAX_SPEED == SLOW_MODE)
-                {
+                } else if (MAX_SPEED == SLOW_MODE) {
                     MAX_SPEED = FAST_MODE;
                 }
             }
-            if(!gamepad1.y)
-            {
+            if (!gamepad1.y) {
                 gamepad1yHeld = false;
             }
             //allows switch positions to be enabled through one button rather than two
@@ -154,8 +149,8 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("changing position LeftBlockMover is ", leftBlockMover);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
-            telemetry.addData("Manual Mode",manualMode);
-            CapstoneDeploymentPositions [] CAPSTONEDEPLOYMENTPOSITIONS = {CapstoneDeploymentPositions.DOWN_POSITION,CapstoneDeploymentPositions.UP_POSITION};
+            telemetry.addData("Manual Mode", manualMode);
+            CapstoneDeploymentPositions[] CAPSTONEDEPLOYMENTPOSITIONS = {CapstoneDeploymentPositions.DOWN_POSITION, CapstoneDeploymentPositions.UP_POSITION};
             if (gamepad2.x && gamepad2xHeld == false) {
                 ranMethod++;
                 gamepad2xHeld = true;
@@ -207,14 +202,12 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad2.a) {
                 gamepad2aHeld = false;
             }
-        if(gamepad2.right_stick_button && !gamepad2rightStickButtonHeld)
-            {
+            if (gamepad2.right_stick_button && !gamepad2rightStickButtonHeld) {
                 gamepad2rightStickButtonHeld = true;
-                manualMode=!manualMode;
+                manualMode = !manualMode;
             }
-            if(!gamepad2.right_stick_button)
-            {
-                gamepad2rightStickButtonHeld= false;
+            if (!gamepad2.right_stick_button) {
+                gamepad2rightStickButtonHeld = false;
             }
 
             //one button change position code for left block mover
@@ -232,21 +225,58 @@ public class TeleOp extends LinearOpMode {
             if (!gamepad1.x) {
                 gamepad1xHeld = false;
             }
-            if(gamepad2.y)
-            {
+            if (gamepad2.y) {
                 OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-<<<<<<< HEAD
-=======
+
             //code to switch between levels on vertical lift and manual mode
-            if(!manualMode){
->>>>>>> 913a7793b8344bd0293f84cadb4131b3a884c847
+            if (!manualMode) {
+
 
                 if (gamepad2.dpad_up && !gamepad2dpadUpHeld && !manualMode) {
-                gamepad2dpadUpHeld = true;
-                if (OuttakeLift.getCurrentPosition() >= -50) {
-                    ranMethodV2++;
-                    OuttakeLift.setTargetPosition(-477);
+                    gamepad2dpadUpHeld = true;
+                    if (OuttakeLift.getCurrentPosition() >= -50) {
+                        ranMethodV2++;
+                        OuttakeLift.setTargetPosition(-477);
+                        OuttakeLift.setPower(.6);
+                        OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        while (opModeIsActive() &&
+                                (OuttakeLift.isBusy())) {
+                            // Display it for the driver.
+                            telemetry.addData("Go Up",
+                                    OuttakeLift.getCurrentPosition());
+                            telemetry.update();
+
+                            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+
+                            if (gamepad1.right_bumper) {
+                                leftIntake.setPower(IntakePower);
+                                rightIntake.setPower(-IntakePower);
+                            } else if (gamepad1.left_bumper) {
+                                leftIntake.setPower(-.3);
+                                rightIntake.setPower(.3);
+                            } else {
+                                leftIntake.setPower(STOP);
+                                rightIntake.setPower(STOP);
+                            }
+
+                            HorizontalLift.setPower(gamepad2.left_stick_y);
+
+
+                        }
+
+                        OuttakeLift.setPower(0);
+                    } else {
+                        VerticalLiftPostions(.6, 10, manualMode, MAX_SPEED, IntakePower);
+                    }
+                }
+                if (!gamepad2.dpad_up) {
+                    gamepad2dpadUpHeld = false;
+                }
+                if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y < .1) {
+                    ranMethod++;
+                    gamepad2dpadDownHeld = true;
+                    OuttakeLift.setTargetPosition(0);
                     OuttakeLift.setPower(.6);
                     OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     while (opModeIsActive() &&
@@ -255,8 +285,7 @@ public class TeleOp extends LinearOpMode {
                         telemetry.addData("Go Up",
                                 OuttakeLift.getCurrentPosition());
                         telemetry.update();
-
-                        drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+                        drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 
                         if (gamepad1.right_bumper) {
                             leftIntake.setPower(IntakePower);
@@ -273,59 +302,18 @@ public class TeleOp extends LinearOpMode {
 
 
                     }
-
                     OuttakeLift.setPower(0);
-                } else {
-                    VerticalLiftPostions(.6, 10,manualMode, MAX_SPEED,IntakePower);
+                    OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 }
-            }
-            if (!gamepad2.dpad_up) {
-                gamepad2dpadUpHeld = false;
-            }
-            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y<.1) {
-                ranMethod++;
-                gamepad2dpadDownHeld = true;
-                OuttakeLift.setTargetPosition(0);
-                OuttakeLift.setPower(.6);
-                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while (opModeIsActive() &&
-                        (OuttakeLift.isBusy())) {
-                    // Display it for the driver.
-                    telemetry.addData("Go Up",
-                    OuttakeLift.getCurrentPosition());
-                    telemetry.update();
-                    drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+                if (!gamepad2.dpad_down) {
 
-                    if (gamepad1.right_bumper) {
-                        leftIntake.setPower(IntakePower);
-                        rightIntake.setPower(-IntakePower);
-                    } else if (gamepad1.left_bumper) {
-                        leftIntake.setPower(-.3);
-                        rightIntake.setPower(.3);
-                    } else {
-                        leftIntake.setPower(STOP);
-                        rightIntake.setPower(STOP);
-                    }
-
-                    HorizontalLift.setPower(gamepad2.left_stick_y);
-
-
+                    gamepad2dpadDownHeld = false;
                 }
-                OuttakeLift.setPower(0);
-                OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
             }
-            if (!gamepad2.dpad_down) {
-
-                gamepad2dpadDownHeld = false;
-            }
-
-<<<<<<< HEAD
-
-=======
-        }
             //One button switch for right block mover positions
->>>>>>> 913a7793b8344bd0293f84cadb4131b3a884c847
             rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
             if (gamepad1.b && gamepad1bHeld == false) {
 
@@ -339,7 +327,7 @@ public class TeleOp extends LinearOpMode {
                 gamepad1bHeld = false;
             }
             //lift levels code
-            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y<.1) {
+            if (gamepad2.dpad_down && !gamepad2dpadDownHeld && gamepad2.right_stick_y < .1) {
                 ranMethod++;
                 gamepad2dpadDownHeld = true;
                 OuttakeLift.setTargetPosition(0);
@@ -366,15 +354,17 @@ public class TeleOp extends LinearOpMode {
             OuttakeLift.setPower(gamepad2.right_stick_y);
             telemetry.addData("Lift Power", gamepad2.right_stick_y);
             HorizontalLift.setPower(gamepad2.left_stick_y);
-            telemetry.addData("OuttakeLift",OuttakeLift.getCurrentPosition());
+            telemetry.addData("OuttakeLift", OuttakeLift.getCurrentPosition());
             telemetry.update();
         }
     }
-//enum for Grabber position switch
+
+    //enum for Grabber position switch
     public enum GrabberPositions {
         UP_POSITION, DOWN_POSITION
     }
-//function for setting position
+
+    //function for setting position
     public void SetPosition(final GrabberPositions POSITION) {
         double targetPosition;
         switch (POSITION) {
@@ -386,16 +376,18 @@ public class TeleOp extends LinearOpMode {
                 break;
         }
     }
+
     //enum for Capstone servo position switch
     public enum CapstoneDeploymentPositions {
         UP_POSITION, DOWN_POSITION
     }
+
     //function for setting position
     public void SetCapstoneDeploymentPosition(final CapstoneDeploymentPositions POSITION) {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                CapstoneDeployment.setPosition(.15 );
+                CapstoneDeployment.setPosition(.15);
 
                 break;
             case DOWN_POSITION:
@@ -403,10 +395,12 @@ public class TeleOp extends LinearOpMode {
                 break;
         }
     }
+
     //enum for Baseplate mover servo position switch
     public enum BaseplateMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
+
     //function for setting position of the servos
     public void SetBaseplateMoverPosition(final BaseplateMoverPositions POSITION) {
         switch (POSITION) {
@@ -421,10 +415,12 @@ public class TeleOp extends LinearOpMode {
                 break;
         }
     }
+
     //enum for right side block mover servo position switch
     public enum rightBlockMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
+
     //function for setting position of the servo
     public void SetRightBlockMoverPosition(final rightBlockMoverPositions POSITION) {
         switch (POSITION) {
@@ -437,10 +433,12 @@ public class TeleOp extends LinearOpMode {
                 break;
         }
     }
+
     //enum for left side block mover servo position switch
     public enum leftBlockMoverPositions {
         UP_POSITION, DOWN_POSITION
     }
+
     //function for setting position of the servos
     public void SetLeftBlockMoverPosition(final leftBlockMoverPositions POSITION) {
         switch (POSITION) {
@@ -455,11 +453,11 @@ public class TeleOp extends LinearOpMode {
     }
 
     //mechanum drive train motion calculation function
-    private void drivetrain(double forward, double right, double turn,double MAX_SPEED) {
+    private void drivetrain(double forward, double right, double turn, double MAX_SPEED) {
 
-        forward = checkValue(forward,MAX_SPEED);
-        right = checkValue(right,MAX_SPEED);
-        turn = checkValue(turn,MAX_SPEED);
+        forward = checkValue(forward, MAX_SPEED);
+        right = checkValue(right, MAX_SPEED);
+        turn = checkValue(turn, MAX_SPEED);
         double leftFrontPower = forward - right - turn;
         double leftBackPower = forward + right - turn;
         double rightFrontPower = forward + right + turn;
@@ -515,26 +513,22 @@ public class TeleOp extends LinearOpMode {
         //telemetry.update();
     }
 
-    private double checkValue(double hardInput,double MAX_SPEED) {
+    private double checkValue(double hardInput, double MAX_SPEED) {
         hardInput = Range.clip(hardInput, -MAX_SPEED, MAX_SPEED);
-        if(MAX_SPEED == 1) {
+        if (MAX_SPEED == 1) {
             hardInput = Math.pow(hardInput, 3);
         }
         return hardInput;
     }
-<<<<<<< HEAD
-    public void VerticalLiftPostions(double speed,double Timeout,boolean manualMode,double MAX_SPEED, double IntakePower) {
-=======
-    //function code for different lift positions
-    public void VerticalLiftPostions(double speed,double Timeout,boolean manualMode) {
->>>>>>> 913a7793b8344bd0293f84cadb4131b3a884c847
+
+    public void VerticalLiftPostions(double speed, double Timeout, boolean manualMode,double MAX_SPEED,double IntakePower) {
         int newTargetVerticalLiftPosition;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTargetVerticalLiftPosition =(OuttakeLift.getCurrentPosition()-457);
+            newTargetVerticalLiftPosition = (OuttakeLift.getCurrentPosition() - 457);
 
             OuttakeLift.setTargetPosition(newTargetVerticalLiftPosition);
             // Turn On RUN_TO_POSITION
@@ -553,9 +547,9 @@ public class TeleOp extends LinearOpMode {
                     (OuttakeLift.isBusy()) && !manualMode) {
                 // Display it for the driver.
                 telemetry.addData("Path1", newTargetVerticalLiftPosition);
-                telemetry.addData("Path2",  OuttakeLift.getCurrentPosition());
+                telemetry.addData("Path2", OuttakeLift.getCurrentPosition());
                 telemetry.update();
-                drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x,MAX_SPEED);
+                drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 
                 if (gamepad1.right_bumper) {
                     leftIntake.setPower(IntakePower);
@@ -574,9 +568,8 @@ public class TeleOp extends LinearOpMode {
             }
 
             OuttakeLift.setPower(0);
-           OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-
 }
 
