@@ -387,9 +387,12 @@ telemetry.addLine("Vuforia SetUp");
             gyroTurn(TURN_SPEED,0);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             while (!skystoneVisible && !isStopRequested() && numOfTimesMoved <= 6) {
 =======
             //checks for visibility of a skystone
+=======
+>>>>>>> parent of 913a779... added comments for code printing
 =======
 >>>>>>> parent of 913a779... added comments for code printing
             while (!skystoneVisible && !isStopRequested()) {
