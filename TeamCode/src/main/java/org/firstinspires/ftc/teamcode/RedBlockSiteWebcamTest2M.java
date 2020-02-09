@@ -499,7 +499,7 @@ public class RedBlockSiteWebcamTest2M extends LinearOpMode {
                 break;
             } else if (!targetVisible && !skystoneVisible &&sensorColor.alpha()>50 ) {
 
-                relativeLayout.setBackgroundResource(Color.BLUE);
+                relativeLayout.setBackgroundResource(R.color.very_very_dark_blue);
                 telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
 //                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
 //                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
