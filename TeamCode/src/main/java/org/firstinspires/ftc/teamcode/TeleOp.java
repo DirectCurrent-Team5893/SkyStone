@@ -315,10 +315,24 @@ public class TeleOp extends LinearOpMode {
 
 
             }
+            if(manualMode)
+            {
+                OuttakeLift.setPower(gamepad2.right_stick_x);
+            }
+                HorizontalLift.setPower(gamepad2.left_stick_y);
             //One button switch for right block mover positions
         }
+
+
+
+
+
+
+
+
+
         }
-        
+
             rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
             if (gamepad1.b && gamepad1bHeld == false) {
 
