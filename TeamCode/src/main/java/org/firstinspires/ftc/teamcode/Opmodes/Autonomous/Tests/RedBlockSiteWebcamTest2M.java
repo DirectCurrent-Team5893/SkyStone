@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes.Autonomous.Tests;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -37,6 +37,7 @@ import android.view.View;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -96,12 +97,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name = "RedBlockSideWebcamTest2M", group = "Concept")
+@Disabled
 public class RedBlockSiteWebcamTest2M extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     private static final boolean PHONE_IS_PORTRAIT = false;
-
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -499,7 +500,7 @@ public class RedBlockSiteWebcamTest2M extends LinearOpMode {
                 break;
             } else if (!targetVisible && !skystoneVisible &&sensorColor.alpha()>50 ) {
 
-                relativeLayout.setBackgroundResource(R.color.very_very_dark_blue);
+               // relativeLayout.setBackgroundResource(R.color.very_very_dark_blue);
                 telemetry.addData("SKYSTONE NOT FOUND", "We be moving backward still");
 //                frontLeftFinalEncoders = Math.abs(frontLeft.getCurrentPosition());
 //                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());

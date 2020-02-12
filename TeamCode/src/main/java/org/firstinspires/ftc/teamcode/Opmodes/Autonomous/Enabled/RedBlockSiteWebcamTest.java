@@ -27,17 +27,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes.Autonomous.Enabled;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -86,12 +89,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="BlueBlockSide", group ="Concept")
-public class BlueBlockSiteWebcamTest extends LinearOpMode {
+@Autonomous(name="RedBlockSideWebcamTest", group ="Concept")
+public class RedBlockSiteWebcamTest extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -110,8 +113,8 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -125,7 +128,7 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField = 36 * mmPerInch;
+    private static final float quadField  = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
@@ -137,9 +140,9 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
      */
     WebcamName webcamName = null;
     private boolean targetVisible = false;
-    private float phoneXRotate = 0;
-    private float phoneYRotate = 0;
-    private float phoneZRotate = 0;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -157,33 +160,31 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
     Servo LeftBaseplateShover;
     Servo RightBaseplateShover;
     Servo ShoveBlock;
-    ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
+    ModernRoboticsI2cGyro gyro    = null;                    // Additional Gyro device
 
     static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double DRIVE_SPEED = 0.8;     // Nominal speed for better accuracy.
-    static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
+    static final double     DRIVE_SPEED             = 0.8;     // Nominal speed for better accuracy.
+    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
 
-    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
-    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
-    static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
+    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
+    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
-    double DOWN_POSITION = 1;
     double STRAFE_TO_BLOCK = 17;
-    public double amountError = 0.64;
+    public double amountError =0.64;
 
 
-    @Override
-    public void runOpMode() {
-        ElapsedTime timer = new ElapsedTime();
-        telemetry.addLine("Timer is made");
-        telemetry.update();
+    @Override public void runOpMode() {
+    ElapsedTime timer = new ElapsedTime();
+    telemetry.addLine("Timer is made");
+    telemetry.update();
         /*
          * Retrieve the camera we are to use.
          */
@@ -203,7 +204,7 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
         RightBaseplateShover = hardwareMap.get(Servo.class, "RBS");
         ShoveBlock = hardwareMap.get(Servo.class, "SB");
 
-        gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
+        gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
         webcamName = hardwareMap.get(WebcamName.class, "Webcam");
         telemetry.addLine("Config Finish");
@@ -286,24 +287,24 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90;
+            phoneXRotate = 90 ;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
-                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+                    .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                    .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
-        telemetry.addLine("Vuforia SetUp");
+telemetry.addLine("Vuforia SetUp");
         // WARNING:
         // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
@@ -329,7 +330,7 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         timer.reset();
-        while (!isStopRequested() && gyro.isCalibrating()) {
+        while (!isStopRequested() && gyro.isCalibrating())  {
             sleep(50);
             idle();
         }
@@ -352,40 +353,40 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
         targetVisible = false;
 
 
+
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
 
 
-        gyroDrive(DRIVE_SPEED, 6, 6, 6, 6, 0, 100);
-        telemetry.update();
-        telemetry.addData("Initial Right Strafe", "Begun");
-        telemetry.update();
-        encoderDrive(DRIVE_SPEED, 23, -23, -23, 23, 60);
-        telemetry.addData("Initial Right Strafe", "Complete");
 
-        telemetry.addLine("Vision Starts");
 
-        int skystonePosition = 1;
-        double frontRightInitialEncoders = 0;
-        double frontLeftInitialEncoders = 0;
-        double backRightInitialEncoders = 0;
-        double backLeftInitialEncoders = 0;
+            gyroDrive(DRIVE_SPEED, -6, -6,-6, -6, 0,100);
+            telemetry.update();
+            telemetry.addData("Initial Right Strafe", "Begun");
+            telemetry.update();
+            encoderDrive(DRIVE_SPEED,23, -23, -23, 23, 60);
+            telemetry.addData("Initial Right Strafe", "Complete");
 
-        double frontRightFinalEncoders = 0;
-        double frontLeftFinalEncoders = 0;
-        double backRightFinalEncoders = 0;
-        double backLeftFinalEncoders = 0;
+            telemetry.addLine("Vision Starts");
 
-        frontLeftInitialEncoders = frontLeft.getCurrentPosition();
-        frontRightInitialEncoders = frontRight.getCurrentPosition();
-        backLeftInitialEncoders = backLeft.getCurrentPosition();
-        backRightInitialEncoders = backRight.getCurrentPosition();
-        gyroTurn(TURN_SPEED, 0);
-        while (!skystoneVisible && !isStopRequested() && numOfTimesMoved <= 6) {
-            //checks for visibility of a skystone
-            while (!skystoneVisible && !isStopRequested()) {
+            int skystonePosition = 1;
+            double frontRightInitialEncoders = 0;
+            double frontLeftInitialEncoders = 0;
+            double backRightInitialEncoders = 0;
+            double backLeftInitialEncoders =0;
 
+            double frontRightFinalEncoders = 0;
+            double frontLeftFinalEncoders = 0;
+            double backRightFinalEncoders = 0;
+            double backLeftFinalEncoders = 0;
+
+            frontLeftInitialEncoders = frontLeft.getCurrentPosition();
+            frontRightInitialEncoders = frontRight.getCurrentPosition();
+            backLeftInitialEncoders = backLeft.getCurrentPosition();
+            backRightInitialEncoders = backRight.getCurrentPosition();
+            gyroTurn(TURN_SPEED,0);
+            while (!skystoneVisible && !isStopRequested() || numOfTimesMoved <= 6) {
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -417,11 +418,12 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
                     // express the rotation of the robot in degrees.
                     Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                     telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                } else {
+                }
+                else {
                     telemetry.addData("Visible Target", "none");
                 }
 
-                if ((targetVisible && skystoneVisible) || numOfTimesMoved >= 6) {
+                if ((targetVisible && skystoneVisible) || numOfTimesMoved>=6 ) {
                     backLeft.setPower(0);
                     backRight.setPower(0);
                     frontLeft.setPower(0);
@@ -433,10 +435,10 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 //                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
                     String[] Positions = {"UNKNOWN POSITION", "LEFT POSITION", "MIDDLE POSITION", "RIGHT POSITION"};
                     telemetry.addLine("Skystone detected");
-                    gyroTurn(TURN_SPEED, 0);
+                    gyroTurn(TURN_SPEED,0);
                     telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                     telemetry.update();
-                    gyroDrive(DRIVE_SPEED, -1, -1, -1, -1, 0, 10);
+                    gyroDrive(DRIVE_SPEED, -3, -3, -3, -3, 0,10);
                     telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
                     telemetry.addData("strafe right 3.7 inches", "Begun");
@@ -445,12 +447,11 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
                     telemetry.addData("strafe right 3.7 inches", "Complete");
                     telemetry.addData("Lower Right Block Grabber", "Begun");
                     telemetry.update();
-                    RightBlockGrabber.setPosition(DOWN_POSITION);
+                    LeftBlockGrabber.setPosition(.1);
                     sleep(1500);
                     telemetry.addData("Lower Right Block Grabber", "Complete");
                     telemetry.addData("Position is", Positions[skystonePosition]);
                     break;
-
                 } else if (!targetVisible && !skystoneVisible) {
 
 
@@ -459,127 +460,116 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
 //                frontRightFinalEncoders = Math.abs(frontRight.getCurrentPosition());
 //                backLeftFinalEncoders = Math.abs(backLeft.getCurrentPosition());
 //                backRightFinalEncoders = Math.abs(backRight.getCurrentPosition());
-                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    encoderDrive(DRIVE_SPEED, -4, -4, -4, -4, 5);
-                    numOfTimesMoved++;
+                    encoderDrive(DRIVE_SPEED,4,4,4,4,5);
+                    numOfTimesMoved ++;
                     backLeftFinalEncoders = backLeft.getCurrentPosition();
                     backRightFinalEncoders = backRight.getCurrentPosition();
                     frontLeftFinalEncoders = frontLeft.getCurrentPosition();
                     frontRightFinalEncoders = frontRight.getCurrentPosition();
-
-
                 }
             }
-            backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            double frontRightInchesMoved = Math.abs((frontRightFinalEncoders - frontRightInitialEncoders) / COUNTS_PER_INCH);
-            double backRightInchesMoved = Math.abs((backRightFinalEncoders - backRightInitialEncoders) / COUNTS_PER_INCH);
-            double frontLeftInchesMoved = Math.abs((frontLeftFinalEncoders - frontLeftInitialEncoders) / COUNTS_PER_INCH);
-            double backLeftInchesMoved = Math.abs(backLeftFinalEncoders - backLeftInitialEncoders) / COUNTS_PER_INCH;
-            double averageInchesMoved = Math.abs((frontLeftInchesMoved + backLeftInchesMoved + frontRightInchesMoved + backRightInchesMoved) / 4);
-            telemetry.addData("numOfTimesMoved", numOfTimesMoved);
+
+            double frontRightInchesMoved = (frontRightFinalEncoders - frontRightInitialEncoders) / COUNTS_PER_INCH;
+            double backRightInchesMoved = (backRightFinalEncoders - backRightInitialEncoders) / COUNTS_PER_INCH;
+            double frontLeftInchesMoved = (frontLeftFinalEncoders - frontLeftInitialEncoders) / COUNTS_PER_INCH;
+            double backLeftInchesMoved = (backLeftFinalEncoders - backLeftInitialEncoders) / COUNTS_PER_INCH;
+            double averageInchesMoved = (frontLeftInchesMoved + backLeftInchesMoved + frontRightInchesMoved + backRightInchesMoved)/4;
+            telemetry.addData("numOfTimesMoved",numOfTimesMoved);
 
             telemetry.addData("Strafe Left 4 inches", "Begun");
             telemetry.update();
-            encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
+            encoderDrive(DRIVE_SPEED, -14, 14, 14, -14, 10);
             telemetry.addData("Strafe Left 4 inches", "Complete");
 
 
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, 32 + averageInchesMoved, 32 + averageInchesMoved, 32 + averageInchesMoved, 32 + averageInchesMoved, 0, 10);
+            gyroDrive(DRIVE_SPEED, -30-averageInchesMoved, -30-averageInchesMoved, -30-averageInchesMoved, -30-averageInchesMoved, 0,10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
             telemetry.update();
-            RightBlockGrabber.setPosition(0);
+            LeftBlockGrabber.setPosition(1);
             telemetry.addData("Raise Right Block Grabber", "Complete");
-            gyroTurn(TURN_SPEED, 0);
+            gyroTurn(TURN_SPEED,0);
             telemetry.addData("move backward 72 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, -56 - averageInchesMoved, -56 - averageInchesMoved, -56 - averageInchesMoved, -56 - averageInchesMoved, 0, 10);
-            if (numOfTimesMoved > 5) {
-                gyroDrive(DRIVE_SPEED, -3, -3, -3, -3, 0, 100);
+            gyroDrive(DRIVE_SPEED, 54+averageInchesMoved, 54+averageInchesMoved, 54+averageInchesMoved, 54+averageInchesMoved, 0,10);
+            if(numOfTimesMoved>5)
+            {
+                gyroDrive(DRIVE_SPEED,3,3,3,3,0,100);
             }
             telemetry.addData("Move backward 72 inches", "Complete");
-            gyroTurn(TURN_SPEED, 0);
+            gyroTurn(TURN_SPEED,0);
             telemetry.addData("move Forward 60 inches to the foundation", "Begun");
             telemetry.update();
             //gyroDrive(3, -3, -3, -3, -3, 0,10);
             telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
-            if (numOfTimesMoved < 6) {
-                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0, 10);
-            }
             encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
             telemetry.update();
-            RightBlockGrabber.setPosition(DOWN_POSITION);
+            LeftBlockGrabber.setPosition(.1);
             sleep(1500);
             telemetry.addData("strafe right 3.7 inches", "Begun");
             telemetry.update();
 
-            gyroTurn(TURN_SPEED, 0);
+            gyroTurn(TURN_SPEED,0);
             encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
             telemetry.addData("strafe right 3.7 inches", "Complete");
             telemetry.addData("Lower Right Block Grabber", "Complete");
             telemetry.addData("move Forward 68 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, 58 + averageInchesMoved, 58 + averageInchesMoved, 58 + averageInchesMoved, 58 + averageInchesMoved, 0, 10);
+            gyroDrive(DRIVE_SPEED, -54-averageInchesMoved, -54-averageInchesMoved, -54-averageInchesMoved,-54 -averageInchesMoved, 0,10);
             telemetry.addData("Move Forward 68 inches", "Complete");
 
             telemetry.addData("Raise Right Block Grabber", "Begun");
             telemetry.update();
-            RightBlockGrabber.setPosition(.1);
+            LeftBlockGrabber.setPosition(1);
             telemetry.addData("Raise Right Block Grabber", "Complete");
 
-            gyroTurn(TURN_SPEED, 0);
-            if (numOfTimesMoved <= 3) {
-                gyroDrive(DRIVE_SPEED, -76 - averageInchesMoved, -76 - averageInchesMoved, -76 - averageInchesMoved, -76 - averageInchesMoved, 0, 10);
-                gyroTurn(TURN_SPEED, 0);
-                telemetry.addData("move Forward 60 inches to the foundation", "Begun");
-                telemetry.update();
-                //gyroDrive(3, -3, -3, -3, -3, 0,DRIVE_SPEED0);
-                telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
-                telemetry.addData("strafe right 3.7 inches", "Begun");
-                telemetry.update();
-                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0, 10);
-                encoderDrive(DRIVE_SPEED, 14, -14, -14, 14, 10);
-                telemetry.addData("strafe right 3.7 inches", "Complete");
-                telemetry.update();
-                RightBlockGrabber.setPosition(DOWN_POSITION);
-                sleep(1500);
-                encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
-                gyroDrive(DRIVE_SPEED, 72 + averageInchesMoved, 72 + averageInchesMoved, 72 + averageInchesMoved, 72 + averageInchesMoved, 0, 10);
-                RightBlockGrabber.setPosition(.1);
-            } else if (numOfTimesMoved < 6 && numOfTimesMoved > 3) {
-                gyroDrive(DRIVE_SPEED, -20 - averageInchesMoved, -20 - averageInchesMoved, -20 - averageInchesMoved, -20 - averageInchesMoved, 0, 10);
-                gyroTurn(TURN_SPEED, 0);
+            gyroTurn(TURN_SPEED,0);
+            if (numOfTimesMoved <=3){
+             gyroDrive(DRIVE_SPEED,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,72+averageInchesMoved,0,10);
+                gyroTurn(TURN_SPEED,0);
                 telemetry.addData("move Forward 60 inches to the foundation", "Begun");
                 telemetry.update();
                 //gyroDrive(3, -3, -3, -3, -3, 0,10);
                 telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
                 telemetry.addData("strafe right 3.7 inches", "Begun");
                 telemetry.update();
-                gyroDrive(DRIVE_SPEED, 2, 2, 2, 2, 0, 10);
                 encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
                 telemetry.addData("strafe right 3.7 inches", "Complete");
                 telemetry.update();
-                RightBlockGrabber.setPosition(DOWN_POSITION);
-                sleep(1250);
+                LeftBlockGrabber.setPosition(.1);
+                sleep(1500);
                 encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
-                gyroDrive(DRIVE_SPEED, 20 + averageInchesMoved, 20 + averageInchesMoved, 20 + averageInchesMoved, 20 + averageInchesMoved, 0, 10);
-                RightBlockGrabber.setPosition(.1);
+                gyroDrive(DRIVE_SPEED,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,-72-averageInchesMoved,0,10);
+                LeftBlockGrabber.setPosition(1);
+            }
+            else if(numOfTimesMoved<6 && numOfTimesMoved>3)
+            {
+                gyroDrive(DRIVE_SPEED,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,20+averageInchesMoved,0,10);
+                gyroTurn(TURN_SPEED,0);
+                telemetry.addData("move Forward 60 inches to the foundation", "Begun");
+                telemetry.update();
+                //gyroDrive(3, -3, -3, -3, -3, 0,10);
+                telemetry.addData("Move Forward 60 inches to the foundation", "Complete");
+                telemetry.addData("strafe right 3.7 inches", "Begun");
+                telemetry.update();
+                encoderDrive(DRIVE_SPEED, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, 10);
+                telemetry.addData("strafe right 3.7 inches", "Complete");
+                telemetry.update();
+                LeftBlockGrabber.setPosition(.1);
+                sleep(1500);
+                encoderDrive(DRIVE_SPEED, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
+                gyroDrive(DRIVE_SPEED,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,-20-averageInchesMoved,0,10);
+                LeftBlockGrabber.setPosition(1);
             }
             telemetry.addData("move backward 10 inches", "Begun");
             telemetry.update();
-            gyroDrive(DRIVE_SPEED, -12, -18, -18, -12, 0, 10);
+            gyroDrive(DRIVE_SPEED, 16, 16, 16, 16, 0,10);
             telemetry.addData("Move backward 10 inches", "Complete");
             telemetry.update();
 
@@ -589,355 +579,361 @@ public class BlueBlockSiteWebcamTest extends LinearOpMode {
             telemetry.update();
 
 
-            // Disable Tracking when we are done
-            targetsSkyStone.deactivate();
-        }
+        // Disable Tracking when we are done
+        targetsSkyStone.deactivate();
     }
-        /**
-         *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-         *  Move will stop if either of these conditions occur:
-         *  1) Move gets to the desired position
-         *  2) Driver stops the opmode running.
-         *
-         * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-         * @param frontLeftInches  Distance (in inches) to move from current position for front Left.  Negative distance means move backwards.
-         * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-         *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-         *                   If a relative angle is required, add/subtract from current heading.
-         */
-        public void gyroDrive ( double speed,
-        double frontLeftInches, double frontRightInches, double backLeftInches,
-        double backRightInches,
-        double angle, double timeoutS){
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param frontLeftInches  Distance (in inches) to move from current position for front Left.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
+    public void gyroDrive ( double speed,
+                            double frontLeftInches, double frontRightInches, double backLeftInches,
+                            double backRightInches,
+                            double angle,double timeoutS) {
 
-            int newFrontLeftTarget;
-            int newFrontRightTarget;
-            int newBackLeftTarget;
-            int newBackRightTarget;
-            int moveCounts;
+        int     newFrontLeftTarget;
+        int     newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
+        int     moveCounts;
 
-            double HalfMaxOne;
-            double HalfMaxTwo;
+        double HalfMaxOne;
+        double HalfMaxTwo;
 
-            double max;
+        double  max;
 
-            double error;
-            double steer;
-            double frontLeftSpeed;
-            double frontRightSpeed;
-            double backLeftSpeed;
-            double backRightSpeed;
+        double  error;
+        double  steer;
+        double  frontLeftSpeed;
+        double  frontRightSpeed;
+        double backLeftSpeed;
+        double backRightSpeed;
 
-            double ErrorAmount;
-            boolean goodEnough = false;
+        double ErrorAmount;
+        boolean goodEnough = false;
 
-            // Ensure that the opmode is still active
-            if (opModeIsActive()) {
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
 
-                // Determine new target position, and pass to motor controller
-                newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
-                newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
-                newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
-                newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
-
-
-                // Set Target and Turn On RUN_TO_POSITION
-                frontLeft.setTargetPosition(newFrontLeftTarget);
-                frontRight.setTargetPosition(newFrontRightTarget);
-                backLeft.setTargetPosition(newBackLeftTarget);
-                backRight.setTargetPosition(newBackRightTarget);
-
-                frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                // start motion.
-                speed = Range.clip(Math.abs(speed), 0.0, 1.0);
-                frontLeft.setPower(Math.abs(speed));
-                frontRight.setPower(Math.abs(speed));
-                backLeft.setPower(Math.abs(speed));
-                backRight.setPower(Math.abs(speed));
-                // keep looping while we are still active, and BOTH motors are running.
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
+            // Determine new target position, and pass to motor controller
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
 
 
-                    // adjust relative speed based on heading error.
-                    error = getError(angle);
-                    steer = getSteer(error, P_DRIVE_COEFF);
+            // Set Target and Turn On RUN_TO_POSITION
+            frontLeft.setTargetPosition(newFrontLeftTarget);
+            frontRight.setTargetPosition(newFrontRightTarget);
+            backLeft.setTargetPosition(newBackLeftTarget);
+            backRight.setTargetPosition(newBackRightTarget);
 
-                    // if driving in reverse, the motor correction also needs to be reversed
-                    if (frontLeftInches < 0 && frontRightInches < 0 && backLeftInches < 0 && backRightInches < 0)
-                        steer *= -1.0;
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    frontLeftSpeed = speed - steer;
-                    backLeftSpeed = speed - steer;
-                    backRightSpeed = speed + steer;
-                    frontRightSpeed = speed + steer;
+            // start motion.
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            frontLeft.setPower(Math.abs(speed));
+            frontRight.setPower(Math.abs(speed));
+            backLeft.setPower(Math.abs(speed));
+            backRight.setPower(Math.abs(speed));
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
 
-                    // Normalize speeds if either one exceeds +/- 1.0;
-                    HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
-                    HalfMaxTwo = Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
-                    max = Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
-                    if (max > 1.0) {
-                        frontLeftSpeed /= max;
-                        frontRightSpeed /= max;
-                        backLeftSpeed /= max;
-                        backRightSpeed /= max;
-                    }
 
-                    frontLeft.setPower(frontLeftSpeed);
-                    frontRight.setPower(frontRightSpeed);
-                    backLeft.setPower(backLeftSpeed);
-                    backRight.setPower(backRightSpeed);
+                // adjust relative speed based on heading error.
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
 
-                    // Display drive status for the driver.
-                    telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
-                    telemetry.addData("Target", "%7d:%7d", newBackLeftTarget, newBackRightTarget, newFrontLeftTarget, newFrontRightTarget);
-                    telemetry.addData("Actual", "%7d:%7d", backLeft.getCurrentPosition(), backRight.getCurrentPosition(), frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
-                    telemetry.addData("Speed", "%5.2f:%5.2f", backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
-                    telemetry.update();
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (frontLeftInches< 0 && frontRightInches <0 && backLeftInches<0 && backRightInches <0)
+                    steer *= -1.0;
 
-                    ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
-                            + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
-                            + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
-                            + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
-                    if (ErrorAmount < amountError) {
-                        goodEnough = true;
-                    }
+                frontLeftSpeed = speed - steer;
+                backLeftSpeed = speed - steer;
+                backRightSpeed = speed + steer;
+                frontRightSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
+                HalfMaxTwo =Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
+                max= Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
+                if (max > 1.0)
+                {
+                    frontLeftSpeed /= max;
+                    frontRightSpeed /= max;
+                    backLeftSpeed /= max;
+                    backRightSpeed /= max;
                 }
 
-                // Stop all motion;
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
+                frontLeft.setPower(frontLeftSpeed);
+                frontRight.setPower(frontRightSpeed);
+                backLeft.setPower(backLeftSpeed);
+                backRight.setPower(backRightSpeed);
 
-                // Turn off RUN_TO_POSITION
-                frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-        }
-
-        /**
-         *  Method to spin on central axis to point in a new direction.
-         *  Move will stop if either of these conditions occur:
-         *  1) Move gets to the heading (angle)
-         *  2) Driver stops the opmode running.
-         *
-         * @param speed Desired speed of turn.
-         * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-         *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-         *                   If a relative angle is required, add/subtract from current heading.
-         */
-
-
-        public void gyroTurn ( double speed, double angle){
-
-            // keep looping while we are still active, and not on heading.
-            while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
-                // Update telemetry & Allow time for other processes to run.
-                telemetry.update();
-            }
-        }
-
-        /**
-         *  Method to obtain & hold a heading for a finite amount of time
-         *  Move will stop once the requested time has elapsed
-         *
-         * @param speed      Desired speed of turn.
-         * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-         *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-         *                   If a relative angle is required, add/subtract from current heading.
-         * @param holdTime   Length of time (in seconds) to hold the specified heading.
-         */
-
-
-        public void gyroHold ( double speed, double angle, double holdTime){
-
-            ElapsedTime holdTimer = new ElapsedTime();
-
-            // keep looping while we have time remaining.
-            holdTimer.reset();
-            while (opModeIsActive() && (holdTimer.time() < holdTime)) {
-                // Update telemetry & Allow time for other processes to run.
-                onHeading(speed, angle, P_TURN_COEFF);
+                // Display drive status for the driver.
+                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Target",  "%7d:%7d",      newBackLeftTarget,newBackRightTarget,newFrontLeftTarget,newFrontRightTarget);
+                telemetry.addData("Actual",  "%7d:%7d",    backLeft.getCurrentPosition(),backRight.getCurrentPosition(),frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
+                telemetry.addData("Speed",   "%5.2f:%5.2f",  backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
                 telemetry.update();
 
-
+                ErrorAmount = ((Math.abs(((newBackLeftTarget)-(backLeft.getCurrentPosition())))
+                        +(Math.abs(((newFrontLeftTarget)-(frontLeft.getCurrentPosition()))))
+                        +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
+                        +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
+                if(ErrorAmount<amountError)
+           {
+               goodEnough = true;
+           }
             }
 
             // Stop all motion;
             frontLeft.setPower(0);
+            frontRight.setPower(0);
             backLeft.setPower(0);
             backRight.setPower(0);
-            frontRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    /**
+     *  Method to spin on central axis to point in a new direction.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the heading (angle)
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed Desired speed of turn.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
+
+
+
+    public void gyroTurn (  double speed, double angle) {
+
+        // keep looping while we are still active, and not on heading.
+        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
+            // Update telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
+    }
+
+    /**
+     *  Method to obtain & hold a heading for a finite amount of time
+     *  Move will stop once the requested time has elapsed
+     *
+     * @param speed      Desired speed of turn.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     * @param holdTime   Length of time (in seconds) to hold the specified heading.
+     */
+
+
+
+
+    public void gyroHold( double speed, double angle, double holdTime) {
+
+        ElapsedTime holdTimer = new ElapsedTime();
+
+        // keep looping while we have time remaining.
+        holdTimer.reset();
+        while (opModeIsActive() && (holdTimer.time() < holdTime)) {
+            // Update telemetry & Allow time for other processes to run.
+            onHeading(speed, angle, P_TURN_COEFF);
+            telemetry.update();
+
+
+
         }
 
+        // Stop all motion;
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+        frontRight.setPower(0);
+    }
 
-        /**
-         * Perform one cycle of closed loop heading control.
-         *
-         * @param speed     Desired speed of turn.
-         * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
-         *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-         *                  If a relative angle is required, add/subtract from current heading.
-         * @param PCoeff    Proportional Gain coefficient
-         * @return
-         */
-        boolean onHeading ( double speed, double angle, double PCoeff){
-            double error;
-            double steer;
-            boolean onTarget = false;
-            double leftSpeed;
-            double rightSpeed;
 
-            // determine turn power based on +/- error
-            error = getError(angle);
 
-            if (Math.abs(error) <= HEADING_THRESHOLD) {
-                steer = 0.0;
-                leftSpeed = 0.0;
-                rightSpeed = 0.0;
-                onTarget = true;
-            } else {
-                steer = getSteer(error, PCoeff);
-                rightSpeed = speed * steer;
-                leftSpeed = -rightSpeed;
-            }
+    /**
+     * Perform one cycle of closed loop heading control.
+     *
+     * @param speed     Desired speed of turn.
+     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
+     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                  If a relative angle is required, add/subtract from current heading.
+     * @param PCoeff    Proportional Gain coefficient
+     * @return
+     */
+    boolean onHeading(double speed, double angle, double PCoeff) {
+        double   error ;
+        double   steer ;
+        boolean  onTarget = false ;
+        double leftSpeed;
+        double rightSpeed;
 
-            // Send desired speeds to motors.
-            frontLeft.setPower(leftSpeed);
-            backLeft.setPower(leftSpeed);
-            backRight.setPower(rightSpeed);
-            frontRight.setPower(rightSpeed);
+        // determine turn power based on +/- error
+        error = getError(angle);
 
-            // Display it for the driver.
-            telemetry.addData("Target", "%5.2f", angle);
-            telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
-            telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
-
-            return onTarget;
+        if (Math.abs(error) <= HEADING_THRESHOLD) {
+            steer = 0.0;
+            leftSpeed  = 0.0;
+            rightSpeed = 0.0;
+            onTarget = true;
+        }
+        else {
+            steer = getSteer(error, PCoeff);
+            rightSpeed  = speed * steer;
+            leftSpeed   = -rightSpeed;
         }
 
-        /**
-         * getError determines the error between the target angle and the robot's current heading
-         * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
-         * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-         *          +ve error means the robot should turn LEFT (CCW) to reduce error.
-         */
-        public double getError ( double targetAngle){
+        // Send desired speeds to motors.
+        frontLeft.setPower(leftSpeed);
+        backLeft.setPower(leftSpeed);
+        backRight.setPower(rightSpeed);
+        frontRight.setPower(rightSpeed);
 
-            double robotError;
+        // Display it for the driver.
+        telemetry.addData("Target", "%5.2f", angle);
+        telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
+        telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed,rightSpeed);
 
-            // calculate error in -179 to +180 range  (
-            robotError = targetAngle - gyro.getIntegratedZValue();
-            while (robotError > 180) robotError -= 360;
-            while (robotError <= -180) robotError += 360;
-            return robotError;
-        }
+        return onTarget;
+    }
 
-        /**
-         * returns desired steering force.  +/- 1 range.  +ve = steer left
-         * @param error   Error angle in robot relative degrees
-         * @param PCoeff  Proportional Gain Coefficient
-         * @return
-         */
-        public double getSteer ( double error, double PCoeff){
-            return Range.clip(error * PCoeff, -DRIVE_SPEED, 1);
-        }
+    /**
+     * getError determines the error between the target angle and the robot's current heading
+     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
+     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
+     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     */
+    public double getError(double targetAngle) {
 
-        public void encoderDrive ( double speed,
-        double frontLeftInches, double frontRightInches, double backLeftInches,
-        double backRightInches,
-        double timeoutS){
-            int newFrontLeftTarget;
-            int newFrontRightTarget;
-            int newBackLeftTarget;
-            int newBackRightTarget;
+        double robotError;
 
-            double ErrorAmount;
-            boolean goodEnough = false;
-            // Ensure that the opmode is still active
-            if (opModeIsActive()) {
+        // calculate error in -179 to +180 range  (
+        robotError = targetAngle - gyro.getIntegratedZValue();
+        while (robotError > 180)  robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
 
-                // Determine new target position, and pass to motor controller
-                newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
-                newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
-                newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
-                newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
-                frontLeft.setTargetPosition(newFrontLeftTarget);
-                frontRight.setTargetPosition(newFrontRightTarget);
-                backLeft.setTargetPosition(newBackLeftTarget);
-                backRight.setTargetPosition(newBackRightTarget);
+    /**
+     * returns desired steering force.  +/- 1 range.  +ve = steer left
+     * @param error   Error angle in robot relative degrees
+     * @param PCoeff  Proportional Gain Coefficient
+     * @return
+     */
+    public double getSteer(double error, double PCoeff) {
+        return Range.clip(error * PCoeff, -DRIVE_SPEED, 1);
+    }
+    public void encoderDrive(double speed,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches,
+                             double timeoutS) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
 
-                // Turn On RUN_TO_POSITION
-                frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        double ErrorAmount;
+        boolean goodEnough = false;
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
+            frontLeft.setTargetPosition(newFrontLeftTarget);
+            frontRight.setTargetPosition(newFrontRightTarget);
+            backLeft.setTargetPosition(newBackLeftTarget);
+            backRight.setTargetPosition(newBackRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-                // reset the timeout time and start motion.
-                runtime.reset();
-                frontLeft.setPower(Math.abs(speed));
-                frontRight.setPower(Math.abs(speed));
-                backLeft.setPower(Math.abs(speed));
-                backRight.setPower(Math.abs(speed));
+            // reset the timeout time and start motion.
+            runtime.reset();
+            frontLeft.setPower(Math.abs(speed));
+            frontRight.setPower(Math.abs(speed));
+            backLeft.setPower(Math.abs(speed));
+            backRight.setPower(Math.abs(speed));
 
-                // keep looping while we are still active, and there is time left, and both motors are running.
-                // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-                // its target position, the motion will stop.  This is "safer" in the event that the robot will
-                // always end the motion as soon as possible.
-                // However, if you require that BOTH motors have finished their moves before the robot continues
-                // onto the next step, use (isBusy() || isBusy()) in the loop test.
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy())&& !goodEnough) {
 
-                    // Display it for the driver.
-                    telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
-                    telemetry.addData("Path2", "Running at %7d :%7d",
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
 
-                            frontLeft.getCurrentPosition(),
-                            frontRight.getCurrentPosition(),
-                            backLeft.getCurrentPosition(),
-                            backRight.getCurrentPosition());
-                    telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-                    telemetry.addData("backLeft", backLeft.getCurrentPosition());
-                    telemetry.addData("frontRight", frontRight.getCurrentPosition());
-                    telemetry.addData("backright", backRight.getCurrentPosition());
+                        frontLeft.getCurrentPosition(),
+                        frontRight.getCurrentPosition(),
+                        backLeft.getCurrentPosition(),
+                        backRight.getCurrentPosition());
+                telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+                telemetry.addData("backLeft", backLeft.getCurrentPosition());
+                telemetry.addData("frontRight", frontRight.getCurrentPosition());
+                telemetry.addData("backright", backRight.getCurrentPosition());
 
-                    telemetry.update();
+                telemetry.update();
 
-                    ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
-                            + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
-                            + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
-                            + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
-                    if (ErrorAmount < amountError) {
-                        goodEnough = true;
-                    }
+                ErrorAmount = ((Math.abs(((newBackLeftTarget)-(backLeft.getCurrentPosition())))
+                        +(Math.abs(((newFrontLeftTarget)-(frontLeft.getCurrentPosition()))))
+                        +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
+                        +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
+                if(ErrorAmount<amountError)
+                {
+                    goodEnough = true;
                 }
-
-                // Stop all motion;
-
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-
-                // Turn off RUN_TO_POSITION
-                frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                //  sleep(250);   // optional pause after eah move
             }
-        }
 
+            // Stop all motion;
+
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after eah move
+        }
+    }
 }
