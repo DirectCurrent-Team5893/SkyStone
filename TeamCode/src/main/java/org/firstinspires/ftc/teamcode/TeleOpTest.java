@@ -142,6 +142,7 @@ public class TeleOpTest extends LinearOpMode {
             if (!gamepad1.y) {
                 gamepad1yHeld = false;
             }
+
             GrabberPositions[] GRABBERPOSITIONS = {GrabberPositions.DOWN_POSITION, GrabberPositions.UP_POSITION};
             telemetry.addData("gamepad2.b is", gamepad2.b);
             telemetry.addData("gamepad2b held is", gamepad2bHeld);
@@ -153,6 +154,7 @@ public class TeleOpTest extends LinearOpMode {
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("changing position GrabberChanger is ", baseplateChanger);
             telemetry.addData("Manual Mode", manualMode);
+
             CapstoneDeploymentPositions[] CAPSTONEDEPLOYMENTPOSITIONS = {CapstoneDeploymentPositions.DOWN_POSITION, CapstoneDeploymentPositions.UP_POSITION};
             if (gamepad2.x && gamepad2xHeld == false) {
                 ranMethod++;
@@ -208,6 +210,7 @@ public class TeleOpTest extends LinearOpMode {
                 gamepad2rightStickButtonHeld = true;
                 manualMode = !manualMode;
             }
+
             if (!gamepad2.right_stick_button) {
                 gamepad2rightStickButtonHeld = false;
             }
@@ -231,10 +234,8 @@ public class TeleOpTest extends LinearOpMode {
             }
 
             //code to switch between levels on vertical lift and manual mode
-            if (!manualMode) {
 
-            if(!manualMode){
-                if (gamepad2.dpad_up && !gamepad2dpadUpHeld && !manualMode) {
+                if (gamepad2.dpad_up && !gamepad2dpadUpHeld && gamepad2.right_stick_y <.1) {
                     gamepad2dpadUpHeld = true;
                     if (OuttakeLift.getCurrentPosition() >= -50) {
                         ranMethodV2++;
@@ -314,24 +315,18 @@ public class TeleOpTest extends LinearOpMode {
 
 
 
-            }
-            if(manualMode)
-            {
-                OuttakeLift.setPower(gamepad2.right_stick_x);
-            }
-                HorizontalLift.setPower(gamepad2.left_stick_y);
+            OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            OuttakeLift.setPower(gamepad2.right_stick_y);
+            telemetry.addData("Lift Power", gamepad2.right_stick_y);
+            telemetry.addData("Horizontal Lift Position:",HorizontalLift.getCurrentPosition());
+            HorizontalLift.setPower(gamepad2.left_stick_y);
+            telemetry.addData("OuttakeLift", OuttakeLift.getCurrentPosition());
+            telemetry.update();
+
             //One button switch for right block mover positions
-        }
+            }
 
 
-
-
-
-
-
-
-
-        }
 
             rightBlockMoverPositions[] RIGHTBLOCKMOVERPOSITIONS = {rightBlockMoverPositions.UP_POSITION, rightBlockMoverPositions.DOWN_POSITION};
             if (gamepad1.b && gamepad1bHeld == false) {
