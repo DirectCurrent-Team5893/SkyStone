@@ -446,7 +446,7 @@ public class TeleOp extends LinearOpMode {
                 Grabber.setPosition(.5);
                 break;
             case DOWN_POSITION:
-                Grabber.setPosition(.4);
+                Grabber.setPosition(.3);
                 break;
         }
     }
@@ -481,8 +481,8 @@ public class TeleOp extends LinearOpMode {
 
                 break;
             case DOWN_POSITION:
-                RightBaseplateShover.setPosition(.2);
-                LeftBaseplateShover.setPosition(.7);
+                RightBaseplateShover.setPosition(.1);
+                LeftBaseplateShover.setPosition(.9);
                 break;
         }
     }
