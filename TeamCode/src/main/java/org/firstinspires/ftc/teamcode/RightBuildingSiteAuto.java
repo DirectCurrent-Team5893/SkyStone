@@ -245,7 +245,112 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         encoderDrive(1, -34, -34, 34, -34, 0);
         telemetry.addData("Move Backward 34 inches to park", "Complete");
         TurnOffAllMotors();
-    }
+
+//        telemetry.addData("Reset foundation mover", "Start");
+//        LeftBaseplateShover.setPosition(0);
+//        RightBaseplateShover.setPosition(1);
+//        telemetry.addData("Reset Foundation mover", "Completed");
+//        telemetry.update();
+//
+//        telemetry.addData("move Forward 6 inches", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, -6, -6, 6, -6, 0, 0);
+//        telemetry.addData("Move Forward 6 inches", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("left Strafe", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, 10, -10, 10, 10, 0,0);
+//        telemetry.addData("left Strafe", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("right 90 degree turn", "Begun");
+//        telemetry.update();
+//        while(gyro.getHeading() < currentAngle+90)
+//        {
+//            frontLeft.setPower(DRIVE_SPEED);
+//            frontRight.setPower(DRIVE_SPEED);
+//            backLeft.setPower(DRIVE_SPEED);
+//            backRight.setPower(DRIVE_SPEED);
+//        }
+//        telemetry.addData("right 90 degree turn", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("move Forward 25 inches", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, 21, 21, -21, 21, 0, 0);
+//        gyroDrive(.4, 4, 4, -4, 4, 0, 0);
+//        telemetry.addData("Move Forward 25 inches", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("Lower foundation mover", "Start");
+//        LeftBaseplateShover.setPosition(1);
+//        RightBaseplateShover.setPosition(.4);
+//        telemetry.addData("Lower Foundation mover", "Completed");
+//        telemetry.update();
+//        TurnOffAllMotors();
+//
+//        Thread.sleep(1500);
+//
+//        telemetry.addData("left Strafe", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, -7, 7, -7, -7, 0, 0);
+//        gyroDrive(.4, -10, 10, -10, -10, 0, 0);
+//        telemetry.addData("left Strafe", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("right Strafe", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, 8, -8, 8, 8, 0, 0);
+//        telemetry.addData("left Strafe", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("Arc", "Begun");
+//        telemetry.update();
+//        while(gyro.getHeading() < currentAngle+90)
+//        {
+//            frontLeft.setPower(DRIVE_SPEED);
+//            frontRight.setPower(DRIVE_SPEED);
+//            backLeft.setPower(DRIVE_SPEED);
+//            backRight.setPower(DRIVE_SPEED);
+//        }
+//        telemetry.addData("Arc", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("right Strafe", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, 45, -45, 45, 45, 0,0);
+//        telemetry.addData("right Strafe", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("right 45 degree turn", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, -14, 14, 14, 14, 0,0);
+//        telemetry.addData("right 45 degree turn", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("Raise foundation mover", "Start");
+//        LeftBaseplateShover.setPosition(0);
+//        RightBaseplateShover.setPosition(1);
+//        telemetry.addData("Raise Foundation mover", "Completed");
+//        telemetry.update();
+//        TurnOffAllMotors();
+//
+//        Thread.sleep(1500);
+//
+//        telemetry.addData("left 15 degree turn", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, 6, -6, -6, -6, 0, 0);
+//        telemetry.addData("left 15 degree turn", "Complete");
+//        TurnOffAllMotors();
+//
+//        telemetry.addData("move Backward 34 inches to park", "Begun");
+//        telemetry.update();
+//        gyroDrive(1, -34, -34, 34, -34, 0, 0);
+//        telemetry.addData("Move Backward 34 inches to park", "Complete");
+//        TurnOffAllMotors();
+
+}
 
     public void encoderDrive(double speed,
                              double frontLeftInches, double frontRightInches, double backLeftInches,
