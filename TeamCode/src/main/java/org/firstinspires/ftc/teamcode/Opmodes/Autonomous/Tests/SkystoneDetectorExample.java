@@ -23,19 +23,19 @@ public class SkystoneDetectorExample {
     OpMode opMode;
     OpenCvCamera camera;
 
-    private final Point BLUE_LEFT_TL = new Point(20, 120);
-    private final Point BLUE_LEFT_BR = new Point(70, 160);
-    private final Point BLUE_MIDDLE_TL = new Point(90, 120);
-    private final Point BLUE_MIDDLE_BR = new Point(140, 160);
-    private final Point BLUE_RIGHT_TL = new Point(160, 120);
-    private final Point BLUE_RIGHT_BR = new Point(210, 160);
+    private  Point BLUE_LEFT_TL = new Point(20, 120);
+    private  Point BLUE_LEFT_BR = new Point(70, 160);
+    private  Point BLUE_MIDDLE_TL = new Point(90, 120);
+    private  Point BLUE_MIDDLE_BR = new Point(140, 160);
+    private  Point BLUE_RIGHT_TL = new Point(160, 120);
+    private  Point BLUE_RIGHT_BR = new Point(210, 160);
 
-    private final Point RED_LEFT_TL = new Point(20, 120);
-    private final Point RED_LEFT_BR = new Point(70, 160);
-    private final Point RED_MIDDLE_TL = new Point(90, 120);
-    private final Point RED_MIDDLE_BR = new Point(140, 160);
-    private final Point RED_RIGHT_TL = new Point(160, 120);
-    private final Point RED_RIGHT_BR = new Point(210, 160);
+    private  Point RED_LEFT_TL = new Point(20, 120);
+    private  Point RED_LEFT_BR = new Point(70, 160);
+    private  Point RED_MIDDLE_TL = new Point(90, 120);
+    private  Point RED_MIDDLE_BR = new Point(140, 160);
+    private  Point RED_RIGHT_TL = new Point(160, 120);
+    private  Point RED_RIGHT_BR = new Point(210, 160);
 
     private Point leftTL;
     private Point leftBR;
@@ -48,8 +48,16 @@ public class SkystoneDetectorExample {
     private RGBColor middle;
     private RGBColor right;
 
-    public SkystoneDetectorExample(OpMode opmode, boolean useWebcam) {
+    public SkystoneDetectorExample(OpMode opmode, boolean useWebcam,Point LTL,Point LBR,Point MTL,Point MBR,Point RTL, Point RBR) {
         opMode = opmode;
+        leftBR =LBR;
+        leftTL = LTL;
+        middleBR = MBR;
+        middleTL = MTL;
+        rightBR = RBR;
+        rightTL = RTL;
+
+
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         if (useWebcam) {

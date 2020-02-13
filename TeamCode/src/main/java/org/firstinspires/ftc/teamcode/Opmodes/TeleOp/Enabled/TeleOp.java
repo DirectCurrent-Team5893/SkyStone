@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Opmodes.TeleOp.Enabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -57,6 +58,7 @@ public class TeleOp extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
+
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -249,7 +251,6 @@ public class TeleOp extends LinearOpMode {
                             telemetry.update();
 
                             drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
-
                             if (gamepad1.right_bumper) {
                                 leftIntake.setPower(IntakePower);
                                 rightIntake.setPower(-IntakePower);
@@ -260,7 +261,6 @@ public class TeleOp extends LinearOpMode {
                                 leftIntake.setPower(STOP);
                                 rightIntake.setPower(STOP);
                             }
-
                             HorizontalLift.setPower(gamepad2.left_stick_y);
 
 
@@ -287,7 +287,6 @@ public class TeleOp extends LinearOpMode {
                                 OuttakeLift.getCurrentPosition());
                         telemetry.update();
                         drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
-
                         if (gamepad1.right_bumper) {
                             leftIntake.setPower(IntakePower);
                             rightIntake.setPower(-IntakePower);
@@ -443,10 +442,10 @@ public class TeleOp extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.5);
+                Grabber.setPosition(.7);
                 break;
             case DOWN_POSITION:
-                Grabber.setPosition(.3);
+                Grabber.setPosition(.2);
                 break;
         }
     }
@@ -619,17 +618,16 @@ public class TeleOp extends LinearOpMode {
         telemetry.update();
         drivetrain(gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x,MAX_SPEED);
 
-        if(gamepad1.right_bumper){
-        leftIntake.setPower(IntakePower);
-        rightIntake.setPower(-IntakePower);
-        }else if(gamepad1.left_bumper){
-        leftIntake.setPower(-.2);
-        rightIntake.setPower(.2);
-        }else{
-        leftIntake.setPower(0);
-        rightIntake.setPower(0);
-        }
-
+            if (gamepad1.right_bumper) {
+                leftIntake.setPower(IntakePower);
+                rightIntake.setPower(-IntakePower);
+            } else if (gamepad1.left_bumper) {
+                leftIntake.setPower(-.3);
+                rightIntake.setPower(.3);
+            } else {
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+            }
         HorizontalLift.setPower(gamepad2.left_stick_y);
 
 

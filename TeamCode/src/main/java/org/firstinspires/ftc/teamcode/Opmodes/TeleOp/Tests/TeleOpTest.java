@@ -439,14 +439,13 @@ public class TeleOpTest extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.5);
+                Grabber.setPosition(.53);
                 break;
             case DOWN_POSITION:
-                Grabber.setPosition(.4);
+                Grabber.setPosition(.2);
                 break;
         }
     }
-
     //enum for Capstone servo position switch
     public enum CapstoneDeploymentPositions {
         UP_POSITION, DOWN_POSITION
@@ -477,8 +476,8 @@ public class TeleOpTest extends LinearOpMode {
 
                 break;
             case DOWN_POSITION:
-                RightBaseplateShover.setPosition(.2);
-                LeftBaseplateShover.setPosition(.7);
+                RightBaseplateShover.setPosition(.1);
+                LeftBaseplateShover.setPosition(.9);
                 break;
         }
     }
