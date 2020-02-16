@@ -162,14 +162,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        finalAngle = gyro.getHeading()+90;
-        while(gyro.getHeading() < finalAngle)
-        {
-            frontLeft.setPower(DRIVE_SPEED);
-            frontRight.setPower(DRIVE_SPEED);
-            backLeft.setPower(DRIVE_SPEED);
-            backRight.setPower(DRIVE_SPEED);
-        }
+        gyroTurn(DRIVE_SPEED, 90);
         telemetry.addData("right 90 degree turn", "Complete");
         TurnOffAllMotors();
 
@@ -204,14 +197,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        finalAngle = gyro.getHeading()+80;
-        while(gyro.getHeading() < finalAngle)
-        {
-            frontLeft.setPower(DRIVE_SPEED);
-            frontRight.setPower(DRIVE_SPEED);
-            backLeft.setPower(DRIVE_SPEED);
-            backRight.setPower(DRIVE_SPEED);
-        }
+        gyroTurn(DRIVE_SPEED, 0);
         telemetry.addData("Arc", "Complete");
         TurnOffAllMotors();
 
@@ -692,6 +678,14 @@ public class RightBuildingSiteAuto extends LinearOpMode {
      */
     public double getSteer ( double error, double PCoeff){
         return Range.clip(error * PCoeff, -DRIVE_SPEED, 1);
+    }
+    public void gyroTurn (  double speed, double angle) {
+
+        // keep looping while we are still active, and not on heading.
+        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
+            // Update telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
     }
 }
 
