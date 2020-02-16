@@ -23,7 +23,6 @@ public class SkystoneDetectorExample {
     OpMode opMode;
     OpenCvCamera camera;
 
-    CustomPipeline pipeline;
 
     private  Point BLUE_LEFT_TL = new Point(20, 150);
     private  Point BLUE_LEFT_BR = new Point(900, 200);
@@ -53,6 +52,7 @@ public class SkystoneDetectorExample {
     public SkystoneDetectorExample(OpMode opmode, boolean useWebcam,boolean isBlue) {
         opMode = opmode;
 
+
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         if (useWebcam) {
@@ -60,26 +60,27 @@ public class SkystoneDetectorExample {
         } else {
             camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         }
-    leftTL =isBlue ? BLUE_LEFT_TL :RED_LEFT_TL;
-    leftBR = isBlue ? BLUE_LEFT_BR : RED_LEFT_BR;
-    middleTL = isBlue ? BLUE_MIDDLE_TL : RED_MIDDLE_TL;
-    middleBR = isBlue ? BLUE_MIDDLE_BR : RED_MIDDLE_BR;
-    rightTL = isBlue ? BLUE_RIGHT_TL : RED_RIGHT_TL;
-    rightBR = isBlue ? BLUE_RIGHT_BR : RED_RIGHT_BR;
 
 
 
-        pipeline = new CustomPipeline();
+
+         CustomPipeline pipeline = new CustomPipeline();
         camera.openCameraDevice();
         camera.setPipeline(pipeline);
         camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
+        leftTL =isBlue ? BLUE_LEFT_TL :RED_LEFT_TL;
+        leftBR = isBlue ? BLUE_LEFT_BR : RED_LEFT_BR;
+        middleTL = isBlue ? BLUE_MIDDLE_TL : RED_MIDDLE_TL;
+        middleBR = isBlue ? BLUE_MIDDLE_BR : RED_MIDDLE_BR;
+        rightTL = isBlue ? BLUE_RIGHT_TL : RED_RIGHT_TL;
+        rightBR = isBlue ? BLUE_RIGHT_BR : RED_RIGHT_BR;
+
+
     }
     public void stopStreaming(){
+
         camera.stopStreaming();
-    }
-    public void startStreaming(){
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
     public SkystoneDetectorExample.SkyStonePosition getDecision(){
 
