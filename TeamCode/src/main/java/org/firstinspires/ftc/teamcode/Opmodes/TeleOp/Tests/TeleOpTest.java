@@ -476,8 +476,8 @@ public class TeleOpTest extends LinearOpMode {
 
                 break;
             case DOWN_POSITION:
-                RightBaseplateShover.setPosition(.1);
-                LeftBaseplateShover.setPosition(.9);
+                RightBaseplateShover.setPosition(0);
+                LeftBaseplateShover.setPosition(1);
                 break;
         }
     }

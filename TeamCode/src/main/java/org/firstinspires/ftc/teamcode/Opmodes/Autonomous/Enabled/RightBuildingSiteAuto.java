@@ -53,7 +53,8 @@ public class RightBuildingSiteAuto extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     public double amountError = 0.64;
-    float currentAngle = gyro.getHeading();
+    double finalAngle;
+
 
 
     @Override
@@ -131,9 +132,8 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         gyro.resetZAxisIntegrator();
 
         // Wait for the game to start (driver presses PLAY)
+
         waitForStart();
-
-
 /*
 
         Guides for strafeing
@@ -162,7 +162,8 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        while(gyro.getHeading() < currentAngle+90)
+        finalAngle = gyro.getHeading()+90;
+        while(gyro.getHeading() < finalAngle)
         {
             frontLeft.setPower(DRIVE_SPEED);
             frontRight.setPower(DRIVE_SPEED);
@@ -181,7 +182,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
-        RightBaseplateShover.setPosition(.4);
+        RightBaseplateShover.setPosition(0);
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
         TurnOffAllMotors();
@@ -203,7 +204,8 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        while(gyro.getHeading() < currentAngle+90)
+        finalAngle = gyro.getHeading()+90;
+        while(gyro.getHeading() < finalAngle)
         {
             frontLeft.setPower(DRIVE_SPEED);
             frontRight.setPower(DRIVE_SPEED);

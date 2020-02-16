@@ -31,15 +31,16 @@ public class OpenCvPhoneExample extends LinearOpMode {
     boolean leftBlockSelected = false;
     boolean rightBlockSelected = false;
     boolean middleBlockSelected = false;
-    int LMU = 0;
-    int LML = 0;
-    int MMU = 0;
-    int MML = 0;
-    int RMU = 0;
-    int RML = 0;
+    int LMU = -100;
+    int LML = -100;
+    int MMU = -100;
+    int MML = -100;
+    int RMU = -100;
+    int RML = -100;
 
-    int SU = 0;
-    int SL = 0;
+    int SU = -100;
+    int SL = -100;
+    int PixelIncrease = 10;
     SkystoneDetectorExample detector;
     Point leftTL = new Point(0, 0);
     Point leftBR = new Point(0, 0);
@@ -76,22 +77,38 @@ public class OpenCvPhoneExample extends LinearOpMode {
     public void runOpMode() {
 
 
-        detector = new SkystoneDetectorExample(this, false, leftTL, leftBR, middleTL, middleBR, rightTL, rightBR);
+
+        detector = new SkystoneDetectorExample(this, false,false);
 
         waitForStart();
 
 
         while (opModeIsActive()) {
-
             // This is going to be used mainly for the use of being able to size or move them down to the general area for detection
             //After we get close enough we should use separate cases
+            telemetry.addData("leftTL", leftTL);
+            telemetry.addData("leftBR", leftBR);
+            telemetry.addData("middleTL",middleTL);
+            telemetry.addData("middleBR",middleBR);
+            telemetry.addData("rightTL",rightTL);
+            telemetry.addData("rightBR",rightBR);
+            telemetry.addData("rightBlockSelected",rightBlockSelected);
+            telemetry.addData("middleBlockSelected",middleBlockSelected);
+            telemetry.addData("leftBlockSelected",leftBlockSelected);
+            telemetry.update();
             if (!(leftBlockSelected && middleBlockSelected && rightBlockSelected)) {
-                setLeftBR(new Point(-SL - LML, -SU - LMU));
-                setLeftTL(new Point(-LML, -LMU));
-                setRightTL(new Point(-RML, -RMU));
-                setRightBR(new Point(-SL - RML, -SU - RMU));
-                setMiddleBR(new Point(-SL - MML, -SU - MMU));
-                setMiddleTL(new Point(-MML, -MMU));
+//                setLeftBR(new Point(-SL - LML, -SU - LMU));
+//                setLeftTL(new Point(-LML, -LMU));
+//                setRightTL(new Point(-RML, -RMU));
+//                setRightBR(new Point(-SL - RML, -SU - RMU));
+//                setMiddleBR(new Point(-SL - MML, -SU - MMU));
+//                setMiddleTL(new Point(-MML, -MMU));
+                leftBR = new Point(-SL-LML,-SU-LMU);
+                leftTL = new Point(-LML, -LMU);
+                rightTL =new Point(-RML, -RMU);
+                rightBR = new Point(-SL - RML, -SU - RMU);
+                middleBR = new Point(-SL - MML, -SU - MMU);
+                middleTL = new Point(-MML, -MMU);
             }
 
             // Here is the portion for left case
@@ -130,18 +147,18 @@ public class OpenCvPhoneExample extends LinearOpMode {
                 leftBlockSelected = false;
                 middleBlockSelected = false;
             }
-            
+
 
             if (gamepad2.dpad_up && !gamepad2dpadUpHeld) {
                 gamepad2dpadUpHeld = true;
                 if(leftBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    LMU += 10;
+                    LMU += PixelIncrease;
                 }
                 if(middleBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    MMU += 10;
+                    MMU += PixelIncrease;
                 }
                 if(rightBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    RMU += 10;
+                    RMU += PixelIncrease;
                 }
 
             }
@@ -153,13 +170,13 @@ public class OpenCvPhoneExample extends LinearOpMode {
             if (gamepad2.dpad_down && gamepad2dpadDownHeld) {
                 gamepad2dpadDownHeld = true;
                 if(leftBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    LMU -= 10;
+                    LMU -= PixelIncrease;
                 }
                 if(middleBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    MMU -= 10;
+                    MMU -= PixelIncrease;
                 }
                 if(rightBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    RMU -= 10;
+                    RMU -= PixelIncrease;
                 }
             }
             if (!gamepad2.dpad_down) {
@@ -170,13 +187,13 @@ public class OpenCvPhoneExample extends LinearOpMode {
             if (gamepad2.dpad_left && !gamepad2dpadLeftHeld) {
                 gamepad2dpadLeftHeld = true;
                 if(leftBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    LML += 10;
+                    LML += PixelIncrease;
                 }
                 if(middleBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    MML += 10;
+                    MML += PixelIncrease;
                 }
                 if(rightBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    RML += 10;
+                    RML += PixelIncrease;
                 }
 
             }
@@ -188,13 +205,13 @@ public class OpenCvPhoneExample extends LinearOpMode {
             if (gamepad2.dpad_right && !gamepad2dpadRightHeld) {
                 gamepad2.dpad_right = true;
                 if(leftBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    LML -= 10;
+                    LML -= PixelIncrease;
                 }
                 if(middleBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    MML -= 10;
+                    MML -= PixelIncrease;
                 }
                 if(rightBlockSelected ||(!leftBlockSelected&&!rightBlockSelected&&!middleBlockSelected)){
-                    RML -= 10;
+                    RML -= PixelIncrease;
                 }
 
             }
@@ -205,7 +222,7 @@ public class OpenCvPhoneExample extends LinearOpMode {
 
             if (gamepad1.dpad_up && !gamepad1dpadUpHeld) {
                 gamepad1dpadUpHeld = true;
-                SU += 10;
+                SU += PixelIncrease;
             }
             if (!gamepad1.dpad_up) {
                 gamepad1dpadUpHeld = false;
@@ -214,7 +231,7 @@ public class OpenCvPhoneExample extends LinearOpMode {
 
             if (gamepad2.dpad_down && gamepad2dpadDownHeld) {
                 gamepad2dpadDownHeld = true;
-                SU -= 10;
+                SU -= PixelIncrease;
             }
             if (!gamepad1.dpad_down) {
                 gamepad1dpadDownHeld = false;
@@ -222,7 +239,7 @@ public class OpenCvPhoneExample extends LinearOpMode {
 
             if (gamepad1.dpad_left && !gamepad1dpadLeftHeld) {
                 gamepad2dpadLeftHeld = true;
-                SL += 10;
+                SL += PixelIncrease;
 
             }
             if (!gamepad1.dpad_left) {
@@ -231,16 +248,38 @@ public class OpenCvPhoneExample extends LinearOpMode {
 
             if (gamepad1.dpad_right && !gamepad1dpadRightHeld) {
                 gamepad1.dpad_right = true;
-                SL -= 10;
+                SL -= PixelIncrease;
 
             }
             if (!gamepad1.dpad_right) {
                 gamepad1dpadRightHeld = false;
             }
-            sleep(100);
-            detector = new SkystoneDetectorExample(this, false, leftTL, leftBR, middleTL, middleBR, rightTL, rightBR);
+            telemetry.addData("leftTL", leftTL);
+            telemetry.addData("leftBR", leftBR);
+            telemetry.addData("middleTL",middleTL);
+            telemetry.addData("middleBR",middleBR);
+            telemetry.addData("rightTL",rightTL);
+            telemetry.addData("rightBR",rightBR);
+            telemetry.addData("rightBlockSelected",rightBlockSelected);
+            telemetry.addData("middleBlockSelected",middleBlockSelected);
+            telemetry.addData("leftBlockSelected",leftBlockSelected);
+            telemetry.update();
+
+                detector = new SkystoneDetectorExample(this, false,false);
+
+            telemetry.addData("leftTL", leftTL);
+            telemetry.addData("leftBR", leftBR);
+            telemetry.addData("middleTL",middleTL);
+            telemetry.addData("middleBR",middleBR);
+            telemetry.addData("rightTL",rightTL);
+            telemetry.addData("rightBR",rightBR);
+            telemetry.addData("rightBlockSelected",rightBlockSelected);
+            telemetry.addData("middleBlockSelected",middleBlockSelected);
+            telemetry.addData("leftBlockSelected",leftBlockSelected);
+            telemetry.update();
 
 //            telemetry.addData("Decision is ", detector.getDecision());
         }
     }
+
 }

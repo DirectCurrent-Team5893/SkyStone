@@ -23,19 +23,19 @@ public class SkystoneDetectorExample {
     OpMode opMode;
     OpenCvCamera camera;
 
-    private  Point BLUE_LEFT_TL = new Point(20, 120);
-    private  Point BLUE_LEFT_BR = new Point(70, 160);
-    private  Point BLUE_MIDDLE_TL = new Point(90, 120);
-    private  Point BLUE_MIDDLE_BR = new Point(140, 160);
-    private  Point BLUE_RIGHT_TL = new Point(160, 120);
-    private  Point BLUE_RIGHT_BR = new Point(210, 160);
+    private  Point BLUE_LEFT_TL = new Point(20, 150);
+    private  Point BLUE_LEFT_BR = new Point(900, 200);
+    private  Point BLUE_MIDDLE_TL = new Point(120, 150);
+    private  Point BLUE_MIDDLE_BR = new Point(200, 200);
+    private  Point BLUE_RIGHT_TL = new Point(230, 150);
+    private  Point BLUE_RIGHT_BR = new Point(310, 200);
 
-    private  Point RED_LEFT_TL = new Point(20, 120);
-    private  Point RED_LEFT_BR = new Point(70, 160);
-    private  Point RED_MIDDLE_TL = new Point(90, 120);
-    private  Point RED_MIDDLE_BR = new Point(140, 160);
-    private  Point RED_RIGHT_TL = new Point(160, 120);
-    private  Point RED_RIGHT_BR = new Point(210, 160);
+    private  Point RED_LEFT_TL = new Point(30, 130);
+    private  Point RED_LEFT_BR = new Point(80, 170);
+    private  Point RED_MIDDLE_TL = new Point(100, 130);
+    private  Point RED_MIDDLE_BR = new Point(150, 170);
+    private  Point RED_RIGHT_TL = new Point(170, 130);
+    private  Point RED_RIGHT_BR = new Point(230, 170);
 
     private Point leftTL;
     private Point leftBR;
@@ -48,14 +48,20 @@ public class SkystoneDetectorExample {
     private RGBColor middle;
     private RGBColor right;
 
-    public SkystoneDetectorExample(OpMode opmode, boolean useWebcam,Point LTL,Point LBR,Point MTL,Point MBR,Point RTL, Point RBR) {
+    public SkystoneDetectorExample(OpMode opmode, boolean useWebcam,boolean isBlue) {
         opMode = opmode;
-        leftBR =LBR;
-        leftTL = LTL;
-        middleBR = MBR;
-        middleTL = MTL;
-        rightBR = RBR;
-        rightTL = RTL;
+//        leftBR =LBR;
+//        leftTL = LTL;
+//        middleBR = MBR;
+//        middleTL = MTL;
+//        rightBR = RBR;
+//        rightTL = RTL;
+leftTL =isBlue ? BLUE_LEFT_TL :RED_LEFT_TL;
+leftBR = isBlue ? BLUE_LEFT_BR : RED_LEFT_BR;
+middleTL = isBlue ? BLUE_MIDDLE_TL : RED_MIDDLE_TL;
+middleBR = isBlue ? BLUE_MIDDLE_BR : RED_MIDDLE_BR;
+rightTL = isBlue ? BLUE_RIGHT_TL : RED_RIGHT_TL;
+rightBR = isBlue ? BLUE_RIGHT_BR : RED_RIGHT_BR;
 
 
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
@@ -66,19 +72,52 @@ public class SkystoneDetectorExample {
             camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         }
         CustomPipeline pipeline = new CustomPipeline();
-
+        camera.openCameraDevice();
+        camera.setPipeline(pipeline);
+        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
     }
+    public void stopStreaming(){
+        camera.stopStreaming();
+    }
+    public void startStreaming(){
+        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+    }
+    public SkystoneDetectorExample.SkyStonePosition getDecision(){
 
+        int leftValue = left.getValue();
+        int middleValue = middle.getValue();
+        int rightValue = right.getValue();
+
+        if (leftValue < middleValue && leftValue < rightValue){
+            return SkystoneDetectorExample.SkyStonePosition.LEFT;
+        }
+        if (middleValue < leftValue && middleValue < rightValue){
+            return SkystoneDetectorExample.SkyStonePosition.MIDDLE;
+        }
+        if (rightValue < leftValue && rightValue < middleValue){
+            return SkystoneDetectorExample.SkyStonePosition.RIGHT;
+        }
+        return SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
+    }
     class CustomPipeline extends OpenCvPipeline {
         @Override
         public Mat processFrame(Mat input) {
-            int thickness = 1;
+
+            int thickness = 2;
+
             Imgproc.rectangle(input, leftTL, leftBR, new Scalar(0, 255, 0), thickness);
             Imgproc.rectangle(input, middleTL, middleBR, new Scalar(0, 255, 0), thickness);
             Imgproc.rectangle(input, rightTL, rightBR, new Scalar(0, 255, 0), thickness);
 
+
+            left=getAverageColor(input,leftTL,leftBR);
+            middle=getAverageColor(input,middleTL,middleBR);
+            right =getAverageColor(input,rightTL,rightBR);
+
+            sendTelemetry();
             return input;
+
         }
 
 
@@ -104,12 +143,14 @@ public class SkystoneDetectorExample {
 
             return new RGBColor(red, green, blue);
         }
-        private void sendTelemetry(){
+        public void sendTelemetry(){
             opMode.telemetry.addLine("Left :" + " R " + left.getRed() + " G " + left.getGreen() + " B " + left.getBlue());
             opMode.telemetry.addLine("Middle :" + " R " + middle.getRed() + " G " + middle.getGreen() + " B " + middle.getBlue());
             opMode.telemetry.addLine("Right :" + " R " + right.getRed() + " G " + right.getGreen() + " B " + right.getBlue());
             opMode.telemetry.update();
         }
     }
-
+    public enum SkyStonePosition{
+        LEFT,MIDDLE,RIGHT,UNKNOWN
+    }
 }
