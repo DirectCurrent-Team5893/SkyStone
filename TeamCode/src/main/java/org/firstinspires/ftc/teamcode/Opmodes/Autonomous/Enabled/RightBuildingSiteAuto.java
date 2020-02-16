@@ -158,7 +158,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, -10, 10, 10, -10, 0);
+        encoderDrive(1, 10, -10, -10, 10, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
@@ -168,11 +168,11 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("right 90 degree turn", "Complete");
         //TurnOffAllMotors();
 
-        telemetry.addData("move Forward 25 inches", "Begun");
+        telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
-        encoderDrive(1, -21, -21, -21, -21, 0);
-        encoderDrive(.4, -4, -4, -4, -4, 0);
-        telemetry.addData("Move Forward 25 inches", "Complete");
+        encoderDrive(1, 21, 21, 21, 21, 0);
+        encoderDrive(.4, 4, 4, 4, 4, 0);
+        telemetry.addData("Move Backward 25 inches", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("Lower foundation mover", "Start");
@@ -186,14 +186,14 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, -7, 7, 7, -7, 0);
-        encoderDrive(.4, -10, 10, 10, -10, 0);
+        encoderDrive(1, 7, -7, -7, 7, 0);
+        encoderDrive(.4, 10, -10, -10, 10, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, 8, -8, -8, 8, 0);
+        encoderDrive(1, -8, 8, 8, -8, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
@@ -205,7 +205,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, 45, -45, -45, 45, 0);
+        encoderDrive(1, -45, 45, 45, -45, 0);
         telemetry.addData("right Strafe", "Complete");
         //TurnOffAllMotors();
 
