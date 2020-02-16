@@ -23,6 +23,7 @@ public class SkystoneDetectorExample {
     OpMode opMode;
     OpenCvCamera camera;
 
+    CustomPipeline pipeline;
     private  Point BLUE_LEFT_TL = new Point(20, 150);
     private  Point BLUE_LEFT_BR = new Point(900, 200);
     private  Point BLUE_MIDDLE_TL = new Point(120, 150);
