@@ -136,7 +136,6 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
         telemetry.update();
-        detector = new SkystoneDetectorExample(this, true,true);
         gyro.calibrate();
 
         // make sure the gyro is calibrated before continuing
@@ -152,7 +151,7 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
-
+        detector = new SkystoneDetectorExample(this, true,true);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
@@ -169,48 +168,40 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         switch (skystonePostion){
             case LEFT:
                 encoderDrive(.8,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
-                sleep(1000);
+                
                 gyroTurn(.8,0);
-                sleep(1000);
+                
                 gyroDrive(.8,distanceToDifferentBlock,distanceToDifferentBlock,distanceToDifferentBlock,distanceToDifferentBlock,0,5);
-                sleep(1000);
-//                while(sensorRange.getDistance(DistanceUnit.INCH)>2.6&&!isStopRequested())
-//                {
-//
-//                     frontLeft.setPower(1);
-//                     frontRight.setPower(-1);
-//                     backLeft.setPower(-1);
-//                     backRight.setPower(1);
-//                }
+                
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
                 backRight.setPower(0);
-                sleep(1000);
+                
                 RightBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                sleep(1000);
+                
                 encoderDrive(.6,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,5);
-                sleep(1000);
+                
                 gyroDrive(.8,32+distanceToDifferentBlock,32+distanceToDifferentBlock,32+distanceToDifferentBlock,32+distanceToDifferentBlock,0,5);
-                sleep(1000);
+                
                 RightBlockGrabber.setPosition(.1);
-                sleep(1000);
+                
                 gyroDrive(.8,-72,-72,-72,-72,0,10);
-                sleep(1000);
+                
                 gyroTurn(.8,0);
-                sleep(1000);
+                
                 encoderDrive(.8,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,5);
-                sleep(1000);
+                
                 RightBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                sleep(1000);
+                
                 encoderDrive(.8,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,5);
-                sleep(1000);
+                
                 gyroDrive(.8,70,70,70,70,0,10);
-                sleep(1000);
+                
                 RightBlockGrabber.setPosition(.1);
-                sleep(1000);
+                
                 gyroDrive(.8,-18,-18,-18,-18,0,10);
 
                 break;
