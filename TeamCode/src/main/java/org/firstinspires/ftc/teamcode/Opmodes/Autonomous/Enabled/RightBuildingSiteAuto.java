@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -79,9 +80,10 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
 
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -162,9 +164,9 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED, 90);
+        gyroTurn(TURN_SPEED, 90);
         telemetry.addData("right 90 degree turn", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("move Forward 25 inches", "Begun");
         telemetry.update();
