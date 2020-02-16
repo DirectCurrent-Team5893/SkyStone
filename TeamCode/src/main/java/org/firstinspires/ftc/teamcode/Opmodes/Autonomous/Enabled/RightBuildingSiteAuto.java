@@ -211,7 +211,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 45 degree turn", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED, 220);
+        gyroTurn(DRIVE_SPEED, 210);
         telemetry.addData("right 45 degree turn", "Complete");
         //TurnOffAllMotors();
 
@@ -232,7 +232,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("left 15 degree turn", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED,195);
+        gyroTurn(DRIVE_SPEED,190);
         telemetry.addData("left 15 degree turn", "Complete");
         //TurnOffAllMotors();
 
