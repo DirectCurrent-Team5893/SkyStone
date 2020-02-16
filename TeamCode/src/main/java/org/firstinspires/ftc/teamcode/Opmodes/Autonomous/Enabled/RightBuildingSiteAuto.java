@@ -199,7 +199,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED, 0);
+        gyroTurn(DRIVE_SPEED, 180);
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
 
@@ -214,6 +214,11 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 //        gyroTurn(DRIVE_SPEED, );
 //        telemetry.addData("right 45 degree turn", "Complete");
 //        TurnOffAllMotors();
+        telemetry.addData("forward 10 inches", "Begun");
+        telemetry.update();
+        encoderDrive(1, 10, 10, 10, 10, 0);
+        telemetry.addData("forward 10 inches", "Complete");
+        //TurnOffAllMotors();
 
         telemetry.addData("Raise foundation mover", "Start");
         LeftBaseplateShover.setPosition(0);
