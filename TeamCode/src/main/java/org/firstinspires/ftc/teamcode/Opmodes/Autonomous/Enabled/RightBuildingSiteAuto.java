@@ -152,15 +152,15 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive( 1, -6, -6, 6, -6, 0);
+        encoderDrive( 1, -6, -6, -6, -6, 0);
         telemetry.addData("Move Forward 6 inches", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, 10, -10, 10, 10, 0);
+        encoderDrive(1, 10, -10, 10, -10, 0);
         telemetry.addData("left Strafe", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
@@ -170,69 +170,70 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 25 inches", "Begun");
         telemetry.update();
-        encoderDrive(1, 21, 21, -21, 21, 0);
-        encoderDrive(.4, 4, 4, -4, 4, 0);
+        encoderDrive(1, -21, -21, -21, -21, 0);
+        encoderDrive(.4, -4, -4, -4, -4, 0);
         telemetry.addData("Move Forward 25 inches", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         Thread.sleep(1500);
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, -7, 7, -7, -7, 0);
-        encoderDrive(.4, -10, 10, -10, -10, 0);
+        encoderDrive(1, 7, -7, 7, -7, 0);
+        encoderDrive(.4, 10, -10, 10, -10, 0);
         telemetry.addData("left Strafe", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, 8, -8, 8, 8, 0);
+        encoderDrive(1, -8, 8, -8, 8, 0);
         telemetry.addData("left Strafe", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
         gyroTurn(DRIVE_SPEED, 0);
         telemetry.addData("Arc", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(1, 45, -45, 45, 45, 0);
+        encoderDrive(1, 45, -45, 45, -45, 0);
         telemetry.addData("right Strafe", "Complete");
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
-        telemetry.addData("right 45 degree turn", "Begun");
-        telemetry.update();
-        encoderDrive(1, -14, 14, 14, 14, 0);
-        telemetry.addData("right 45 degree turn", "Complete");
-        TurnOffAllMotors();
+//        telemetry.addData("right 45 degree turn", "Begun");
+//        telemetry.update();
+//        gyroTurn(DRIVE_SPEED, );
+//        telemetry.addData("right 45 degree turn", "Complete");
+//        TurnOffAllMotors();
 
         telemetry.addData("Raise foundation mover", "Start");
         LeftBaseplateShover.setPosition(0);
         RightBaseplateShover.setPosition(1);
         telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
-        TurnOffAllMotors();
+        //TurnOffAllMotors();
 
         Thread.sleep(1500);
 
-        telemetry.addData("left 15 degree turn", "Begun");
-        telemetry.update();
-        encoderDrive(1, 6, -6, -6, -6, 0);
-        telemetry.addData("left 15 degree turn", "Complete");
-        TurnOffAllMotors();
+//        telemetry.addData("left 15 degree turn", "Begun");
+//        telemetry.update();
+//        finalAngle = gyro.getHeading()+ 15;
+//        gyroTurn(DRIVE_SPEED, finalAngle);
+//        telemetry.addData("left 15 degree turn", "Complete");
+//        TurnOffAllMotors();
 
         telemetry.addData("move Backward 34 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(1, -34, -34, 34, -34, 0);
+        encoderDrive(1, 34, 34, 34, 34, 0);
         telemetry.addData("Move Backward 34 inches to park", "Complete");
         TurnOffAllMotors();
 
