@@ -204,7 +204,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        finalAngle = gyro.getHeading()+90;
+        finalAngle = gyro.getHeading()+80;
         while(gyro.getHeading() < finalAngle)
         {
             frontLeft.setPower(DRIVE_SPEED);
