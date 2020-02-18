@@ -184,6 +184,12 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
+        telemetry.addData("right Strafe", "Begun");
+        telemetry.update();
+        encoderDrive(1, -25, -25, -25, -25, 0);
+        telemetry.addData("right Strafe", "Complete");
+        //TurnOffAllMotors();
+
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
         encoderDrive(1, -7, 7, 7, -7, 0);
@@ -203,16 +209,16 @@ public class RightBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
 
-        telemetry.addData("right Strafe", "Begun");
-        telemetry.update();
-        encoderDrive(1, 45, -45, -45, 45, 0);
-        telemetry.addData("right Strafe", "Complete");
+//        telemetry.addData("right Strafe", "Begun");
+//        telemetry.update();
+//        encoderDrive(1, 45, -45, -45, 45, 0);
+//        telemetry.addData("right Strafe", "Complete");
         //TurnOffAllMotors();
 
-        telemetry.addData("right 45 degree turn", "Begun");
-        telemetry.update();
-        gyroTurn(DRIVE_SPEED, 210);
-        telemetry.addData("right 45 degree turn", "Complete");
+//        telemetry.addData("right 45 degree turn", "Begun");
+//        telemetry.update();
+//        gyroTurn(DRIVE_SPEED, 210);
+//        telemetry.addData("right 45 degree turn", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("forward 5 inches", "Begun");
@@ -230,16 +236,21 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
-        telemetry.addData("left 15 degree turn", "Begun");
-        telemetry.update();
-        gyroTurn(DRIVE_SPEED,190);
-        telemetry.addData("left 15 degree turn", "Complete");
-        //TurnOffAllMotors();
+//        telemetry.addData("left 15 degree turn", "Begun");
+//        telemetry.update();
+//        gyroTurn(DRIVE_SPEED,190);
+//        telemetry.addData("left 15 degree turn", "Complete");
+//        //TurnOffAllMotors();
 
-        telemetry.addData("move Backward 34 inches to park", "Begun");
+        telemetry.addData("move left 12 inches", "Begun");
         telemetry.update();
-        encoderDrive(1, -34, -34, -34, -34, 0);
-        telemetry.addData("Move Backward 34 inches to park", "Complete");
+        encoderDrive(1, 12, -12, -12, 12, 0);
+        telemetry.addData("Move Left 12 inches", "Complete");
+
+        telemetry.addData("move Backward 40 inches to park", "Begun");
+        telemetry.update();
+        encoderDrive(1, -40, -40, -40, -40, 0);
+        telemetry.addData("Move Backward 40 inches to park", "Complete");
         TurnOffAllMotors();
 
 }
