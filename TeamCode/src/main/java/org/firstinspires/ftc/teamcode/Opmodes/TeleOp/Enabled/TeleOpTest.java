@@ -103,7 +103,7 @@ public class TeleOpTest extends LinearOpMode {
         double IntakePower = 1;
         waitForStart();
 
-        HorizontalLift.setTargetPosition(-20);
+        HorizontalLift.setTargetPosition(80);
         HorizontalLift.setPower(.6);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while (opModeIsActive() &&

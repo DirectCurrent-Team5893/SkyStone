@@ -187,7 +187,7 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
                 
                 RightBlockGrabber.setPosition(.1);
                 
-                gyroDrive(.8,-72,-72,-72,-72,0,10);
+                gyroDrive(.8,-71,-71,-71,-71, 0,10);
                 
                 gyroTurn(.8,0);
                 

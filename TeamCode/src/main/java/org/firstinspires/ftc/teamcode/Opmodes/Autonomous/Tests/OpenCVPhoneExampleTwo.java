@@ -30,8 +30,7 @@ public class OpenCVPhoneExampleTwo extends LinearOpMode {
             telemetry.addData("decision:", detector.getDecision());
             sleep(1000);
         }
-        while (opModeIsActive()) {
-            sleep(100);
+
         }
     }
-}
+
