@@ -56,6 +56,7 @@ public class TeleOpTest extends LinearOpMode {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         HorizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        OuttakeLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -101,6 +102,9 @@ public class TeleOpTest extends LinearOpMode {
         int ranMethodV2 = 0;
 
         double IntakePower = 1;
+        RightBlockGrabber.setPosition(.2);
+        LeftBlockGrabber.setPosition(.7);
+        CapstoneDeployment.setPosition(.8);
         waitForStart();
 
         HorizontalLift.setTargetPosition(80);
@@ -276,13 +280,19 @@ public class TeleOpTest extends LinearOpMode {
                             rightIntake.setPower(STOP);
                         }
 
-                          if (HorizontalLift.getCurrentPosition() > 80 && gamepad2.left_stick_y > 0) {
                         HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
-                    if (HorizontalLift.getCurrentPosition() >= 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
+                        if (gamepad2.b && gamepad2bHeld == false) {
+                            ranMethod++;
+                            gamepad2bHeld = true;
+                            telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
+                            SetPosition(GRABBERPOSITIONS[grabberChanger]);
+                            grabberChanger++;
+                            grabberChanger = grabberChanger % 2;
+                        }
+                        if (!gamepad2.b) {
+                            gamepad2bHeld = false;
+                        }
 
                     }
 
@@ -318,13 +328,20 @@ public class TeleOpTest extends LinearOpMode {
                         leftIntake.setPower(STOP);
                         rightIntake.setPower(STOP);
                     }
-                    if (HorizontalLift.getCurrentPosition() > 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
-                    if (HorizontalLift.getCurrentPosition() >= 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
+                    HorizontalLift.setPower(gamepad2.left_stick_y);
 
+                    if (gamepad2.b && gamepad2bHeld == false) {
+                        ranMethod++;
+                        gamepad2bHeld = true;
+                        telemetry.addData("changing position GrabberChanger is ", grabberChanger);
+
+                        SetPosition(GRABBERPOSITIONS[grabberChanger]);
+                        grabberChanger++;
+                        grabberChanger = grabberChanger % 2;
+                    }
+                    if (!gamepad2.b) {
+                        gamepad2bHeld = false;
+                    }
                 }
                 OuttakeLift.setPower(0);
                 OuttakeLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -337,15 +354,18 @@ public class TeleOpTest extends LinearOpMode {
 
 
             OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            OuttakeLift.setPower(gamepad2.right_stick_y);
+           if(gamepad2.right_stick_y<0){
+               telemetry.addLine("UP");
+            OuttakeLift.setPower(-gamepad2.right_stick_y);
+           } else
+               {
+                   telemetry.addLine("Down");
+                   OuttakeLift.setPower((-.6)*gamepad2.right_stick_y);
+               }
             telemetry.addData("Lift Power", gamepad2.right_stick_y);
             telemetry.addData("Horizontal Lift Position:", HorizontalLift.getCurrentPosition());
-              if (HorizontalLift.getCurrentPosition() > 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
-                    if (HorizontalLift.getCurrentPosition() >= 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
+            HorizontalLift.setPower(gamepad2.left_stick_y);
+
             telemetry.addData("OuttakeLift", OuttakeLift.getCurrentPosition());
             telemetry.update();
 
@@ -390,15 +410,20 @@ public class TeleOpTest extends LinearOpMode {
 
 
         OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        OuttakeLift.setPower(gamepad2.right_stick_y);
+        OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Gamepad2.y",gamepad2.right_stick_y);
+        if(gamepad2.right_stick_y<0){
+            OuttakeLift.setPower(-gamepad2.right_stick_y);
+        } else
+        {
+
+            OuttakeLift.setPower((-.6)*gamepad2.right_stick_y);
+        }
+
         telemetry.addData("Lift Power", gamepad2.right_stick_y);
         telemetry.addData("Horizontal Lift Position:", HorizontalLift.getCurrentPosition());
-          if (HorizontalLift.getCurrentPosition() > 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
-                    if (HorizontalLift.getCurrentPosition() >= 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
+        HorizontalLift.setPower(gamepad2.left_stick_y);
+
         telemetry.addData("OuttakeLift", OuttakeLift.getCurrentPosition());
         telemetry.update();
 
@@ -455,7 +480,7 @@ public class TeleOpTest extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.53);
+                Grabber.setPosition(.45 );
                 break;
             case DOWN_POSITION:
                 Grabber.setPosition(.2);
@@ -467,11 +492,11 @@ public class TeleOpTest extends LinearOpMode {
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                CapstoneDeployment.setPosition(.15);
+                CapstoneDeployment.setPosition(.0);
 
                 break;
             case DOWN_POSITION:
-                CapstoneDeployment.setPosition(1);
+                CapstoneDeployment.setPosition(.8);
                 break;
         }
     }
@@ -624,12 +649,8 @@ public class TeleOpTest extends LinearOpMode {
                     rightIntake.setPower(0);
                 }
 
-                  if (HorizontalLift.getCurrentPosition() > 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
-                    if (HorizontalLift.getCurrentPosition() >= 80 && gamepad2.left_stick_y > 0) {
-                        HorizontalLift.setPower(gamepad2.left_stick_y);
-                    }
+                HorizontalLift.setPower(gamepad2.left_stick_y);
+
 
 
             }

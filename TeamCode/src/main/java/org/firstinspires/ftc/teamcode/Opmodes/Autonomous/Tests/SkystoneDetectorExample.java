@@ -31,12 +31,12 @@ public class SkystoneDetectorExample {
     private  Point BLUE_RIGHT_TL = new Point(220, 150);
     private  Point BLUE_RIGHT_BR = new Point(310, 200);
 
-    private  Point RED_LEFT_TL = new Point(20, 150);
-    private  Point RED_LEFT_BR = new Point(90, 200);
+    private  Point RED_LEFT_TL = new Point(220, 150);
+    private  Point RED_LEFT_BR = new Point(310, 200);
     private  Point RED_MIDDLE_TL = new Point(120, 150);
     private  Point RED_MIDDLE_BR = new Point(200, 200);
-    private  Point RED_RIGHT_TL = new Point(230, 150);
-    private  Point RED_RIGHT_BR = new Point(320, 200);
+    private  Point RED_RIGHT_TL = new Point(20, 150);
+    private  Point RED_RIGHT_BR =  new Point(90, 200);
 //new Point(170, 130);
             //new Point(320, 170);
     private Point leftTL;

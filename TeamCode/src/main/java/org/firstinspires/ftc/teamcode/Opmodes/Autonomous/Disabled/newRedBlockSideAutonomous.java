@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -33,12 +34,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 @Autonomous(name="newBlueBlockSide", group ="Concept")
-public class newBlueBlockSideAutonomous extends LinearOpMode {
+public class newRedBlockSideAutonomous extends LinearOpMode {
 
     SkystoneDetectorExample detector;
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
-
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -75,7 +75,7 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
-    double DOWN_POSITION = .8;
+    double DOWN_POSITION = .1;
     double STRAFE_TO_BLOCK = 14;
     public double amountError = 0.64;
     public SkystoneDetectorExample.SkyStonePosition skystonePostion= SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
@@ -152,10 +152,12 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
-        detector = new SkystoneDetectorExample(this, true,true);
+        detector = new SkystoneDetectorExample(this, true,false);
+       sleep(1500);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
+            telemetry.addData("Decision",detector.getDecision());
             telemetry.update();
         }
 
@@ -169,92 +171,92 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         switch (skystonePostion){
             case LEFT:
                 encoderDrive(.8,2,-2, -2, 2,5);
-                gyroDrive(.8,distanceToDifferentBlock,distanceToDifferentBlock,distanceToDifferentBlock,distanceToDifferentBlock,0,5);
+                gyroDrive(.8,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,0,5);
                 encoderDrive(.8,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
                 gyroTurn(.8,0);
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
                 backRight.setPower(0);
-                
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                
+
                 encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
-                
-                gyroDrive(.8,32+distanceToDifferentBlock,32+distanceToDifferentBlock,32+distanceToDifferentBlock,32+distanceToDifferentBlock,0,5);
-                
-                RightBlockGrabber.setPosition(.1);
-                
-                gyroDrive(.8,-67,-67,-67,-68, 0,10);
-                
+
+                gyroDrive(.8,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,0,5);
+
+                LeftBlockGrabber.setPosition(.8);
+                gyroTurn(1,0);
+
+                gyroDrive(.8,73,73,73,73, 0,10);
+
                 gyroTurn(.8,0);
-                
+
                 encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
-                
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
                 encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
-                
-                gyroDrive(.8,71,71,71,71,0,10);
-                
-                RightBlockGrabber.setPosition(.1);
-                
-                gyroDrive(.8,-18,-18,-18,-18,0,10);
-                encoderDrive(.8,3,-3,-3,3,10);
 
+                gyroDrive(.8,-75,-75,-75,-75,0,10);
+
+                LeftBlockGrabber.setPosition(.8);
+
+                gyroDrive(.8,23,23,23,23,0,10);
+                encoderDrive(.8,3,-3,-3,3,10);
                 break;
             case MIDDLE:
                 encoderDrive(.8,2,-2, -2, 2,5);
-                gyroDrive(.8,6,6,6,6,0,5);
+                gyroDrive(.8,-5,-5,-5,-5,0,5);
                 encoderDrive(.8,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
                 gyroTurn(.8,0);
 
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
                 encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
-                gyroDrive(1,42,42,42,42,0,5);
-                RightBlockGrabber.setPosition(.1);
-                gyroDrive(.8,-67,-67,-67,-67, 0,10);
+                gyroDrive(1,-42,-42,-42,-42,0,5);
+                LeftBlockGrabber.setPosition(.8);
+                gyroDrive(.8,69,69,69,69, 0,10);
                 gyroTurn(0.8,0);
                 encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
                 encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
-                gyroDrive(.8,75,75,75,75,0,10);
-                RightBlockGrabber.setPosition(.1);
-                gyroDrive(.8,-18,-18,-18,-18,0,10);
+                gyroDrive(.8,-75,-75,-75,-75,0,10);
+                LeftBlockGrabber.setPosition(.8);
+                gyroDrive(.8,18,18,18,18,0,10);
                 encoderDrive(.8,3,-3,-3,3,10);
 
 
                 break;
             case RIGHT:
                 encoderDrive(.8,2,-2, -2, 2,5);
-                gyroDrive(1,-1,-1,-1,-1,0,5);
+                gyroDrive(1,4  ,4,4,4,0,5);
                 encoderDrive(1,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
                 encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
-                gyroDrive(1,60,60,60,60,0,5);
-                RightBlockGrabber.setPosition(.1);
-                gyroDrive(.8,-87,-87,-87,-87, 0,10);
+                gyroDrive(1,-60,-60,-60,-60,0,5);
+                LeftBlockGrabber.setPosition(.8);
+                gyroDrive(.8,87,87,87,87, 0,10);
                 gyroTurn(0.8,0);
                 encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
-                RightBlockGrabber.setPosition(DOWN_POSITION);
+                LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
                 encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
-                gyroDrive(.8,75,75,75,75,0,10);
-                RightBlockGrabber.setPosition(.1);
-                gyroDrive(.8,-18,-18,-18,-18,0,10);
+                gyroDrive(.8,-75,-75,-75,-75,0,10);
+                LeftBlockGrabber.setPosition(.8);
+                gyroDrive(.8,18,18,18,18,0,10);
                 encoderDrive(.8,3,-3,-3,3,10);
                 break;
         }
 
 
 
-        }
+    }
 
     /**
      *  Method to drive on a fixed compass bearing (angle), based on encoder counts.

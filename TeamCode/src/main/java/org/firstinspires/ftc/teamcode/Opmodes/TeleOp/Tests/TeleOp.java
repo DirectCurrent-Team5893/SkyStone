@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Opmodes.TeleOp.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "MainTeleOp", group = "Linear Opmode")
-
+@Disabled
 public class TeleOp extends LinearOpMode {
 
     //define the motors
