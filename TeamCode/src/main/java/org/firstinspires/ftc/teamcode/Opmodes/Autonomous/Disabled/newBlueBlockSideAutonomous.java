@@ -154,7 +154,9 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
         telemetry.update();
         detector = new SkystoneDetectorExample(this, true,true);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
+        sleep(1000);
         while (!isStarted()) {
+            telemetry.addData("Decision",detector.getDecision());
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
             telemetry.update();
         }
