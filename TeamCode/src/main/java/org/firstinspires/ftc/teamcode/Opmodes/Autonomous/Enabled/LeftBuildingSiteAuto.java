@@ -139,7 +139,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
 /*
         Guides for strafeing
-        encoderDrive(0.6,  -10,  10,-10,-10, 5.0);
+        encoderDrive(0.6,  -10,  10,-10,10, 5.0);
          right 10 Inches with 5 Sec timeout
        encoderDrive(.6, 10,-10, 10,10, 5.0);
         left 10 inches with 5 sec timeout?
