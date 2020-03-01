@@ -12,13 +12,41 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Opmodes.Autonomous.Tests.SkystoneDetectorExample;
 
-@Autonomous(name="BlueBlockSideWithFoundationMovement", group ="Concept")
+@Autonomous(name = "BlueBlockSideWithFoundationMovement", group = "Concept")
 public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode {
 
 
+    static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    // These constants define the desired driving/control characteristics
+    // The can/should be tweaked to suite the specific robot drive train.
+    static final double DRIVE_SPEED = 0.8;     // Nominal speed for better accuracy.
+    static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
+    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
+    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
+    static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
+    public double amountError = 0.64;
+    public SkystoneDetectorExample.SkyStonePosition skystonePostion = SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
     SkystoneDetectorExample detector;
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
+    Servo Grabber;
+    Servo LeftBlockGrabber;
+    Servo RightBlockGrabber;
+    Servo LeftBaseplateShover;
+    Servo RightBaseplateShover;
+    Servo ShoveBlock;
+    ModernRoboticsI2cGyro gyro = null; // Additional Gyro device
+    DistanceSensor sensorRange;
+    int numOfTimesMoved = 0;
+    double DOWN_POSITION = .8;
+    double STRAFE_TO_BLOCK = 14;
+    double initDistanceFromBlocks;
+    double distanceToDifferentBlock = 14;
+    int TIME_FOR_ARM_TO_DROP = 1500;
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -29,39 +57,6 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
     private DcMotor leftIntake = null;
     private DcMotor OuttakeLift = null;
     private DcMotor HorizontalLift = null;
-
-    Servo Grabber;
-    Servo LeftBlockGrabber;
-    Servo RightBlockGrabber;
-    Servo LeftBaseplateShover;
-    Servo RightBaseplateShover;
-    Servo ShoveBlock;
-    ModernRoboticsI2cGyro gyro = null; // Additional Gyro device
-
-    DistanceSensor sensorRange;
-
-    static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
-    static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
-    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-
-    // These constants define the desired driving/control characteristics
-    // The can/should be tweaked to suite the specific robot drive train.
-    static final double DRIVE_SPEED = 0.8;     // Nominal speed for better accuracy.
-    static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
-
-    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
-    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
-    static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
-    int numOfTimesMoved = 0;
-    double DOWN_POSITION = .8;
-    double STRAFE_TO_BLOCK = 14;
-    public double amountError = 0.64;
-    public SkystoneDetectorExample.SkyStonePosition skystonePostion= SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
-    double initDistanceFromBlocks;
-    double distanceToDifferentBlock =14;
-    int TIME_FOR_ARM_TO_DROP = 1500;
 
     @Override
     public void runOpMode() {
@@ -93,9 +88,6 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
 
         telemetry.addLine("Config Finish");
-
-
-
 
 
         telemetry.addLine("motor direction");
@@ -132,7 +124,7 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
-        detector = new SkystoneDetectorExample(this, true,true);
+        detector = new SkystoneDetectorExample(this, true, true);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
@@ -146,30 +138,30 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
         waitForStart();
         Grabber.setPosition(.53);
         skystonePostion = detector.getDecision();
-        telemetry.addData("Decision:",skystonePostion);
-        switch (skystonePostion){
+        telemetry.addData("Decision:", skystonePostion);
+        switch (skystonePostion) {
             case LEFT:
-                encoderDrive(.7,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
+                encoderDrive(.7, initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks, 5);
 
-                gyroTurn(.6,0);
-                
-                gyroDrive(.7,distanceToDifferentBlock+2,distanceToDifferentBlock+2,distanceToDifferentBlock+2,distanceToDifferentBlock+2,0,5);
+                gyroTurn(.6, 0);
+
+                gyroDrive(.7, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, 0, 5);
 
                 gyroTurn(1, 285);
 
-                encoderDrive(.7,4,-4,-4,4,0);
+                encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.4,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,0);
+                encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 0);
 
                 Grabber.setPosition(.2);
 
-                gyroDrive(.7,75,75,75,75,0,0);
+                gyroDrive(.7, 75, 75, 75, 75, 0, 0);
 
-                gyroTurn(.6,90);
+                gyroTurn(.6, 90);
 
                 telemetry.addData("move Backward 25 inches", "Begun");
                 telemetry.update();
@@ -223,30 +215,30 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
 
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(1);
 
-                gyroDrive(.7,-91,-91,-91,-91, 0,0);
+                gyroDrive(.7, -91, -91, -91, -91, 0, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.7,-STRAFE_TO_BLOCK-25,STRAFE_TO_BLOCK+25,STRAFE_TO_BLOCK+25,-STRAFE_TO_BLOCK-25,5);
+                encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
 
-                encoderCollectionDrive(.7, 1, -6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
                 Grabber.setPosition(.2);
 
-                encoderDrive(.7,STRAFE_TO_BLOCK+29,-STRAFE_TO_BLOCK-29,-STRAFE_TO_BLOCK-29,STRAFE_TO_BLOCK+29,5);
+                encoderDrive(.7, STRAFE_TO_BLOCK + 29, -STRAFE_TO_BLOCK - 29, -STRAFE_TO_BLOCK - 29, STRAFE_TO_BLOCK + 29, 5);
 
-                gyroDrive(.7,-90,-90,-90,-90,0,0);
+                gyroDrive(.7, -90, -90, -90, -90, 0, 0);
 
                 HorizontalLift.setTargetPosition(50);
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -266,17 +258,17 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
 
-                gyroDrive(.7,-38,-38,-38,-38,0,0);
+                gyroDrive(.7, -38, -38, -38, -38, 0, 0);
 
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 break;
@@ -285,27 +277,27 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
             case MIDDLE:
 
 
-                encoderDrive(.7,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,0);
+                encoderDrive(.7, initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                gyroDrive(.7,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,0,0);
+                gyroDrive(.7, distanceToDifferentBlock - 4, distanceToDifferentBlock - 4, distanceToDifferentBlock - 4, distanceToDifferentBlock - 4, 0, 0);
 
                 gyroTurn(1, 285);
 
-                encoderDrive(.7,4,-4,-4,4,0);
+                encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.4,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,0);
+                encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 0);
 
                 Grabber.setPosition(.2);
 
-                gyroDrive(.7,83,83,83,83,0,0);
+                gyroDrive(.7, 83, 83, 83, 83, 0, 0);
 
-                gyroTurn(.6,90);
+                gyroTurn(.6, 90);
 
                 telemetry.addData("move Backward 25 inches", "Begun");
                 telemetry.update();
@@ -359,30 +351,30 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
 
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
 
-                gyroDrive(.7,-99,-99,-99,-99, 0,0);
+                gyroDrive(.7, -99, -99, -99, -99, 0, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.7,-STRAFE_TO_BLOCK-25,STRAFE_TO_BLOCK+25,STRAFE_TO_BLOCK+25,-STRAFE_TO_BLOCK-25,5);
+                encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
 
-                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
                 Grabber.setPosition(.2);
 
-                encoderDrive(.7,STRAFE_TO_BLOCK+29,-STRAFE_TO_BLOCK-29,-STRAFE_TO_BLOCK-29,STRAFE_TO_BLOCK+29,5);
+                encoderDrive(.7, STRAFE_TO_BLOCK + 29, -STRAFE_TO_BLOCK - 29, -STRAFE_TO_BLOCK - 29, STRAFE_TO_BLOCK + 29, 5);
 
-                gyroDrive(.7,-98,-98,-98,-98,0,0);
+                gyroDrive(.7, -98, -98, -98, -98, 0, 0);
 
                 HorizontalLift.setTargetPosition(50);
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -402,17 +394,17 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
 
-                gyroDrive(.7,-38,-38,-38,-38,0,0);
+                gyroDrive(.7, -38, -38, -38, -38, 0, 0);
 
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -422,27 +414,27 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
             case RIGHT:
 
 
-                encoderDrive(.7,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,0);
+                encoderDrive(.7, initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
 //                gyroDrive(.7,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,0,0);
 
                 gyroTurn(1, 285);
 
-                encoderDrive(.7,4,-4,-4,4,0);
+                encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.4,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,0);
+                encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 0);
 
                 Grabber.setPosition(.2);
 
-                gyroDrive(.7,91,91,91,91,0,0);
+                gyroDrive(.7, 91, 91, 91, 91, 0, 0);
 
-                gyroTurn(.6,90);
+                gyroTurn(.6, 90);
 
                 telemetry.addData("move Backward 25 inches", "Begun");
                 telemetry.update();
@@ -496,30 +488,30 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
 
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
 
-                gyroDrive(.7,-107,-107,-107,-107, 0,0);
+                gyroDrive(.7, -107, -107, -107, -107, 0, 0);
 
-                gyroTurn(.6,0);
+                gyroTurn(.6, 0);
 
-                encoderDrive(.7,-STRAFE_TO_BLOCK-25,STRAFE_TO_BLOCK+25,STRAFE_TO_BLOCK+25,-STRAFE_TO_BLOCK-25,5);
+                encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
 
-                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
 
                 Grabber.setPosition(.2);
 
-                encoderDrive(.7,STRAFE_TO_BLOCK+29,-STRAFE_TO_BLOCK-29,-STRAFE_TO_BLOCK-29,STRAFE_TO_BLOCK+29,5);
+                encoderDrive(.7, STRAFE_TO_BLOCK + 29, -STRAFE_TO_BLOCK - 29, -STRAFE_TO_BLOCK - 29, STRAFE_TO_BLOCK + 29, 5);
 
-                gyroDrive(.7,-105,-105,-105,-105,0,0);
+                gyroDrive(.7, -105, -105, -105, -105, 0, 0);
 
                 HorizontalLift.setTargetPosition(50);
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -539,17 +531,17 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
-                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+                gyroDrive(.7, -2, -2, -2, -2, 0, 0);
 
                 OuttakeLift.setTargetPosition(0);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
-                gyroTurn(1,0);
+                gyroTurn(1, 0);
 
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
 
-                gyroDrive(.7,-38,-38,-38,-38,0,0);
+                gyroDrive(.7, -38, -38, -38, -38, 0, 0);
 
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -557,25 +549,24 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
         }
 
 
-
-        }
+    }
 
     /**
-     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Driver stops the opmode running.
+     * Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     * Move will stop if either of these conditions occur:
+     * 1) Move gets to the desired position
+     * 2) Driver stops the opmode running.
      *
-     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-     * @param frontLeftInches  Distance (in inches) to move from current position for front Left.  Negative distance means move backwards.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
+     * @param speed           Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param frontLeftInches Distance (in inches) to move from current position for front Left.  Negative distance means move backwards.
+     * @param angle           Absolute Angle (in Degrees) relative to last gyro reset.
+     *                        0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                        If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroDrive ( double speed,
-                            double frontLeftInches, double frontRightInches, double backLeftInches,
-                            double backRightInches,
-                            double angle, double timeoutS){
+    public void gyroDrive(double speed,
+                          double frontLeftInches, double frontRightInches, double backLeftInches,
+                          double backRightInches,
+                          double angle, double timeoutS) {
 
         int newFrontLeftTarget;
         int newFrontRightTarget;
@@ -689,10 +680,11 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-    public void gyroDriveWithUpAndOut ( double speed,
-                            double frontLeftInches, double frontRightInches, double backLeftInches,
-                            double backRightInches,
-                            double angle, double timeoutS){
+
+    public void gyroDriveWithUpAndOut(double speed,
+                                      double frontLeftInches, double frontRightInches, double backLeftInches,
+                                      double backRightInches,
+                                      double angle, double timeoutS) {
 
         int newFrontLeftTarget;
         int newFrontRightTarget;
@@ -752,15 +744,15 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
                     (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
                 leftIntake.setPower(1);
                 rightIntake.setPower(-1);
-                if(runtime.seconds()>1){
+                if (runtime.seconds() > 1) {
                     leftIntake.setPower(0);
                     rightIntake.setPower(0);
                     Grabber.setPosition(.2);
                 }
-                if(runtime.seconds()>2){
+                if (runtime.seconds() > 2) {
                     HorizontalLift.setPower(.8);
                 }
-                if(runtime.seconds()>2.5) {
+                if (runtime.seconds() > 2.5) {
                     OuttakeLift.setPower(.8);
                 }
                 // adjust relative speed
@@ -814,6 +806,10 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
             frontRight.setPower(0);
             backLeft.setPower(0);
             backRight.setPower(0);
+            leftIntake.setPower(0);
+            rightIntake.setPower(0);
+            OuttakeLift.setPower(0);
+            HorizontalLift.setPower(0);
 
             // Turn off RUN_TO_POSITION
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -825,20 +821,20 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
 
 
     /**
-     *  Method to spin on central axis to point in a new direction.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the heading (angle)
-     *  2) Driver stops the opmode running.
+     * Method to spin on central axis to point in a new direction.
+     * Move will stop if either of these conditions occur:
+     * 1) Move gets to the heading (angle)
+     * 2) Driver stops the opmode running.
      *
      * @param speed Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
+     * @param angle Absolute Angle (in Degrees) relative to last gyro reset.
+     *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *              If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroCollectionDrive ( double speed,
-                            double frontLeftInches, double frontRightInches, double backLeftInches,
-                            double backRightInches, double intakeSpeed,
-                            double angle, double timeoutS){
+    public void gyroCollectionDrive(double speed,
+                                    double frontLeftInches, double frontRightInches, double backLeftInches,
+                                    double backRightInches, double intakeSpeed,
+                                    double angle, double timeoutS) {
 
         int newFrontLeftTarget;
         int newFrontRightTarget;
@@ -959,7 +955,7 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
         }
     }
 
-    public void gyroTurn ( double speed, double angle){
+    public void gyroTurn(double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
@@ -969,18 +965,18 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
     }
 
     /**
-     *  Method to obtain & hold a heading for a finite amount of time
-     *  Move will stop once the requested time has elapsed
+     * Method to obtain & hold a heading for a finite amount of time
+     * Move will stop once the requested time has elapsed
      *
-     * @param speed      Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
-     * @param holdTime   Length of time (in seconds) to hold the specified heading.
+     * @param speed    Desired speed of turn.
+     * @param angle    Absolute Angle (in Degrees) relative to last gyro reset.
+     *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                 If a relative angle is required, add/subtract from current heading.
+     * @param holdTime Length of time (in seconds) to hold the specified heading.
      */
 
 
-    public void gyroHold ( double speed, double angle, double holdTime){
+    public void gyroHold(double speed, double angle, double holdTime) {
 
         ElapsedTime holdTimer = new ElapsedTime();
 
@@ -1005,14 +1001,14 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
     /**
      * Perform one cycle of closed loop heading control.
      *
-     * @param speed     Desired speed of turn.
-     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
-     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                  If a relative angle is required, add/subtract from current heading.
-     * @param PCoeff    Proportional Gain coefficient
+     * @param speed  Desired speed of turn.
+     * @param angle  Absolute Angle (in Degrees) relative to last gyro reset.
+     *               0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *               If a relative angle is required, add/subtract from current heading.
+     * @param PCoeff Proportional Gain coefficient
      * @return
      */
-    boolean onHeading ( double speed, double angle, double PCoeff){
+    boolean onHeading(double speed, double angle, double PCoeff) {
         double error;
         double steer;
         boolean onTarget = false;
@@ -1049,11 +1045,12 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
 
     /**
      * getError determines the error between the target angle and the robot's current heading
-     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
+     *
+     * @param targetAngle Desired angle (relative to global reference established at last Gyro Reset).
      * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     * +ve error means the robot should turn LEFT (CCW) to reduce error.
      */
-    public double getError ( double targetAngle){
+    public double getError(double targetAngle) {
 
         double robotError;
 
@@ -1066,18 +1063,19 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
 
     /**
      * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
-     * @param PCoeff  Proportional Gain Coefficient
+     *
+     * @param error  Error angle in robot relative degrees
+     * @param PCoeff Proportional Gain Coefficient
      * @return
      */
-    public double getSteer ( double error, double PCoeff){
+    public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -DRIVE_SPEED, 1);
     }
 
-    public void encoderDrive ( double speed,
-                               double frontLeftInches, double frontRightInches, double backLeftInches,
-                               double backRightInches,
-                               double timeoutS){
+    public void encoderDrive(double speed,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches,
+                             double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;
@@ -1162,10 +1160,11 @@ public class YahyaBlueBlockSideAutonomousWithFoundationMovement extends LinearOp
             //  sleep(250);   // optional pause after eah move
         }
     }
-    public void encoderCollectionDrive ( double speed, double intakeSpeed,
-                               double frontLeftInches, double frontRightInches, double backLeftInches,
-                               double backRightInches,
-                               double timeoutS){
+
+    public void encoderCollectionDrive(double speed, double intakeSpeed,
+                                       double frontLeftInches, double frontRightInches, double backLeftInches,
+                                       double backRightInches,
+                                       double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;

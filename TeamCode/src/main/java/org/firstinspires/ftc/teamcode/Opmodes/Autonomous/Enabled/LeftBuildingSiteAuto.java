@@ -23,26 +23,6 @@ import com.qualcomm.robotcore.util.Range;
 public class LeftBuildingSiteAuto extends LinearOpMode {
 
 
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontLeft = null;
-    private DcMotor frontRight = null;
-
-    private DcMotor backLeft = null;
-    private DcMotor backRight = null;
-    private DcMotor rightIntake = null;
-    private DcMotor leftIntake = null;
-    private DcMotor OuttakeLift = null;
-    private DcMotor HorizontalLift = null;
-
-    private
-    Servo Grabber;
-    Servo LeftBlockGrabber;
-    Servo RightBlockGrabber;
-    Servo LeftBaseplateShover;
-    Servo RightBaseplateShover;
-    Servo ShoveBlock;
-    ModernRoboticsI2cGyro gyro = null;
-
     static final double COUNTS_PER_MOTOR_REV = 383.6;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
@@ -53,9 +33,26 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     public double amountError = 0.64;
+
+    Servo LeftBlockGrabber;
+    Servo RightBlockGrabber;
+    Servo LeftBaseplateShover;
+    Servo RightBaseplateShover;
+    Servo ShoveBlock;
+    ModernRoboticsI2cGyro gyro = null;
+
     double finalAngle;
-
-
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor frontLeft = null;
+    private DcMotor frontRight = null;
+    private DcMotor backLeft = null;
+    private DcMotor backRight = null;
+    private DcMotor rightIntake = null;
+    private DcMotor leftIntake = null;
+    private DcMotor OuttakeLift = null;
+    private DcMotor HorizontalLift = null;
+    private
+    Servo Grabber;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -152,7 +149,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive( .7, -6, -6, -6, -6, 0);
+        encoderDrive(.7, -6, -6, -6, -6, 0);
         telemetry.addData("Move Forward 6 inches", "Complete");
         //TurnOffAllMotors();
 
@@ -301,7 +298,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy())&& !goodEnough) {
+                    (frontLeft.isBusy() || frontRight.isBusy()) || (backLeft.isBusy() || backRight.isBusy()) && !goodEnough) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
@@ -318,12 +315,11 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
                 telemetry.update();
 
-                ErrorAmount = ((Math.abs(((newBackLeftTarget)-(backLeft.getCurrentPosition())))
-                        +(Math.abs(((newFrontLeftTarget)-(frontLeft.getCurrentPosition()))))
-                        +(Math.abs((newBackRightTarget)-(backRight.getCurrentPosition())))
-                        +(Math.abs(((newFrontRightTarget)-(frontRight.getCurrentPosition())))))/COUNTS_PER_INCH);
-                if(ErrorAmount<.4)
-                {
+                ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
+                        + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
+                        + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
+                        + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
+                if (ErrorAmount < .4) {
                     goodEnough = true;
                 }
             }
@@ -406,8 +402,8 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             //  sleep(250);   // optional pause after eah move
         }
     }
-    public void TurnOffAllMotors()
-    {
+
+    public void TurnOffAllMotors() {
         // Stop all motion;
 
         frontLeft.setPower(0);
@@ -421,7 +417,7 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    boolean onHeading ( double speed, double angle, double PCoeff){
+    boolean onHeading(double speed, double angle, double PCoeff) {
         double error;
         double steer;
         boolean onTarget = false;
@@ -457,10 +453,10 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
     }
 
 
-    public void gyroDrive ( double speed,
-                            double frontLeftInches, double frontRightInches, double backLeftInches,
-                            double backRightInches,
-                            double angle, double timeoutS){
+    public void gyroDrive(double speed,
+                          double frontLeftInches, double frontRightInches, double backLeftInches,
+                          double backRightInches,
+                          double angle, double timeoutS) {
 
         int newFrontLeftTarget;
         int newFrontRightTarget;
@@ -574,7 +570,8 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-    public double getError ( double targetAngle){
+
+    public double getError(double targetAngle) {
 
         double robotError;
 
@@ -587,14 +584,16 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
     /**
      * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
-     * @param PCoeff  Proportional Gain Coefficient
+     *
+     * @param error  Error angle in robot relative degrees
+     * @param PCoeff Proportional Gain Coefficient
      * @return
      */
-    public double getSteer ( double error, double PCoeff){
+    public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -DRIVE_SPEED, 1);
     }
-    public void gyroTurn (  double speed, double angle) {
+
+    public void gyroTurn(double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {

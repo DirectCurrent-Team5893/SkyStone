@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 
 public class TeleOpFieldRelative extends LinearOpMode {
 
+    public int initialAngle = 0;
     Servo Grabber;
     Servo LeftBlockGrabber;
     Servo RightBlockGrabber;
@@ -20,7 +21,6 @@ public class TeleOpFieldRelative extends LinearOpMode {
     Servo ShoveBlock;
     Servo CapstoneDeployment;
     ModernRoboticsI2cGyro gyro = null; // Additional Gyro device
-
     //define the motors
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft = null;
@@ -31,7 +31,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
     private DcMotor leftIntake = null;
     private DcMotor OuttakeLift = null;
     private DcMotor HorizontalLift = null;
-public int initialAngle = 0;
+
     @Override
     public void runOpMode() {
 
@@ -318,7 +318,7 @@ public int initialAngle = 0;
                     telemetry.addData("Go Up",
                             OuttakeLift.getCurrentPosition());
                     telemetry.update();
-                    fieldRelativeDrive( gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+                    fieldRelativeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 
                     if (gamepad1.right_bumper) {
                         leftIntake.setPower(IntakePower);
@@ -356,14 +356,13 @@ public int initialAngle = 0;
 
 
             OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-           if(gamepad2.right_stick_y<0){
-               telemetry.addLine("UP");
-            OuttakeLift.setPower(-gamepad2.right_stick_y);
-           } else
-               {
-                   telemetry.addLine("Down");
-                   OuttakeLift.setPower((-.6)*gamepad2.right_stick_y);
-               }
+            if (gamepad2.right_stick_y < 0) {
+                telemetry.addLine("UP");
+                OuttakeLift.setPower(-gamepad2.right_stick_y);
+            } else {
+                telemetry.addLine("Down");
+                OuttakeLift.setPower((-.6) * gamepad2.right_stick_y);
+            }
             telemetry.addData("Lift Power", gamepad2.right_stick_y);
             telemetry.addData("Horizontal Lift Position:", HorizontalLift.getCurrentPosition());
             HorizontalLift.setPower(gamepad2.left_stick_y);
@@ -413,13 +412,12 @@ public int initialAngle = 0;
 
         OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Gamepad2.y",gamepad2.right_stick_y);
-        if(gamepad2.right_stick_y<0){
+        telemetry.addData("Gamepad2.y", gamepad2.right_stick_y);
+        if (gamepad2.right_stick_y < 0) {
             OuttakeLift.setPower(-gamepad2.right_stick_y);
-        } else
-        {
+        } else {
 
-            OuttakeLift.setPower((-.6)*gamepad2.right_stick_y);
+            OuttakeLift.setPower((-.6) * gamepad2.right_stick_y);
         }
 
         telemetry.addData("Lift Power", gamepad2.right_stick_y);
@@ -482,7 +480,7 @@ public int initialAngle = 0;
         double targetPosition;
         switch (POSITION) {
             case UP_POSITION:
-                Grabber.setPosition(.45 );
+                Grabber.setPosition(.45);
                 break;
             case DOWN_POSITION:
                 Grabber.setPosition(.2);
@@ -540,33 +538,37 @@ public int initialAngle = 0;
                 LeftBlockGrabber.setPosition(.2);
                 break;
         }
-    } public void setInitalAngle(int angle){
+    }
+
+    public void setInitalAngle(int angle) {
         initialAngle = angle;
     }
 
-    public void setCurrentAngleAs(int angle){
+    public void setCurrentAngleAs(int angle) {
         initialAngle = angle - gyro.getHeading();
     }
 
-    public double getProcessedAngle(){
+    public double getProcessedAngle() {
         int angle = gyro.getHeading() + initialAngle;
-        while (angle < 0){
+        while (angle < 0) {
             angle += 360;
         }
         angle = angle % 360;
 
         return angle;
     }
-    public void fieldRelativeDrive(double forward, double right, double turn,double MAX_SPEED){
+
+    public void fieldRelativeDrive(double forward, double right, double turn, double MAX_SPEED) {
         double angle = getProcessedAngle();
         angle = Math.toRadians(angle);
 
-        double relativeForward = (Math.cos(angle)*right) + (Math.sin(angle)*forward);
-        double relativeRight = (Math.sin(angle)*right) - (Math.cos(angle)*forward);
+        double relativeForward = (Math.cos(angle) * right) + (Math.sin(angle) * forward);
+        double relativeRight = (Math.sin(angle) * right) - (Math.cos(angle) * forward);
 
-        drivetrain(relativeForward, relativeRight, turn,MAX_SPEED);
+        drivetrain(relativeForward, relativeRight, turn, MAX_SPEED);
 
     }
+
     //mechanum drive train motion calculation function
     private void drivetrain(double forward, double right, double turn, double MAX_SPEED) {
         forward = checkValue(forward, MAX_SPEED);
@@ -677,7 +679,6 @@ public int initialAngle = 0;
                 }
 
                 HorizontalLift.setPower(gamepad2.left_stick_y);
-
 
 
             }
