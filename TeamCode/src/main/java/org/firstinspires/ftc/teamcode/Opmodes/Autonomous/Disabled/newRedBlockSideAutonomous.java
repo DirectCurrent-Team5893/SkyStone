@@ -68,7 +68,7 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double DRIVE_SPEED = 0.8;     // Nominal speed for better accuracy.
+    static final double DRIVE_SPEED = 0.7;     // Nominal speed for better accuracy.
     static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
 
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
@@ -76,7 +76,7 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
     double DOWN_POSITION = .1;
-    double STRAFE_TO_BLOCK = 14;
+    double STRAFE_TO_BLOCK = 12;
     public double amountError = 0.64;
     public SkystoneDetectorExample.SkyStonePosition skystonePostion= SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
     double initDistanceFromBlocks;
@@ -164,16 +164,16 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
         gyro.resetZAxisIntegrator();
 
 
-        initDistanceFromBlocks = 35;
+        initDistanceFromBlocks = 37;
         waitForStart();
         skystonePostion = detector.getDecision();
         telemetry.addData("Decision:",skystonePostion);
         switch (skystonePostion){
             case LEFT:
-                encoderDrive(.8,2,-2, -2, 2,5);
-                gyroDrive(.8,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,0,5);
-                encoderDrive(.8,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
-                gyroTurn(.8,0);
+                encoderDrive(DRIVE_SPEED,2,-2, -2, 2,5);
+                gyroDrive(DRIVE_SPEED,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,0,5);
+                encoderDrive(DRIVE_SPEED,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
+                gyroTurn(DRIVE_SPEED,0);
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
@@ -184,28 +184,28 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
 
                 encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
 
-                gyroDrive(.8,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,0,5);
+                gyroDrive(DRIVE_SPEED,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,0,5);
 
                 LeftBlockGrabber.setPosition(.8);
                 gyroTurn(1,0);
 
-                gyroDrive(.8,73,73,73,73, 0,10);
+                gyroDrive(DRIVE_SPEED,73,73,73,73, 0,10);
 
-                gyroTurn(.8,0);
+                gyroTurn(DRIVE_SPEED,0);
 
-                encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
+                encoderDrive(DRIVE_SPEED,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
 
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
-                encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
+                encoderDrive(DRIVE_SPEED,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
 
-                gyroDrive(.8,-75,-75,-75,-75,0,10);
+                gyroDrive(DRIVE_SPEED,-75,-75,-75,-75,0,10);
 
                 LeftBlockGrabber.setPosition(.8);
 
-                gyroDrive(.8,23,23,23,23,0,10);
-                encoderDrive(.8,3,-3,-3,3,10);
+                gyroDrive(DRIVE_SPEED,23,23,23,23,0,10);
+                encoderDrive(DRIVE_SPEED,3,-3,-3,3,10);
                 break;
             case MIDDLE:
                 encoderDrive(.8,2,-2, -2, 2,5);
@@ -241,7 +241,7 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
                 encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
                 gyroDrive(1,-60,-60,-60,-60,0,5);
                 LeftBlockGrabber.setPosition(.8);
-                gyroDrive(.8,87,87,87,87, 0,10);
+                gyroDrive(.8,83,83,83,83, 0,10);
                 gyroTurn(0.8,0);
                 encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
