@@ -208,10 +208,16 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 telemetry.addData("Arc", "Complete");
                 //TurnOffAllMotors();
 
+                HorizontalLift.setTargetPosition(50);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
                 OuttakeLift.setTargetPosition(-457);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
 
+                HorizontalLift.setTargetPosition(150);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
                 telemetry.addData("Raise foundation mover", "Start");
@@ -228,7 +234,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 OuttakeLift.setPower(0);
                 Grabber.setPosition(.53);
 
-                HorizontalLift.setDirection(DcMotor.Direction.REVERSE);
+                HorizontalLift.setTargetPosition(0);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
                 gyroDrive(.7,-2,-2,-2,-2, 0,0);
@@ -240,7 +247,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 gyroTurn(1,0);
 
                 HorizontalLift.setPower(0);
-                HorizontalLift.setDirection(DcMotor.Direction.FORWARD);
+                OuttakeLift.setPower(1);
 
                 gyroDrive(.7,-91,-91,-91,-91, 0,0);
 
@@ -262,17 +269,22 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 gyroDrive(.7,-90,-90,-90,-90,0,0);
 
+                HorizontalLift.setTargetPosition(50);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
                 OuttakeLift.setTargetPosition(-914);
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 OuttakeLift.setPower(1);
 
+                HorizontalLift.setTargetPosition(150);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
-
-                sleep(1000);
 
                 Grabber.setPosition(.53);
 
-                HorizontalLift.setDirection(DcMotor.Direction.REVERSE);
+                HorizontalLift.setTargetPosition(0);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
 
                 gyroDrive(.7,-2,-2,-2,-2, 0,0);
@@ -283,7 +295,6 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 gyroTurn(1,0);
 
                 HorizontalLift.setPower(0);
-                HorizontalLift.setDirection(DcMotor.Direction.FORWARD);
                 OuttakeLift.setPower(0);
 
                 gyroDrive(.7,-38,-38,-38,-38,0,0);
