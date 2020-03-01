@@ -68,7 +68,7 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double DRIVE_SPEED = 0.7;     // Nominal speed for better accuracy.
+    static final double DRIVE_SPEED = 0.8;     // Nominal speed for better accuracy.
     static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
 
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
@@ -182,12 +182,12 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
-                encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
 
-                gyroDrive(DRIVE_SPEED,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,0,5);
+                gyroDrive(.6,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,-32-distanceToDifferentBlock,0,5);
 
                 LeftBlockGrabber.setPosition(.8);
-                gyroTurn(1,0);
+                gyroTurn(.8,0);
 
                 gyroDrive(DRIVE_SPEED,73,73,73,73, 0,10);
 
@@ -198,14 +198,15 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
-                encoderDrive(DRIVE_SPEED,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
 
-                gyroDrive(DRIVE_SPEED,-75,-75,-75,-75,0,10);
+                gyroDrive(.6,-75,-75,-75,-75,0,10);
 
                 LeftBlockGrabber.setPosition(.8);
 
-                gyroDrive(DRIVE_SPEED,23,23,23,23,0,10);
                 encoderDrive(DRIVE_SPEED,3,-3,-3,3,10);
+                gyroDrive(DRIVE_SPEED,23,23,23,23,0,10);
+
                 break;
             case MIDDLE:
                 encoderDrive(.8,2,-2, -2, 2,5);
@@ -216,19 +217,20 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
 
-                encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
-                gyroDrive(1,-42,-42,-42,-42,0,5);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
+                gyroDrive(.6,-42,-42,-42,-42,0,5);
                 LeftBlockGrabber.setPosition(.8);
-                gyroDrive(.8,69,69,69,69, 0,10);
-                gyroTurn(0.8,0);
-                encoderDrive(.8,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
+                gyroDrive(.9,69,69,69,69, 0,10);
+                gyroTurn(0.9,0);
+                encoderDrive(.9,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
-                gyroDrive(.8,-75,-75,-75,-75,0,10);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
+                gyroDrive(.6,-75,-75,-75,-75,0,10);
                 LeftBlockGrabber.setPosition(.8);
-                gyroDrive(.8,18,18,18,18,0,10);
-                encoderDrive(.8,3,-3,-3,3,10);
+                encoderDrive(.9,3,-3,-3,3,10);
+                gyroDrive(.9,18,18,18,18,0,10);
+
 
 
                 break;
@@ -238,19 +240,20 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
                 encoderDrive(1,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                encoderDrive(.6,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
-                gyroDrive(1,-60,-60,-60,-60,0,5);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-3,STRAFE_TO_BLOCK+3,STRAFE_TO_BLOCK+3,-STRAFE_TO_BLOCK-3,5);
+                gyroDrive(.6,-60,-60,-60,-60,0,5);
                 LeftBlockGrabber.setPosition(.8);
-                gyroDrive(.8,76,76,76,76, 0,10);
-                gyroTurn(0.8,0);
-                encoderDrive(.6,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
+                gyroDrive(.9,76,76,76,76, 0,10);
+                gyroTurn(0.9,0);
+                encoderDrive(.9,STRAFE_TO_BLOCK+6,-STRAFE_TO_BLOCK-6,-STRAFE_TO_BLOCK-6,STRAFE_TO_BLOCK+6,5);
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
-                encoderDrive(.8,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
-                gyroDrive(.8,-75,-75,-75,-75,0,10);
+                encoderDrive(.4,-STRAFE_TO_BLOCK-4,STRAFE_TO_BLOCK+4,STRAFE_TO_BLOCK+4,-STRAFE_TO_BLOCK-4,5);
+                gyroDrive(.6,-75,-75,-75,-75,0,10);
                 LeftBlockGrabber.setPosition(.8);
-                gyroDrive(.8,18,18,18,18,0,10);
-                encoderDrive(.8,5,-5,-5,5,10);
+                encoderDrive(.9,5,-5,-5,5,10);
+                gyroDrive(.9,18,18,18,18,0,10);
+
                 break;
         }
 
