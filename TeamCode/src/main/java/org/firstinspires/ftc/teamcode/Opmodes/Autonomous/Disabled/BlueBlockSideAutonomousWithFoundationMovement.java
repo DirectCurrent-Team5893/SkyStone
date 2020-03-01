@@ -325,12 +325,6 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 sleep(1000);
 
-//                telemetry.addData("backward motion", "Begun");
-//                telemetry.update();
-//                encoderDrive(1, -25, -25, -25, -25, 0);
-//                telemetry.addData("backward motion", "Complete");
-//                //TurnOffAllMotors();
-
                 telemetry.addData("Arc", "Begun");
                 telemetry.update();
                 gyroTurn(DRIVE_SPEED, 180);
@@ -425,21 +419,141 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 break;
+
+
             case RIGHT:
-                encoderDrive(1,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
-                gyroDrive(1,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,-distanceToDifferentBlock,0,5);
-                RightBlockGrabber.setPosition(.1);
-                sleep(TIME_FOR_ARM_TO_DROP);
-                encoderDrive(1,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,5);
-                gyroDrive(1,32-distanceToDifferentBlock,32-distanceToDifferentBlock,32-distanceToDifferentBlock,32-distanceToDifferentBlock,0,5);
-                RightBlockGrabber.setPosition(1);
-                gyroDrive(1,-82,-82,-82,-82,0,5);
-                encoderDrive(1,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,5);
-                RightBlockGrabber.setPosition(.1);
-                sleep(TIME_FOR_ARM_TO_DROP);
-                encoderDrive(1,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,5);
-                gyroDrive(1,82,82,82,82,0,5);
-                gyroDrive(1,-18,-18,-18,-18,0,6);
+
+
+                encoderDrive(.7,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,0);
+
+                gyroTurn(.6,0);
+
+//                gyroDrive(.7,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,distanceToDifferentBlock-4,0,0);
+
+                gyroTurn(1, 285);
+
+                encoderDrive(.7,4,-4,-4,4,0);
+
+                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+
+                gyroTurn(.6,0);
+
+                encoderDrive(.4,-STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,STRAFE_TO_BLOCK,-STRAFE_TO_BLOCK,0);
+
+                Grabber.setPosition(.2);
+
+                gyroDrive(.7,91,91,91,91,0,0);
+
+                gyroTurn(.6,90);
+
+                telemetry.addData("move Backward 25 inches", "Begun");
+                telemetry.update();
+                encoderDrive(.7, 7, 7, 7, 7, 0);
+                encoderDrive(.4, 4, 4, 4, 4, 0);
+                telemetry.addData("Move Backward 25 inches", "Complete");
+                //TurnOffAllMotors();
+
+                telemetry.addData("Lower foundation mover", "Start");
+                LeftBaseplateShover.setPosition(1);
+                RightBaseplateShover.setPosition(0);
+                telemetry.addData("Lower Foundation mover", "Completed");
+                telemetry.update();
+                //TurnOffAllMotors();
+
+                sleep(1000);
+
+                telemetry.addData("Arc", "Begun");
+                telemetry.update();
+                gyroTurn(DRIVE_SPEED, 180);
+                telemetry.addData("Arc", "Complete");
+                //TurnOffAllMotors();
+
+                HorizontalLift.setTargetPosition(50);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                OuttakeLift.setTargetPosition(-457);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                OuttakeLift.setPower(1);
+
+                HorizontalLift.setTargetPosition(150);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                telemetry.addData("Raise foundation mover", "Start");
+                LeftBaseplateShover.setPosition(0);
+                RightBaseplateShover.setPosition(1);
+                telemetry.addData("Raise Foundation mover", "Completed");
+                telemetry.update();
+                //TurnOffAllMotors();
+
+                sleep(1000);
+
+                HorizontalLift.setPower(0);
+
+                OuttakeLift.setPower(0);
+                Grabber.setPosition(.53);
+
+                HorizontalLift.setTargetPosition(0);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+
+                OuttakeLift.setTargetPosition(0);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                OuttakeLift.setPower(1);
+
+                gyroTurn(1,0);
+
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(0);
+
+                gyroDrive(.7,-107,-107,-107,-107, 0,0);
+
+                gyroTurn(.6,0);
+
+                encoderDrive(.7,-STRAFE_TO_BLOCK-25,STRAFE_TO_BLOCK+25,STRAFE_TO_BLOCK+25,-STRAFE_TO_BLOCK-25,5);
+
+                encoderCollectionDrive(.7,1,-6,-6,-6,-6,0);
+
+                Grabber.setPosition(.2);
+
+                encoderDrive(.7,STRAFE_TO_BLOCK+29,-STRAFE_TO_BLOCK-29,-STRAFE_TO_BLOCK-29,STRAFE_TO_BLOCK+29,5);
+
+                gyroDrive(.7,-105,-105,-105,-105,0,0);
+
+                HorizontalLift.setTargetPosition(50);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                OuttakeLift.setTargetPosition(-914);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                OuttakeLift.setPower(1);
+
+                HorizontalLift.setTargetPosition(150);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                Grabber.setPosition(.53);
+
+                HorizontalLift.setTargetPosition(0);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                HorizontalLift.setPower(1);
+
+                gyroDrive(.7,-2,-2,-2,-2, 0,0);
+
+                OuttakeLift.setTargetPosition(0);
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                OuttakeLift.setPower(1);
+                gyroTurn(1,0);
+
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(0);
+
+                gyroDrive(.7,-38,-38,-38,-38,0,0);
+
+                OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 break;
         }
