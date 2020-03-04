@@ -845,8 +845,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
-            rightIntake.setPower(-intakeSpeed);
-            leftIntake.setPower(intakeSpeed);
+            //rightIntake.setPower(-intakeSpeed);
+           // leftIntake.setPower(intakeSpeed);
 
             // Determine new target position, and pass to motor controller
             newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
