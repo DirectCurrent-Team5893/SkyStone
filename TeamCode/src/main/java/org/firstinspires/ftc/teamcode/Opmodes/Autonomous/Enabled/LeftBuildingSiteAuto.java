@@ -149,13 +149,13 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Forward 6 inches", "Begun");
         telemetry.update();
-        encoderDrive(.7, -6, -6, -6, -6, 0);
+        encoderDrive(.6, -6, -6, -6, -6, 0);
         telemetry.addData("Move Forward 6 inches", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.7, -10, 10, 10, -10, 0);
+        encoderDrive(.6, -10, 10, 10, -10, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
@@ -167,8 +167,8 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
-        encoderDrive(.7, 21, 21, 21, 21, 0);
-        encoderDrive(.3, 4, 4, 4, 4, 0);
+        encoderDrive(.6, 21, 21, 21, 21, 0);
+        encoderDrive(.2, 4, 4, 4, 4, 0);
         telemetry.addData("Move Backward 25 inches", "Complete");
         //TurnOffAllMotors();
 
@@ -183,20 +183,20 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("backward motion", "Begun");
         telemetry.update();
-        encoderDrive(.7, -25, -25, -25, -25, 0);
+        encoderDrive(.6, -25, -25, -25, -25, 0);
         telemetry.addData("backward motion", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("left Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.7, 7, -7, -7, 7, 0);
+        encoderDrive(.6, 7, -7, -7, 7, 0);
         encoderDrive(.3, 10, -10, -10, 10, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("right Strafe", "Begun");
         telemetry.update();
-        encoderDrive(.7, -8, 8, 8, -8, 0);
+        encoderDrive(.6, -8, 8, 8, -8, 0);
         telemetry.addData("left Strafe", "Complete");
         //TurnOffAllMotors();
 
@@ -206,21 +206,9 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
 
-//        telemetry.addData("right Strafe", "Begun");
-//        telemetry.update();
-//        encoderDrive(1, 45, -45, -45, 45, 0);
-//        telemetry.addData("right Strafe", "Complete");
-        //TurnOffAllMotors();
-
-//        telemetry.addData("right 45 degree turn", "Begun");
-//        telemetry.update();
-//        gyroTurn(DRIVE_SPEED, 210);
-//        telemetry.addData("right 45 degree turn", "Complete");
-        //TurnOffAllMotors();
-
         telemetry.addData("forward 5 inches", "Begun");
         telemetry.update();
-        encoderDrive(.7, 10, 10, 10, 10, 0);
+        encoderDrive(.6, 10, 10, 10, 10, 0);
         telemetry.addData("forward 5 inches", "Complete");
         //TurnOffAllMotors();
 
@@ -233,20 +221,14 @@ public class LeftBuildingSiteAuto extends LinearOpMode {
 
         Thread.sleep(1500);
 
-//        telemetry.addData("left 15 degree turn", "Begun");
-//        telemetry.update();
-//        gyroTurn(DRIVE_SPEED,190);
-//        telemetry.addData("left 15 degree turn", "Complete");
-//        //TurnOffAllMotors();
-
         telemetry.addData("move left 12 inches", "Begun");
         telemetry.update();
-        encoderDrive(.7, -12, 12, 12, -12, 0);
+        encoderDrive(.6, -12, 12, 12, -12, 0);
         telemetry.addData("Move Left 12 inches", "Complete");
 
         telemetry.addData("move Backward 40 inches to park", "Begun");
         telemetry.update();
-        encoderDrive(.7, -40, -40, -40, -40, 0);
+        encoderDrive(.6, -40, -40, -40, -40, 0);
         telemetry.addData("Move Backward 40 inches to park", "Complete");
         TurnOffAllMotors();
 
