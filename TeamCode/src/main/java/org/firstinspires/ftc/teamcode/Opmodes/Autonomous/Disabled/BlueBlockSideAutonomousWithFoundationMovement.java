@@ -868,8 +868,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             frontRight.setPower(Math.abs(speed));
             backLeft.setPower(Math.abs(speed));
             backRight.setPower(Math.abs(speed));
-            rightIntake.setPower(-intakeSpeed);
-            leftIntake.setPower(intakeSpeed);
+            //rightIntake.setPower(-intakeSpeed);
+            //leftIntake.setPower(intakeSpeed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
