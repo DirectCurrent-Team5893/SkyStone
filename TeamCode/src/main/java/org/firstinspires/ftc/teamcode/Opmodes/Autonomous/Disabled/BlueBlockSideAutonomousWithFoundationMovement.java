@@ -152,11 +152,11 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 gyroDrive(.7, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, 0, 5);
 
-                gyroTurn(1, 285);
+                gyroTurn(1, 290);
 
                 encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7, 1, -10, -10, -10, -10, 0);
+                encoderCollectionDrive(.5, -6, -6, -6, -6, 1, 0);
 
                 gyroTurn(.6, 0);
 
@@ -831,10 +831,10 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
     }
 
-    public void encoderCollectionDrive(double speed, double intakeSpeed,
-                                       double frontLeftInches, double frontRightInches, double backLeftInches,
-                                       double backRightInches,
-                                       double timeoutS) {
+    public void encoderCollectionDrive(double speed,
+                             double frontLeftInches, double frontRightInches, double backLeftInches,
+                             double backRightInches, double intakeSpeed,
+                             double timeoutS) {
         int newFrontLeftTarget;
         int newFrontRightTarget;
         int newBackLeftTarget;
@@ -844,9 +844,6 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         boolean goodEnough = false;
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-
-            //rightIntake.setPower(-intakeSpeed);
-           // leftIntake.setPower(intakeSpeed);
 
             // Determine new target position, and pass to motor controller
             newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
@@ -871,9 +868,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             frontRight.setPower(Math.abs(speed));
             backLeft.setPower(Math.abs(speed));
             backRight.setPower(Math.abs(speed));
-
-
-
+            leftIntake.setPower(intakeSpeed);
+            rightIntake.setPower(-intakeSpeed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -915,7 +911,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             frontRight.setPower(0);
             backLeft.setPower(0);
             backRight.setPower(0);
-            rightIntake.setPower(0);
+            leftIntake.setPower(0);
             leftIntake.setPower(0);
 
             // Turn off RUN_TO_POSITION
@@ -927,6 +923,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             //  sleep(250);   // optional pause after eah move
         }
     }
+
 
     public void gyroDriveWithUpAndOut(double speed,
                                       double frontLeftInches, double frontRightInches, double backLeftInches,
