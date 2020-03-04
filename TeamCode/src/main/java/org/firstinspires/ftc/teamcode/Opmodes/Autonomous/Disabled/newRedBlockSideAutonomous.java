@@ -209,10 +209,10 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
 
                 break;
             case MIDDLE:
-                encoderDrive(.8,2,-2, -2, 2,5);
-                gyroDrive(.8,-5,-5,-5,-5,0,5);
-                encoderDrive(.8,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
-                gyroTurn(.8,0);
+                encoderDrive(.7,2,-2, -2, 2,5);
+                gyroDrive(.7,-5,-5,-5,-5,0,5);
+                encoderDrive(.7,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
+                gyroTurn(.7,0);
 
                 LeftBlockGrabber.setPosition(DOWN_POSITION);
                 sleep(TIME_FOR_ARM_TO_DROP);
@@ -235,7 +235,7 @@ public class newRedBlockSideAutonomous extends LinearOpMode {
 
                 break;
             case RIGHT:
-                encoderDrive(.8,2,-2, -2, 2,5);
+                encoderDrive(.7,2,-2, -2, 2,5);
                 gyroDrive(1,4  ,4,4,4,0,5);
                 encoderDrive(1,initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks,5);
                 LeftBlockGrabber.setPosition(DOWN_POSITION);

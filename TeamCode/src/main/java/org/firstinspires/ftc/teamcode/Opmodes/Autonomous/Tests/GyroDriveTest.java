@@ -74,7 +74,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Pushbot: Auto Drive By Gyro", group="Pushbot")
-@Disabled
+
 public class GyroDriveTest extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -96,10 +96,10 @@ public class GyroDriveTest extends LinearOpMode {
     Servo ShoveBlock;
     ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
-    static final double COUNTS_PER_MOTOR_REV = 537.6;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV = 383.6;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 2;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION*.95) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
@@ -179,8 +179,7 @@ public class GyroDriveTest extends LinearOpMode {
 
         gyro.resetZAxisIntegrator();
         waitForStart();
-        gyroDrive(DRIVE_SPEED, 36.0, 36,36,36,0,100);// Drive FWD 12 inches at 45 degrees
-        gyroTurn(TURN_SPEED,180.0);
+        gyroDrive(DRIVE_SPEED, -24.0, -24,-24,-24,0,100);// Drive FWD 12 inches at 45 degrees
         sleep(1000);
 
         //gyroDrive(DRIVE_SPEED,-15.0,-15.0,-15.0,-15.0,45,100);
