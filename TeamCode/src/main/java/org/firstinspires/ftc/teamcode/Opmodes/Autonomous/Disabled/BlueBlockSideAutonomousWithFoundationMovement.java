@@ -156,7 +156,11 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.5, -6, -6, -6, -6, 1, 0);
+                leftIntake.setPower(1);
+                rightIntake.setPower(-1);
+                encoderDrive(.7,-6,-6,-6,-6,0);
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
 
                 gyroTurn(.6, 0);
 
