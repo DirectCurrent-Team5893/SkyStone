@@ -164,7 +164,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("right 90 degree turn", "Begun");
         telemetry.update();
-        gyroTurn(TURN_SPEED, 90);
+        gyroTurn(.4, 90);
         telemetry.addData("right 90 degree turn", "Complete");
         //TurnOffAllMotors();
 
@@ -225,7 +225,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("move left 12 inches", "Begun");
         telemetry.update();
-        encoderDrive(.6, 12, -12, -12, 12, 0);
+        encoderDrive(.6, 16, -16, -16, 16, 0);
         telemetry.addData("Move Left 12 inches", "Complete");
 
         telemetry.addData("move Backward 40 inches to park", "Begun");
