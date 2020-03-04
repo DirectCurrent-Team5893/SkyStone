@@ -205,7 +205,7 @@ public class RightBuildingSiteAuto extends LinearOpMode {
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED, 180);
+        gyroTurn(.4, 180);
         telemetry.addData("Arc", "Complete");
 
         telemetry.addData("forward 5 inches", "Begun");
