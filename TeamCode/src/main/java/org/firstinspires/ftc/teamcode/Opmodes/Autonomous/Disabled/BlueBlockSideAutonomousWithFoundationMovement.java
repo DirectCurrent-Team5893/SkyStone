@@ -152,25 +152,27 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 gyroDrive(.7, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, 0, 5);
 
-                gyroTurn(1, 290);
+                gyroTurn(1, 300);
 
-                encoderDrive(.7, 4, -4, -4, 4, 0);
+                encoderDrive(.7, 6, -6, -6, 6, 0);
 
                 leftIntake.setPower(1);
                 rightIntake.setPower(-1);
-                encoderDrive(.7,-6,-6,-6,-6,0);
-                leftIntake.setPower(0);
-                rightIntake.setPower(0);
+                encoderDrive(.7,-8,-8,-8,-8,10);
 
                 gyroTurn(.6, 0);
 
                 encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 0);
 
+                leftIntake.setPower(.3);
+                rightIntake.setPower(.3);
+
+                gyroDrive(.8, 75, 75, 75, 75, 0, 0);
                 Grabber.setPosition(.2);
-
-                gyroDrive(.7, 75, 75, 75, 75, 0, 0);
-
                 gyroTurn(.6, 90);
+
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
 
                 moveFoundation();
 
