@@ -146,29 +146,40 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
         switch (skystonePostion) {
             case LEFT:
-                encoderDrive(.7, initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks, 5);
+                LeftBaseplateShover.setPosition(0);
+                RightBaseplateShover.setPosition(1);
 
                 gyroTurn(.6, 0);
 
-                gyroDrive(.7, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, 0, 5);
+                encoderDrive(.8, initDistanceFromBlocks, -initDistanceFromBlocks, -initDistanceFromBlocks, initDistanceFromBlocks, 5);
+
+                gyroDrive(.8, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, distanceToDifferentBlock + 2, 0, 5);
 
                 gyroTurn(1, 300);
 
                 encoderDrive(.7, 6, -6, -6, 6, 0);
 
-                leftIntake.setPower(1);
-                rightIntake.setPower(-1);
-                encoderDrive(.7,-8,-8,-8,-8,10);
+                encoderDrive(.7,-3,-3,-3,-3,5);
 
+                leftIntake.setPower(.8);
+                rightIntake.setPower(-.8);
+                encoderDrive(.7,-8,-8,-8,-8,10);
+                leftIntake.setPower(-.5);
+                rightIntake.setPower(.5);
                 gyroTurn(.6, 0);
 
-                encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 0);
+                leftIntake.setPower(.8);
+                rightIntake.setPower(-.8);
+
+                encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
 
                 leftIntake.setPower(.3);
-                rightIntake.setPower(.3);
+                rightIntake.setPower(-.3);
 
-                gyroDrive(.8, 75, 75, 75, 75, 0, 0);
                 Grabber.setPosition(.2);
+
+                gyroDrive(.8, 65, 65, 65, 65, 0, 10);
+
                 gyroTurn(.6, 90);
 
                 leftIntake.setPower(0);
@@ -176,17 +187,38 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 moveFoundation();
 
+                gyroDrive(.6,-10,-10,-10,-10,0,3);
+
                 ResetLift();
 
-                gyroDrive(.7, -91, -91, -91, -91, 0, 0);
+                encoderDrive(.8,10,-10,-10,10,2);
+
+                gyroDrive(.9, -91, -91, -91, -91, 0, 10);
+
+                encoderDrive(.5,-9,9,9,-9,5);
 
                 gyroTurn(.6, 0);
 
-                encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
+                leftIntake.setPower(.8);
+                rightIntake.setPower(-.8);
+                encoderDrive(.7,-8,-8,-8,-8,10);
 
-                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
+                gyroTurn(.6, 0);
 
+                encoderDrive(.4, 12, -12, -12, 12, 10);
+
+                leftIntake.setPower(.3);
+                rightIntake.setPower(-.3);
                 Grabber.setPosition(.2);
+
+                gyroDrive(.8, 91, 91, 91, 91, 0, 10);
+
+                gyroTurn(.6, 90);
+
+                leftIntake.setPower(0);
+                rightIntake.setPower(0);
+
+                gyroDrive(.6,4,4,4,4,270,2);
 
                 encoderDrive(.7, STRAFE_TO_BLOCK + 29, -STRAFE_TO_BLOCK - 29, -STRAFE_TO_BLOCK - 29, STRAFE_TO_BLOCK + 29, 5);
 
@@ -803,12 +835,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
     }
 
     public void moveFoundation (){
-        telemetry.addData("move Backward 25 inches", "Begun");
-        telemetry.update();
-        gyroDriveWithUpAndOut(.7, 7, 7, 7, 7, 0, 0);
-        encoderDrive(.4, 4, 4, 4, 4, 0);
-        telemetry.addData("Move Backward 25 inches", "Complete");
-        //TurnOffAllMotors();
+
+        encoderDrive(.6,6,6,6,6,2);
 
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
@@ -816,12 +844,18 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
         //TurnOffAllMotors();
-
         sleep(1000);
+
+        telemetry.addData("move Backward 25 inches", "Begun");
+        telemetry.update();
+        gyroDriveWithUpAndOut(.7, 7, 7, 7, 7, 90, 5);
+        encoderDrive(.4, 4, 4, 4, 4, 5);
+        telemetry.addData("Move Backward 25 inches", "Complete");
+        //TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        gyroTurn(DRIVE_SPEED, 180);
+        gyroTurn(.4, 0);
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
 
@@ -991,19 +1025,14 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
-                leftIntake.setPower(1);
-                rightIntake.setPower(-1);
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough && (OuttakeLift.isBusy() && HorizontalLift.isBusy())) {
+                HorizontalLift.setPower(.8);
                 if (runtime.seconds() > 1) {
-                    leftIntake.setPower(0);
-                    rightIntake.setPower(0);
-                    Grabber.setPosition(.2);
-                }
-                if (runtime.seconds() > 2) {
-                    HorizontalLift.setPower(.8);
-                }
-                if (runtime.seconds() > 2.5) {
                     OuttakeLift.setPower(.8);
+                }
+                if(runtime.seconds() > 2){
+                    HorizontalLift.setPower(0);
+                    OuttakeLift.setPower(0);
                 }
                 // adjust relative speed
                 // based on heading error.
