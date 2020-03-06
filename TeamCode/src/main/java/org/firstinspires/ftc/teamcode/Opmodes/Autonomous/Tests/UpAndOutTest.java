@@ -1030,22 +1030,23 @@ telemetry.addLine("Out");
                     ((runtime.seconds() < timeoutS) &&
                             (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough )||(OuttakeLift.isBusy() || HorizontalLift.isBusy())) {
                 telemetry.addLine("Small Outward movement to prevent breaking the lift");
-                HorizontalLift.setPower(.9);
-                if (runtime.milliseconds() >= 300) {
+                while ((runtime.milliseconds()>= 0) && (runtime.milliseconds() <= 300)){
+                    HorizontalLift.setPower(.9);
+                }
+                telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", HorizontalLift.getPower());
+                telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", OuttakeLift.getPower());
+                while ((runtime.milliseconds() > 300) && (runtime.milliseconds() <= 600)) {
                     telemetry.addLine("Up");
                     HorizontalLift.setPower(0);
                     OuttakeLift.setPower(.9);
                 }
-                if(runtime.milliseconds() >= 500){
+                while((runtime.milliseconds() > 600) && (runtime.milliseconds() <= 1000)){
                     telemetry.addLine("Out");
                     HorizontalLift.setTargetPosition(-800);
                     HorizontalLift.setPower(.9);
                 }
-                if (runtime.milliseconds() >= 700) {
-                    telemetry.addLine("Lift Off");
-                    HorizontalLift.setPower(0);
-                    OuttakeLift.setPower(0);
-                }
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(0);
 
                 // adjust relative speed
                 // based on heading error.
