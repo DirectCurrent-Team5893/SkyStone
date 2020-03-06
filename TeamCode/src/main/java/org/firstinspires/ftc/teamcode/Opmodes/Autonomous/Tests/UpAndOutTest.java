@@ -304,7 +304,7 @@ public class UpAndOutTest extends LinearOpMode {
         OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         OuttakeLift.setPower(1);
 
-        gyroTurn(1, 0);
+        //gyroTurn(1, 0);
 
         HorizontalLift.setPower(0);
         OuttakeLift.setPower(0);
@@ -647,8 +647,10 @@ public class UpAndOutTest extends LinearOpMode {
         gyroDrive(.7, 12, 12, 12, 12, 0, 3);
         gyroDrive(.3, 5, 5, 5, 5, 0, 2);
 
-        HorizontalLift.setTargetPosition(-200);
+        HorizontalLift.setTargetPosition(-100);
         HorizontalLift.setPower(.9);
+        OuttakeLift.setTargetPosition(-50);
+        OuttakeLift.setPower(.9);
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
@@ -656,16 +658,13 @@ public class UpAndOutTest extends LinearOpMode {
         telemetry.update();
         //TurnOffAllMotors();
         sleep(800);
-        HorizontalLift.setPower(0);
-        telemetry.addData("move Backward 25 inches", "Begun");
-        telemetry.update();
-        OuttakeLift.setTargetPosition(-50);
-        OuttakeLift.setPower(.9);
         HorizontalLift.setTargetPosition(-600);
         HorizontalLift.setPower(.9);
-        gyroDrive(.8, -25, -25, -25, -25, 0, 3);
         HorizontalLift.setPower(0);
         OuttakeLift.setPower(0);
+        telemetry.addData("move Backward 25 inches", "Begun");
+        telemetry.update();
+        gyroDrive(.8, -25, -25, -25, -25, 0, 4);
         encoderDrive(.8, 7, -7, -7, 7, 2);
         encoderDrive(.7, 5, -5, -5, 5, 2);
         encoderDrive(.9, -8, 8, 8, -8, 2);
@@ -688,7 +687,6 @@ public class UpAndOutTest extends LinearOpMode {
         telemetry.addData("Raise Foundation mover", "Completed");
         telemetry.update();
         //TurnOffAllMotors();
-
         sleep(200);
     }
 
