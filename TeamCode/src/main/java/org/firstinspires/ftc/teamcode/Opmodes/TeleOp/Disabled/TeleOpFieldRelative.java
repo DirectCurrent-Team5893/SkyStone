@@ -122,7 +122,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
         HorizontalLift.setTargetPosition(80);
         HorizontalLift.setPower(.6);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setCurrentAngleAs(90);
+        setInitalAngle(90);
         while (opModeIsActive() &&
                 (OuttakeLift.isBusy())) {
             // Display it for the driver.
@@ -144,6 +144,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
                 setCurrentAngleAs(0);
                 gamepad1bHeld= true;
             }
+
             if(!gamepad1.b){
                 gamepad1bHeld = false;
             }
@@ -259,9 +260,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
                 gamepad1xHeld = true;
                 telemetry.addData("changing position GrabberChanger is ", grabberChanger);
 
-                SetLeftBlockMoverPosition(LEFTBLOCKMOVERPOSITIONS[leftBlockMover]);
-                leftBlockMover++;
-                leftBlockMover = leftBlockMover % 2;
+                setCurrentAngleAs(180);
             }
             if (!gamepad1.x) {
                 gamepad1xHeld = false;
