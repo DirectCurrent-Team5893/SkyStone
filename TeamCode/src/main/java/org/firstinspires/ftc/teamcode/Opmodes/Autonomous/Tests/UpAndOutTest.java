@@ -966,6 +966,7 @@ telemetry.addLine("Out");
         int newBackLeftTarget;
         int newBackRightTarget;
         int moveCounts;
+        double currentTime=runtime.seconds();
 
         double HalfMaxOne;
         double HalfMaxTwo;
@@ -1030,12 +1031,12 @@ telemetry.addLine("Out");
                             (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough )||(OuttakeLift.isBusy() || HorizontalLift.isBusy())) {
                 telemetry.addLine("Out");
                 HorizontalLift.setPower(.9);
-                if (runtime.milliseconds() > 300) {
+                if (runtime.milliseconds() >= 300) {
                     telemetry.addLine("Up");
                     HorizontalLift.setPower(0);
                     OuttakeLift.setPower(.9);
                 }
-                if(runtime.milliseconds() > 400){
+                if(runtime.milliseconds() >= 400){
                     HorizontalLift.setTargetPosition(-800);
                     HorizontalLift.setPower(.9);
                 }
