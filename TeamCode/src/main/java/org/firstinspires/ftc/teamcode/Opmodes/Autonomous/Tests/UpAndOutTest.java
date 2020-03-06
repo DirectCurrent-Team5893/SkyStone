@@ -642,17 +642,20 @@ public class UpAndOutTest extends LinearOpMode {
     }
 
     public void moveFoundation (){
-
+        sleep(100);
         LeftBaseplateShover.setPosition(0);
         RightBaseplateShover.setPosition(1);
+        sleep (300);
         Grabber.setPosition(.2);
-        sleep(100);
-        
-        while((HorizontalLift.getCurrentPosition() > -50) || backLeft.isBusy()){
-            if (HorizontalLift.getCurrentPosition() > -50){
+        sleep(200);
+
+        while((HorizontalLift.getCurrentPosition() > -25) || backLeft.isBusy()){
+            if (HorizontalLift.getCurrentPosition() > -25){
+                HorizontalLift.setTargetPosition(-25);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
             }
-            else if (HorizontalLift.getCurrentPosition() <= -50){
+            else if (HorizontalLift.getCurrentPosition() <= -25){
                 HorizontalLift.setPower(0);
             }
             if (HorizontalLift.isBusy() || backLeft.isBusy()) {
@@ -660,12 +663,14 @@ public class UpAndOutTest extends LinearOpMode {
             }
         }
         while(OuttakeLift.getCurrentPosition() > -100){
+            OuttakeLift.setTargetPosition(-100);
+            OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             OuttakeLift.setPower(.8);
             if(OuttakeLift.isBusy()){
                 LeftBaseplateShover.setPosition(1);
                 RightBaseplateShover.setPosition(0);
             }
-            else{
+            else if (!OuttakeLift.isBusy()){
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
                 sleep(800);
@@ -673,6 +678,8 @@ public class UpAndOutTest extends LinearOpMode {
         }
         while((HorizontalLift.getCurrentPosition() > -600) || backLeft.isBusy()){
             if (HorizontalLift.getCurrentPosition() > -600){
+                HorizontalLift.setTargetPosition(-600);
+                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(.9);
             }
             else if (HorizontalLift.getCurrentPosition() <= -600){
