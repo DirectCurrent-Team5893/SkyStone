@@ -174,16 +174,14 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 rightIntake.setPower(-.8);
 
                 encoderDrive(.4, -STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, STRAFE_TO_BLOCK, -STRAFE_TO_BLOCK, 10);
-
-                gyroDrive(.8, 75, 75, 75, 75, 0, 10);
-
-                gyroTurn(.6, 90);
                 leftIntake.setPower(.3);
                 rightIntake.setPower(-.3);
-
                 Grabber.setPosition(.2);
                 leftIntake.setPower(0);
                 rightIntake.setPower(0);
+                gyroDrive(.8, 75, 75, 75, 75, 0, 10);
+
+                gyroTurn(.6, 90);
 
                 moveFoundation();
 
@@ -191,9 +189,9 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.8,10,-10,-10,10,2);
 
-                gyroDrive(.9, -91, -91, -91, -91, 0, 10);
+                gyroDrive(.9, -73, -73, -73, -73, 0, 6);
 
-                encoderDrive(.5,9,-9,-9,9,5);
+                encoderDrive(.7,10,-10,-10,10,2);
 
                 gyroTurn(.6, 0);
 
@@ -211,28 +209,25 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
                 leftIntake.setPower(.8);
                 rightIntake.setPower(-.8);
 
-                encoderDrive(.4, -10, 10, 10, -10, 10);
+                encoderDrive(.4, -11, 11, 11, -11, 10);
 
                 leftIntake.setPower(.3);
                 rightIntake.setPower(-.3);
                 Grabber.setPosition(.2);
-
-                gyroDrive(.8, 91, 91, 91, 91, 0, 10);
-
-                gyroTurn(.6, 90);
-
                 leftIntake.setPower(0);
                 rightIntake.setPower(0);
 
-                gyroDrive(.6,4,4,4,4,270,2);
+                gyroDrive(.9, 73, 73, 73, 73, 0, 6);
 
-                encoderDrive(.7, STRAFE_TO_BLOCK + 29, -STRAFE_TO_BLOCK - 29, -STRAFE_TO_BLOCK - 29, STRAFE_TO_BLOCK + 29, 5);
+                gyroDrive(.9,-10,10,10,-10,0,2);
 
-                gyroDriveWithUpAndOut(.7, -90, -90, -90, -90, 0, 0);
+                gyroDriveWithUpAndOut(.7, 50, 50, 50, 50, 0, 7);
 
                 ResetLift();
 
-                gyroDrive(.7, -38, -38, -38, -38, 0, 0);
+                gyroDrive(.9,10,-10,-10,10,0,2);
+
+                gyroDrive(.7, -38, -38, -38, -38, 0, 5);
 
                 OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 break;
@@ -843,8 +838,8 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
     public void moveFoundation (){
 
         //encoderDrive(.4,-15,-15,-15,-15,7);
-        gyroDriveWithUpAndOut(.7, 12, 12, 12, 12, 90, 10);
-        gyroDrive(.2, 5, 5, 5, 5, 90, 10);
+        gyroDrive(.7, 12, 12, 12, 12, 90, 2);
+        gyroDrive(.3, 5, 5, 5, 5, 90, 1);
 
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
@@ -852,25 +847,25 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
         //TurnOffAllMotors();
-        sleep(1000);
+        sleep(800);
 
         telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
-        gyroDriveWithUpAndOut(.7, -9, -9, -9, -9, 90, 10);
-        encoderDrive(.6, 7, -7, -7, 7, 0);
-        encoderDrive(.3, 10, -10, -10, 10, 0);
-        encoderDrive(.6, -8, 8, 8, -8, 0);
+        gyroDriveWithUpAndOut(.8, -25, -25, -25, -25, 90, 3);
+        encoderDrive(.7, 7, -7, -7, 7, 2);
+        encoderDrive(.7, 10, -10, -10, 10, 2);
+        encoderDrive(.9, -8, 8, 8, -8, 2);
         //        encoderDrive(.4, 2, 2, 2, 2, 5);
 //        telemetry.addData("Move Backward 25 inches", "Complete");
         //TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
-        gyroTurn(.4, 0);
+        gyroTurn(.6, 0);
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
 
-        gyroDrive(.6,-15,-15,-15,-15,0,3);
+        gyroDrive(.7,-15,-15,-15,-15,0,3);
 
         telemetry.addData("Raise foundation mover", "Start");
         LeftBaseplateShover.setPosition(0);
@@ -879,7 +874,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         telemetry.update();
         //TurnOffAllMotors();
 
-        sleep(1000);
+        sleep(200);
 
     }
 
@@ -1025,7 +1020,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             }else {
                 HorizontalLift.setTargetPosition(-200);
             }
-            if(!weGUCCI) {
+            if(weGUCCI) {
                 OuttakeLift.setTargetPosition(-700);
             }
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
