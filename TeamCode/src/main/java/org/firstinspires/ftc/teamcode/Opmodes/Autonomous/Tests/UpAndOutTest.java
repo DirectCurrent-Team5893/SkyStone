@@ -647,27 +647,31 @@ public class UpAndOutTest extends LinearOpMode {
         gyroDrive(.7, 12, 12, 12, 12, 0, 3);
         gyroDrive(.3, 5, 5, 5, 5, 0, 2);
 
-        HorizontalLift.setTargetPosition(-100);
-        HorizontalLift.setPower(.9);
-        OuttakeLift.setTargetPosition(-70);
-        OuttakeLift.setPower(.9);
+        HorizontalLift.setTargetPosition(-50);
+        HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        HorizontalLift.setPower(1);
+        OuttakeLift.setTargetPosition(-100);
+        OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        OuttakeLift.setPower(.8);
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
         //TurnOffAllMotors();
-        HorizontalLift.setTargetPosition(-800);
-        HorizontalLift.setPower(.9);
         sleep(800);
-        HorizontalLift.setPower(0);
-        OuttakeLift.setPower(0);
+        HorizontalLift.setTargetPosition(-800);
+        HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        HorizontalLift.setPower(.9);
+
         telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
         gyroDrive(.8, -25, -25, -25, -25, 0, 4);
-        encoderDrive(.8, 7, -7, -7, 7, 2);
+        encoderDrive(.8, 10, -10, -10, 10, 2);
         encoderDrive(.7, 5, -5, -5, 5, 2);
         encoderDrive(.9, -8, 8, 8, -8, 2);
+        HorizontalLift.setPower(0);
+        OuttakeLift.setPower(0);
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
@@ -688,6 +692,8 @@ public class UpAndOutTest extends LinearOpMode {
         telemetry.update();
         //TurnOffAllMotors();
         sleep(200);
+        HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void encoderCollectionDrive(double speed,

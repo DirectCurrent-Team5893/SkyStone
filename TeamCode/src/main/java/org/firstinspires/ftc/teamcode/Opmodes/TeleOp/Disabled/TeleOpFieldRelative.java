@@ -107,6 +107,15 @@ public class TeleOpFieldRelative extends LinearOpMode {
         RightBlockGrabber.setPosition(.2);
         LeftBlockGrabber.setPosition(.7);
         CapstoneDeployment.setPosition(.8);
+        telemetry.addData(">", "Calibrating Gyro");    //
+        telemetry.update();
+        gyro.calibrate();
+
+        // make sure the gyro is calibrated before continuing
+        while (!isStopRequested() && gyro.isCalibrating()) {
+            sleep(50);
+            idle();
+        }
         waitForStart();
 
         HorizontalLift.setTargetPosition(80);
@@ -123,15 +132,6 @@ public class TeleOpFieldRelative extends LinearOpMode {
         HorizontalLift.setPower(0);
         HorizontalLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData(">", "Calibrating Gyro");    //
-        telemetry.update();
-        gyro.calibrate();
-
-        // make sure the gyro is calibrated before continuing
-        while (!isStopRequested() && gyro.isCalibrating()) {
-            sleep(50);
-            idle();
-        }
 
         while (opModeIsActive()) {
 
