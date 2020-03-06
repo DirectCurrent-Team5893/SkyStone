@@ -75,7 +75,7 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
-    double DOWN_POSITION = .8;
+    double DOWN_POSITION = .7;
     double STRAFE_TO_BLOCK = 14;
     public double amountError = 0.64;
     public SkystoneDetectorExample.SkyStonePosition skystonePostion= SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
