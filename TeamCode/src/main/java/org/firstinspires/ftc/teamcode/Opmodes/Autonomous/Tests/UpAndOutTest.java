@@ -642,14 +642,12 @@ public class UpAndOutTest extends LinearOpMode {
     }
 
     public void moveFoundation (){
-        sleep(100);
         LeftBaseplateShover.setPosition(0);
         RightBaseplateShover.setPosition(1);
-        sleep (300);
         Grabber.setPosition(.2);
-        sleep(200);
 
-        while((HorizontalLift.getCurrentPosition() > -25) || backLeft.isBusy()){
+
+        while((HorizontalLift.getCurrentPosition() > -25) || ((HorizontalLift.getCurrentPosition() > -25) && backLeft.isBusy()) || ((HorizontalLift.getCurrentPosition() <= -25) && backLeft.isBusy())){
             if (HorizontalLift.getCurrentPosition() > -25){
                 HorizontalLift.setTargetPosition(-25);
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -662,7 +660,7 @@ public class UpAndOutTest extends LinearOpMode {
                 encoderDrive(.3, 5, 5, 5, 5, 2);
             }
         }
-        while(OuttakeLift.getCurrentPosition() > -100){
+        while((OuttakeLift.getCurrentPosition() > -100) && !HorizontalLift.isBusy()){
             OuttakeLift.setTargetPosition(-100);
             OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             OuttakeLift.setPower(.8);
@@ -676,7 +674,7 @@ public class UpAndOutTest extends LinearOpMode {
                 sleep(800);
             }
         }
-        while((HorizontalLift.getCurrentPosition() > -600) || backLeft.isBusy()){
+        while((HorizontalLift.getCurrentPosition() > -600) || ((HorizontalLift.getCurrentPosition() > -600) && backLeft.isBusy()) || ((HorizontalLift.getCurrentPosition() <= -600) && backLeft.isBusy())){
             if (HorizontalLift.getCurrentPosition() > -600){
                 HorizontalLift.setTargetPosition(-600);
                 HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
