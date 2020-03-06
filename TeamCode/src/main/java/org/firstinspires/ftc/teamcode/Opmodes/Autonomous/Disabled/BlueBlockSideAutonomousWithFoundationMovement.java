@@ -246,7 +246,12 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
+
+
+
+
+
+
 
                 gyroTurn(.6, 0);
 
@@ -268,7 +273,11 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
 
-                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
+
+
+
+
+
 
                 Grabber.setPosition(.2);
 
@@ -298,7 +307,12 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.7, 4, -4, -4, 4, 0);
 
-                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
+
+
+
+
+
+
 
                 gyroTurn(.6, 0);
 
@@ -320,7 +334,10 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
                 encoderDrive(.7, -STRAFE_TO_BLOCK - 25, STRAFE_TO_BLOCK + 25, STRAFE_TO_BLOCK + 25, -STRAFE_TO_BLOCK - 25, 5);
 
-                encoderCollectionDrive(.7, 1, -6, -6, -6, -6, 0);
+
+
+
+
 
                 Grabber.setPosition(.2);
 
@@ -503,130 +520,6 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
         HorizontalLift.setPower(0);
         OuttakeLift.setPower(0);
 
-    }
-
-    public void gyroCollectionDrive(double speed,
-                                    double frontLeftInches, double frontRightInches, double backLeftInches,
-                                    double backRightInches, double intakeSpeed,
-                                    double angle, double timeoutS) {
-
-        int newFrontLeftTarget;
-        int newFrontRightTarget;
-        int newBackLeftTarget;
-        int newBackRightTarget;
-        int moveCounts;
-
-        double HalfMaxOne;
-        double HalfMaxTwo;
-
-        double max;
-
-        double error;
-        double steer;
-        double frontLeftSpeed;
-        double frontRightSpeed;
-        double backLeftSpeed;
-        double backRightSpeed;
-
-        double ErrorAmount;
-        boolean goodEnough = false;
-
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
-            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
-            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
-            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
-
-
-            // Set Target and Turn On RUN_TO_POSITION
-            frontLeft.setTargetPosition(newFrontLeftTarget);
-            frontRight.setTargetPosition(newFrontRightTarget);
-            backLeft.setTargetPosition(newBackLeftTarget);
-            backRight.setTargetPosition(newBackRightTarget);
-
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // start motion.
-            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            frontLeft.setPower(Math.abs(speed));
-            frontRight.setPower(Math.abs(speed));
-            backLeft.setPower(Math.abs(speed));
-            backRight.setPower(Math.abs(speed));
-
-
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
-
-
-                // adjust relative speed based on heading error.
-                error = getError(angle);
-                steer = getSteer(error, P_DRIVE_COEFF);
-
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (frontLeftInches < 0 && frontRightInches < 0 && backLeftInches < 0 && backRightInches < 0)
-                    steer *= -1.0;
-
-                frontLeftSpeed = speed - steer;
-                backLeftSpeed = speed - steer;
-                backRightSpeed = speed + steer;
-                frontRightSpeed = speed + steer;
-
-                // Normalize speeds if either one exceeds +/- 1.0;
-                HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
-                HalfMaxTwo = Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
-                max = Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
-                if (max > 1.0) {
-                    frontLeftSpeed /= max;
-                    frontRightSpeed /= max;
-                    backLeftSpeed /= max;
-                    backRightSpeed /= max;
-                }
-
-                frontLeft.setPower(frontLeftSpeed);
-                frontRight.setPower(frontRightSpeed);
-                backLeft.setPower(backLeftSpeed);
-                backRight.setPower(backRightSpeed);
-                rightIntake.setPower(intakeSpeed);
-                leftIntake.setPower(intakeSpeed);
-
-                // Display drive status for the driver.
-                telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
-                telemetry.addData("Target", "%7d:%7d", newBackLeftTarget, newBackRightTarget, newFrontLeftTarget, newFrontRightTarget);
-                telemetry.addData("Actual", "%7d:%7d", backLeft.getCurrentPosition(), backRight.getCurrentPosition(), frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
-                telemetry.addData("Speed", "%5.2f:%5.2f", backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
-                telemetry.update();
-
-                ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
-                        + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
-                        + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
-                        + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
-                if (ErrorAmount < amountError) {
-                    goodEnough = true;
-                }
-            }
-
-            // Stop all motion;
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            rightIntake.setPower(0);
-            leftIntake.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
     }
 
     public void gyroTurn(double speed, double angle) {
@@ -878,98 +771,6 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 
     }
 
-    public void encoderCollectionDrive(double speed,
-                             double frontLeftInches, double frontRightInches, double backLeftInches,
-                             double backRightInches, double intakeSpeed,
-                             double timeoutS) {
-        int newFrontLeftTarget;
-        int newFrontRightTarget;
-        int newBackLeftTarget;
-        int newBackRightTarget;
-
-        double ErrorAmount;
-        boolean goodEnough = false;
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
-            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
-            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
-            newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
-            frontLeft.setTargetPosition(newFrontLeftTarget);
-            frontRight.setTargetPosition(newFrontRightTarget);
-            backLeft.setTargetPosition(newBackLeftTarget);
-            backRight.setTargetPosition(newBackRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            frontLeft.setPower(Math.abs(speed));
-            frontRight.setPower(Math.abs(speed));
-            backLeft.setPower(Math.abs(speed));
-            backRight.setPower(Math.abs(speed));
-            leftIntake.setPower(intakeSpeed);
-            rightIntake.setPower(-intakeSpeed);
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newBackLeftTarget, newFrontRightTarget, newBackRightTarget);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-
-                        frontLeft.getCurrentPosition(),
-                        frontRight.getCurrentPosition(),
-                        backLeft.getCurrentPosition(),
-                        backRight.getCurrentPosition());
-                telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-                telemetry.addData("backLeft", backLeft.getCurrentPosition());
-                telemetry.addData("frontRight", frontRight.getCurrentPosition());
-                telemetry.addData("backright", backRight.getCurrentPosition());
-
-                telemetry.update();
-
-                ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
-                        + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
-                        + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
-                        + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
-                if (ErrorAmount < amountError) {
-                    goodEnough = true;
-                }
-            }
-
-            // Stop all motion;
-
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            leftIntake.setPower(0);
-            leftIntake.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after eah move
-        }
-    }
 
 
     public void gyroDriveWithUpAndOut(double speed,
