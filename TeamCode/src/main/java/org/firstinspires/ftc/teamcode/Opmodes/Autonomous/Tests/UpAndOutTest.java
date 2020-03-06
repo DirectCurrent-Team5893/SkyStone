@@ -141,7 +141,8 @@ public class UpAndOutTest extends LinearOpMode {
         initDistanceFromBlocks = 30;
         waitForStart();
 
-     moveFoundation();
+        encoderDrive(.5,5,5,5,5,2);
+        moveFoundation();
 
 
     }
@@ -641,23 +642,23 @@ public class UpAndOutTest extends LinearOpMode {
     }
 
     public void moveFoundation (){
-        while((HorizontalLift.getCurrentPosition() > -25)){
-                HorizontalLift.setTargetPosition(-25);
-                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if((HorizontalLift.getCurrentPosition() >= -25)){
+//                HorizontalLift.setTargetPosition(-25);
+//                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
         }
-        encoderDrive(.3, 5, 5, 5, 5, 2);
-        while((OuttakeLift.getCurrentPosition() > -100) && !HorizontalLift.isBusy()){
-            OuttakeLift.setTargetPosition(-100);
-            OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if((OuttakeLift.getCurrentPosition() > -40) && (HorizontalLift.getCurrentPosition() <= -25)){
+//            OuttakeLift.setTargetPosition(-100);
+//            OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             OuttakeLift.setPower(1);
+            HorizontalLift.setPower(0);
         }
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
-        sleep(800);
-        while((HorizontalLift.getCurrentPosition() > -600)){
-                HorizontalLift.setTargetPosition(-600);
-                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(600);
+        if((HorizontalLift.getCurrentPosition() <= -25) && (HorizontalLift.getCurrentPosition() > -600) && !OuttakeLift.isBusy()){
+//                HorizontalLift.setTargetPosition(-600);
+//                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 HorizontalLift.setPower(1);
         }
         gyroDrive(.8, -25, -25, -25, -25, 0, 4);
