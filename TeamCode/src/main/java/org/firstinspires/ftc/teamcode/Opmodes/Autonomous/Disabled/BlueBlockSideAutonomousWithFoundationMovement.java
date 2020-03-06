@@ -1024,7 +1024,7 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
 //            }
 //            if(weGUCCI) {
 //                OuttakeLift.setTargetPosition(-700);
-            }
+ //           }
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
