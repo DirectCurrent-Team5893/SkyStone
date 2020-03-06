@@ -1014,14 +1014,16 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             frontRight.setTargetPosition(newFrontRightTarget);
             backLeft.setTargetPosition(newBackLeftTarget);
             backRight.setTargetPosition(newBackRightTarget);
-            if(-180>HorizontalLift.getCurrentPosition() &&HorizontalLift.getCurrentPosition() >-220){
-                weGUCCI=true;
-                HorizontalLift.setTargetPosition(-800);
-            }else {
-                HorizontalLift.setTargetPosition(-200);
-            }
-            if(weGUCCI) {
-                OuttakeLift.setTargetPosition(-700);
+            OuttakeLift.setTargetPosition(-400);
+            HorizontalLift.setTargetPosition(-200);
+//            if(-180>HorizontalLift.getCurrentPosition() &&HorizontalLift.getCurrentPosition() >-220){
+//                weGUCCI=true;
+//                HorizontalLift.setTargetPosition(-800);
+//            }else {
+//                HorizontalLift.setTargetPosition(-200);
+//            }
+//            if(weGUCCI) {
+//                OuttakeLift.setTargetPosition(-700);
             }
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -1042,13 +1044,17 @@ public class BlueBlockSideAutonomousWithFoundationMovement extends LinearOpMode 
             while (opModeIsActive() &&
                     ((runtime.seconds() < timeoutS) &&
                     (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough )||(OuttakeLift.isBusy() || HorizontalLift.isBusy())) {
-telemetry.addLine("Out");
-                HorizontalLift.setPower(.8);
-                if (runtime.seconds() > InitRunTime) {
+                telemetry.addLine("Out");
+                HorizontalLift.setPower(.9);
+                if (runtime.seconds() > 0.2) {
                     telemetry.addLine("Up");
-                    OuttakeLift.setPower(.8);
+                    HorizontalLift.setPower(0);
+                    OuttakeLift.setPower(.9);
                 }
-
+                if(runtime.seconds() > .4){
+                    HorizontalLift.setTargetPosition(-800);
+                    HorizontalLift.setPower(.9);
+                }
                 // adjust relative speed
                 // based on heading error.
                 error = getError(angle);
