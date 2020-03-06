@@ -649,7 +649,7 @@ public class UpAndOutTest extends LinearOpMode {
 
         HorizontalLift.setTargetPosition(-100);
         HorizontalLift.setPower(.9);
-        OuttakeLift.setTargetPosition(-50);
+        OuttakeLift.setTargetPosition(-70);
         OuttakeLift.setPower(.9);
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
@@ -657,9 +657,9 @@ public class UpAndOutTest extends LinearOpMode {
         telemetry.addData("Lower Foundation mover", "Completed");
         telemetry.update();
         //TurnOffAllMotors();
-        sleep(800);
-        HorizontalLift.setTargetPosition(-600);
+        HorizontalLift.setTargetPosition(-800);
         HorizontalLift.setPower(.9);
+        sleep(800);
         HorizontalLift.setPower(0);
         OuttakeLift.setPower(0);
         telemetry.addData("move Backward 25 inches", "Begun");
