@@ -29,6 +29,7 @@ public class UpAndOutTest extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     public double amountError = 0.64;
+    public double liftAmountError = 20;
     public SkystoneDetectorExample.SkyStonePosition skystonePostion = SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
     SkystoneDetectorExample detector;
     ColorSensor sensorColor;
@@ -292,13 +293,12 @@ public class UpAndOutTest extends LinearOpMode {
         HorizontalLift.setPower(0);
 
         OuttakeLift.setPower(0);
-        Grabber.setPosition(.53);
 
         HorizontalLift.setTargetPosition(0);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         HorizontalLift.setPower(1);
 
-        gyroDrive(.7, -2, -2, -2, -2, 0, 0);
+        encoderDrive(.7, -2, -2, -2, -2, 0);
 
         OuttakeLift.setTargetPosition(0);
         OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -643,49 +643,12 @@ public class UpAndOutTest extends LinearOpMode {
 
     public void moveFoundation (){
 
-//        //encoderDrive(.4,-15,-15,-15,-15,7);
-//        gyroDriveWithUpAndOut(.7, 12, 12, 12, 12, 90, 10);
-//        gyroDrive(.2, 5, 5, 5, 5, 90, 10);
-//
-//        telemetry.addData("Lower foundation mover", "Start");
-//        LeftBaseplateShover.setPosition(1);
-//        RightBaseplateShover.setPosition(0);
-//        telemetry.addData("Lower Foundation mover", "Completed");
-//        telemetry.update();
-//        //TurnOffAllMotors();
-//        sleep(1000);
-//
-//        telemetry.addData("move Backward 25 inches", "Begun");
-//        telemetry.update();
-//        gyroDriveWithUpAndOut(.7, -9, -9, -9, -9, 90, 10);
-//        encoderDrive(.6, 7, -7, -7, 7, 0);
-//        encoderDrive(.3, 10, -10, -10, 10, 0);
-//        encoderDrive(.6, -8, 8, 8, -8, 0);
-//        //        encoderDrive(.4, 2, 2, 2, 2, 5);
-////        telemetry.addData("Move Backward 25 inches", "Complete");
-//        //TurnOffAllMotors();
-//
-//        telemetry.addData("Arc", "Begun");
-//        telemetry.update();
-//        gyroTurn(.4, 0);
-//        telemetry.addData("Arc", "Complete");
-//        //TurnOffAllMotors();
-//
-//        gyroDrive(.6,-15,-15,-15,-15,0,3);
-//
-//        telemetry.addData("Raise foundation mover", "Start");
-//        LeftBaseplateShover.setPosition(0);
-//        RightBaseplateShover.setPosition(1);
-//        telemetry.addData("Raise Foundation mover", "Completed");
-//        telemetry.update();
-//        //TurnOffAllMotors();
-//
-//        sleep(1000);
-
-        //encoderDrive(.4,-15,-15,-15,-15,7);
+        Grabber.setPosition(.2);
         gyroDrive(.7, 12, 12, 12, 12, 0, 3);
         gyroDrive(.3, 5, 5, 5, 5, 0, 2);
 
+        HorizontalLift.setTargetPosition(-200);
+        HorizontalLift.setPower(.9);
         telemetry.addData("Lower foundation mover", "Start");
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
@@ -693,22 +656,29 @@ public class UpAndOutTest extends LinearOpMode {
         telemetry.update();
         //TurnOffAllMotors();
         sleep(800);
-
+        HorizontalLift.setPower(0);
         telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
-        gyroDriveWithUpAndOutTimer(.8, -25, -25, -25, -25, 0, 3);
+        OuttakeLift.setTargetPosition(-50);
+        OuttakeLift.setPower(.9);
+        HorizontalLift.setTargetPosition(-600);
+        HorizontalLift.setPower(.9);
+        gyroDrive(.8, -25, -25, -25, -25, 0, 3);
+        HorizontalLift.setPower(0);
+        OuttakeLift.setPower(0);
         encoderDrive(.8, 7, -7, -7, 7, 2);
         encoderDrive(.7, 5, -5, -5, 5, 2);
         encoderDrive(.9, -8, 8, 8, -8, 2);
-        //        encoderDrive(.4, 2, 2, 2, 2, 5);
-//        telemetry.addData("Move Backward 25 inches", "Complete");
-        //TurnOffAllMotors();
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
         gyroTurn(.6, 270);
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
+
+        Grabber.setPosition(.53);
+
+        ResetLift();
 
         gyroDrive(.7,-15,-15,-15,-15,270,3);
 
@@ -966,7 +936,7 @@ telemetry.addLine("Out");
         int newBackLeftTarget;
         int newBackRightTarget;
         int moveCounts;
-        double currentTime=runtime.seconds();
+        double currentTime = runtime.seconds();
 
         double HalfMaxOne;
         double HalfMaxTwo;
@@ -980,27 +950,32 @@ telemetry.addLine("Out");
         double backLeftSpeed;
         double backRightSpeed;
 
+        double liftErrorAmount;
+        boolean liftGoodEnough = false;
         double ErrorAmount;
         boolean goodEnough = false;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-
+            int horizontalLiftTarget;
+            int outtakeLiftTarget;
             // Determine new target position, and pass to motor controller
             newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (frontLeftInches * COUNTS_PER_INCH);
             newFrontRightTarget = frontRight.getCurrentPosition() + (int) (frontRightInches * COUNTS_PER_INCH);
             newBackLeftTarget = backLeft.getCurrentPosition() + (int) (backLeftInches * COUNTS_PER_INCH);
             newBackRightTarget = backRight.getCurrentPosition() + (int) (backRightInches * COUNTS_PER_INCH);
+            outtakeLiftTarget = -400;
+            horizontalLiftTarget = -200;
             boolean weGUCCI;
-            weGUCCI=false;
+            weGUCCI = false;
 
             // Set Target and Turn On RUN_TO_POSITION
             frontLeft.setTargetPosition(newFrontLeftTarget);
             frontRight.setTargetPosition(newFrontRightTarget);
             backLeft.setTargetPosition(newBackLeftTarget);
             backRight.setTargetPosition(newBackRightTarget);
-            OuttakeLift.setTargetPosition(-400);
-            HorizontalLift.setTargetPosition(-200);
+            OuttakeLift.setTargetPosition(outtakeLiftTarget);
+            HorizontalLift.setTargetPosition(horizontalLiftTarget);
 //            if(-180>HorizontalLift.getCurrentPosition() &&HorizontalLift.getCurrentPosition() >-220){
 //                weGUCCI=true;
 //                HorizontalLift.setTargetPosition(-800);
@@ -1025,25 +1000,176 @@ telemetry.addLine("Out");
             backRight.setPower(Math.abs(speed));
             // keep looping while we are still active, and BOTH motors are running.
             double InitRunTime;
-            InitRunTime = runtime.seconds()+1;
+            InitRunTime = runtime.seconds() + 1;
             while (opModeIsActive() &&
                     ((runtime.seconds() < timeoutS) &&
-                            (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough )||(OuttakeLift.isBusy() || HorizontalLift.isBusy())) {
+                            (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) || (OuttakeLift.isBusy() || HorizontalLift.isBusy())) {
                 telemetry.addLine("Small Outward movement to prevent breaking the lift");
-                while ((runtime.milliseconds()>= 0) && (runtime.milliseconds() <= 300)){
+                while (((runtime.milliseconds() >= 0) && (runtime.milliseconds() <= 300)) && ((runtime.seconds() < timeoutS) &&
+                        (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) || (OuttakeLift.isBusy() || HorizontalLift.isBusy() && !liftGoodEnough)) {
                     HorizontalLift.setPower(.9);
+                    error = getError(angle);
+                    steer = getSteer(error, P_DRIVE_COEFF);
+
+
+                    // if driving in reverse, the motor correction also needs to be reversed
+                    if (frontLeftInches < 0 && frontRightInches < 0 && backLeftInches < 0 && backRightInches < 0)
+                        steer *= -1.0;
+
+                    frontLeftSpeed = speed - steer;
+                    backLeftSpeed = speed - steer;
+                    backRightSpeed = speed + steer;
+                    frontRightSpeed = speed + steer;
+
+                    // Normalize speeds if either one exceeds +/- 1.0;
+                    HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
+                    HalfMaxTwo = Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
+                    max = Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
+                    if (max > 1.0) {
+                        frontLeftSpeed /= max;
+                        frontRightSpeed /= max;
+                        backLeftSpeed /= max;
+                        backRightSpeed /= max;
+                    }
+
+                    frontLeft.setPower(frontLeftSpeed);
+                    frontRight.setPower(frontRightSpeed);
+                    backLeft.setPower(backLeftSpeed);
+                    backRight.setPower(backRightSpeed);
+
+                    // Display drive status for the driver.
+                    telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+                    telemetry.addData("Target", "%7d:%7d", newBackLeftTarget, newBackRightTarget, newFrontLeftTarget, newFrontRightTarget);
+                    telemetry.addData("Actual", "%7d:%7d", backLeft.getCurrentPosition(), backRight.getCurrentPosition(), frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
+                    telemetry.addData("Speed", "%5.2f:%5.2f", backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
+                    telemetry.update();
+
+                    ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
+                            + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
+                            + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
+                            + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
+                    if (ErrorAmount < amountError) {
+                        goodEnough = true;
+                    }
+                    liftErrorAmount = (Math.abs((horizontalLiftTarget) - (HorizontalLift.getCurrentPosition())
+                            + (Math.abs(outtakeLiftTarget) - (OuttakeLift.getCurrentPosition())/2)));
+                    if (liftErrorAmount < liftAmountError) {
+                        liftGoodEnough = true;
+                    }
+
                 }
-                telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", HorizontalLift.getPower());
-                telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", OuttakeLift.getPower());
-                while ((runtime.milliseconds() > 300) && (runtime.milliseconds() <= 600)) {
-                    telemetry.addLine("Up");
-                    HorizontalLift.setPower(0);
-                    OuttakeLift.setPower(.9);
+
+            telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", HorizontalLift.getPower());
+            telemetry.addData("Horizontal Lift Speed", "%5.2f:%5.2f", OuttakeLift.getPower());
+            while (((runtime.milliseconds() > 300) && (runtime.milliseconds() <= 600))&& ((runtime.seconds() < timeoutS) &&
+                    (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) || (OuttakeLift.isBusy() || HorizontalLift.isBusy() && !liftGoodEnough)) {
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(.9);
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
+
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (frontLeftInches < 0 && frontRightInches < 0 && backLeftInches < 0 && backRightInches < 0)
+                    steer *= -1.0;
+
+                frontLeftSpeed = speed - steer;
+                backLeftSpeed = speed - steer;
+                backRightSpeed = speed + steer;
+                frontRightSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
+                HalfMaxTwo = Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
+                max = Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
+                if (max > 1.0) {
+                    frontLeftSpeed /= max;
+                    frontRightSpeed /= max;
+                    backLeftSpeed /= max;
+                    backRightSpeed /= max;
                 }
-                while((runtime.milliseconds() > 600) && (runtime.milliseconds() <= 1000)){
-                    telemetry.addLine("Out");
-                    HorizontalLift.setTargetPosition(-800);
+
+                frontLeft.setPower(frontLeftSpeed);
+                frontRight.setPower(frontRightSpeed);
+                backLeft.setPower(backLeftSpeed);
+                backRight.setPower(backRightSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+                telemetry.addData("Target", "%7d:%7d", newBackLeftTarget, newBackRightTarget, newFrontLeftTarget, newFrontRightTarget);
+                telemetry.addData("Actual", "%7d:%7d", backLeft.getCurrentPosition(), backRight.getCurrentPosition(), frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
+                telemetry.addData("Speed", "%5.2f:%5.2f", backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
+                telemetry.update();
+
+                ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
+                        + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
+                        + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
+                        + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
+                if (ErrorAmount < amountError) {
+                    goodEnough = true;
+                }
+                liftErrorAmount = (Math.abs((horizontalLiftTarget) - (HorizontalLift.getCurrentPosition())
+                        + (Math.abs(outtakeLiftTarget) - (OuttakeLift.getCurrentPosition())/2)));
+                if (liftErrorAmount < liftAmountError) {
+                    liftGoodEnough = true;
+                }
+
+            }
+
+                while(((runtime.milliseconds() > 600) && (runtime.milliseconds() <= 1000))&& ((runtime.seconds() < timeoutS) &&
+                        (frontLeft.isBusy() && frontRight.isBusy()) && (backLeft.isBusy() && backRight.isBusy()) && !goodEnough) || (OuttakeLift.isBusy() || HorizontalLift.isBusy() && !liftGoodEnough)) {
+                    horizontalLiftTarget = -800;
+                    HorizontalLift.setTargetPosition(horizontalLiftTarget);
                     HorizontalLift.setPower(.9);
+                    error = getError(angle);
+                    steer = getSteer(error, P_DRIVE_COEFF);
+
+
+                    // if driving in reverse, the motor correction also needs to be reversed
+                    if (frontLeftInches < 0 && frontRightInches < 0 && backLeftInches < 0 && backRightInches < 0)
+                        steer *= -1.0;
+
+                    frontLeftSpeed = speed - steer;
+                    backLeftSpeed = speed - steer;
+                    backRightSpeed = speed + steer;
+                    frontRightSpeed = speed + steer;
+
+                    // Normalize speeds if either one exceeds +/- 1.0;
+                    HalfMaxOne = Math.max(Math.abs(frontLeftSpeed), Math.abs(backLeftSpeed));
+                    HalfMaxTwo = Math.max(Math.abs(frontRightSpeed), Math.abs(backRightSpeed));
+                    max = Math.max(Math.abs(HalfMaxOne), Math.abs(HalfMaxTwo));
+                    if (max > 1.0) {
+                        frontLeftSpeed /= max;
+                        frontRightSpeed /= max;
+                        backLeftSpeed /= max;
+                        backRightSpeed /= max;
+                    }
+
+                    frontLeft.setPower(frontLeftSpeed);
+                    frontRight.setPower(frontRightSpeed);
+                    backLeft.setPower(backLeftSpeed);
+                    backRight.setPower(backRightSpeed);
+
+                    // Display drive status for the driver.
+                    telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+                    telemetry.addData("Target", "%7d:%7d", newBackLeftTarget, newBackRightTarget, newFrontLeftTarget, newFrontRightTarget);
+                    telemetry.addData("Actual", "%7d:%7d", backLeft.getCurrentPosition(), backRight.getCurrentPosition(), frontLeft.getCurrentPosition(), frontRight.getCurrentPosition());
+                    telemetry.addData("Speed", "%5.2f:%5.2f", backLeftSpeed, backRightSpeed, frontLeftSpeed, frontRightSpeed);
+                    telemetry.update();
+
+                    ErrorAmount = ((Math.abs(((newBackLeftTarget) - (backLeft.getCurrentPosition())))
+                            + (Math.abs(((newFrontLeftTarget) - (frontLeft.getCurrentPosition()))))
+                            + (Math.abs((newBackRightTarget) - (backRight.getCurrentPosition())))
+                            + (Math.abs(((newFrontRightTarget) - (frontRight.getCurrentPosition()))))) / COUNTS_PER_INCH);
+                    if (ErrorAmount < amountError) {
+                        goodEnough = true;
+                    }
+                    liftErrorAmount = (Math.abs((horizontalLiftTarget) - (HorizontalLift.getCurrentPosition())
+                            + (Math.abs(outtakeLiftTarget) - (OuttakeLift.getCurrentPosition())/2)));
+                    if (liftErrorAmount < liftAmountError) {
+                        liftGoodEnough = true;
+                    }
+
                 }
                 HorizontalLift.setPower(0);
                 OuttakeLift.setPower(0);
