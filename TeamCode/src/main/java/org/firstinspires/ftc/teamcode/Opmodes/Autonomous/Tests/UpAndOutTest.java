@@ -134,13 +134,13 @@ public class UpAndOutTest extends LinearOpMode {
 
         gyro.resetZAxisIntegrator();
 
-        LeftBaseplateShover.setPosition(0);
-        RightBaseplateShover.setPosition(1);
-        Grabber.setPosition(.2);
+
 //full movement=33 inches
         initDistanceFromBlocks = 30;
         waitForStart();
-
+        LeftBaseplateShover.setPosition(0);
+        RightBaseplateShover.setPosition(1);
+        Grabber.setPosition(.2);
         encoderDrive(.5,5,5,5,5,2);
         moveFoundation();
 
@@ -290,25 +290,25 @@ public class UpAndOutTest extends LinearOpMode {
      */
 
     public void ResetLift() {
-        HorizontalLift.setPower(0);
-
-        OuttakeLift.setPower(0);
 
         HorizontalLift.setTargetPosition(0);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         HorizontalLift.setPower(1);
 
-        encoderDrive(.7, -2, -2, -2, -2, 0);
-
         OuttakeLift.setTargetPosition(0);
         OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         OuttakeLift.setPower(1);
-
-        //gyroTurn(1, 0);
+        while(OuttakeLift.isBusy() || HorizontalLift.isBusy()){
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+        }
 
         HorizontalLift.setPower(0);
         OuttakeLift.setPower(0);
-
+        HorizontalLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        OuttakeLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void gyroCollectionDrive(double speed,
@@ -642,39 +642,38 @@ public class UpAndOutTest extends LinearOpMode {
     }
 
     public void moveFoundation (){
-        if((HorizontalLift.getCurrentPosition() >= -25)){
-//                HorizontalLift.setTargetPosition(-25);
-//                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                HorizontalLift.setPower(1);
-        }
-        if((OuttakeLift.getCurrentPosition() > -40) && (HorizontalLift.getCurrentPosition() <= -25)){
-//            OuttakeLift.setTargetPosition(-100);
-//            OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            OuttakeLift.setPower(1);
-            HorizontalLift.setPower(0);
-        }
         LeftBaseplateShover.setPosition(1);
         RightBaseplateShover.setPosition(0);
-        sleep(600);
-        if((HorizontalLift.getCurrentPosition() <= -25) && (HorizontalLift.getCurrentPosition() > -600) && !OuttakeLift.isBusy()){
-//                HorizontalLift.setTargetPosition(-600);
-//                HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                HorizontalLift.setPower(1);
-        }
-        gyroDrive(.8, -25, -25, -25, -25, 0, 4);
+
+        HorizontalLift.setPower(1);
+        
+        gyroDrive(.8, -5, -5, -5, -5, 0, 4);
+
+        HorizontalLift.setPower(0);
+        OuttakeLift.setPower(1);
+
+        gyroDrive(.8, -20, -20, -20, -20, 0, 4);
+
+        HorizontalLift.setPower(1);
+        OuttakeLift.setPower(0);
+
         encoderDrive(.8, 10, -10, -10, 10, 2);
+
+        HorizontalLift.setPower(0);
+        OuttakeLift.setPower(0);
+
         encoderDrive(.7, 5, -5, -5, 5, 2);
+
         encoderDrive(.9, -8, 8, 8, -8, 2);
 
+        Grabber.setPosition(.53);
+
+        ResetLift();
         telemetry.addData("Arc", "Begun");
         telemetry.update();
         gyroTurn(.6, 270);
         telemetry.addData("Arc", "Complete");
         //TurnOffAllMotors();
-
-        Grabber.setPosition(.53);
-
-        ResetLift();
 
         gyroDrive(.7,-15,-15,-15,-15,270,3);
 
