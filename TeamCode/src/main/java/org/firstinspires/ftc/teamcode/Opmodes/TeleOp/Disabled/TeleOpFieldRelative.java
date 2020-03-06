@@ -53,8 +53,9 @@ public class TeleOpFieldRelative extends LinearOpMode {
 
         //make motors all run forward
         CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
-        CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
-        CapstoneDeployment = hardwareMap.get(Servo.class, "CD");
+
+        gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
+
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -121,6 +122,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
         HorizontalLift.setTargetPosition(80);
         HorizontalLift.setPower(.6);
         HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setCurrentAngleAs(90);
         while (opModeIsActive() &&
                 (OuttakeLift.isBusy())) {
             // Display it for the driver.
@@ -137,6 +139,14 @@ public class TeleOpFieldRelative extends LinearOpMode {
 
             //assigns power and buttons to intake
             fieldRelativeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+            if(gamepad1.b&&!gamepad1bHeld)
+            {
+                setCurrentAngleAs(0);
+                gamepad1bHeld= true;
+            }
+            if(!gamepad1.b){
+                gamepad1bHeld = false;
+            }
             if (gamepad1.right_bumper) {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);

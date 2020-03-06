@@ -75,7 +75,7 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     int numOfTimesMoved = 0;
-    double DOWN_POSITION = .7;
+    double DOWN_POSITION = .76;
     double STRAFE_TO_BLOCK = 14;
     public double amountError = 0.64;
     public SkystoneDetectorExample.SkyStonePosition skystonePostion= SkystoneDetectorExample.SkyStonePosition.UNKNOWN;
@@ -249,9 +249,9 @@ public class newBlueBlockSideAutonomous extends LinearOpMode {
                 sleep(TIME_FOR_ARM_TO_DROP);
                 encoderDrive(.4,-STRAFE_TO_BLOCK-1,STRAFE_TO_BLOCK+1,STRAFE_TO_BLOCK+1,-STRAFE_TO_BLOCK-1,5);
 
-                gyroDrive(.6,60,60,60,60,0,5);
+                gyroDrive(.6,66,66,66,66,0,5);
                 RightBlockGrabber.setPosition(.1);
-                gyroDrive(.9,-87,-87,-87,-87, 0,10);
+                gyroDrive(1,-87,-87,-87,-87, 0,10);
                 gyroTurn(0.9,0);
                 encoderDrive(.9,STRAFE_TO_BLOCK+2,-STRAFE_TO_BLOCK-2,-STRAFE_TO_BLOCK-2,STRAFE_TO_BLOCK+2,5);
                 encoderDrive(.3,2, -2, -2, 2,5);
