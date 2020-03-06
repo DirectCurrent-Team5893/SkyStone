@@ -644,25 +644,30 @@ public class UpAndOutTest extends LinearOpMode {
     public void moveFoundation (){
 
         Grabber.setPosition(.2);
-        gyroDrive(.7, 12, 12, 12, 12, 0, 3);
-        gyroDrive(.3, 5, 5, 5, 5, 0, 2);
+        while((HorizontalLift.getCurrentPosition() > -50) && backLeft.isBusy()){
+            HorizontalLift.setPower(1);
+            if (HorizontalLift.isBusy()){
+                encoderDrive(.3, 5, 5, 5, 5, 2);
+            }
+            else{
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(0);
+            }
+        }
+        while((OuttakeLift.getCurrentPosition() > -100) && (HorizontalLift.getCurrentPosition() > -600)){
+            OuttakeLift.setPower(.8);
+            HorizontalLift.setPower(.9);
+            if(HorizontalLift.isBusy() && OuttakeLift.isBusy()){
+                LeftBaseplateShover.setPosition(1);
+                RightBaseplateShover.setPosition(0);
+            }
+            else{
+                HorizontalLift.setPower(0);
+                OuttakeLift.setPower(0);
+                sleep(800);
+            }
 
-        HorizontalLift.setTargetPosition(-50);
-        HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        HorizontalLift.setPower(1);
-        OuttakeLift.setTargetPosition(-100);
-        OuttakeLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        OuttakeLift.setPower(.8);
-        telemetry.addData("Lower foundation mover", "Start");
-        LeftBaseplateShover.setPosition(1);
-        RightBaseplateShover.setPosition(0);
-        telemetry.addData("Lower Foundation mover", "Completed");
-        telemetry.update();
-        //TurnOffAllMotors();
-        sleep(800);
-        HorizontalLift.setTargetPosition(-800);
-        HorizontalLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        HorizontalLift.setPower(.9);
+        }
 
         telemetry.addData("move Backward 25 inches", "Begun");
         telemetry.update();
