@@ -128,8 +128,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
         while (opModeIsActive()) {
 
             //assigns power and buttons to intake
-            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
-            drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+            fieldRelativeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
             if (gamepad1.right_bumper) {
                 leftIntake.setPower(IntakePower);
                 rightIntake.setPower(-IntakePower);
@@ -269,7 +268,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
                                 OuttakeLift.getCurrentPosition());
                         telemetry.update();
 
-                        drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+                        fieldRelativeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 
                         if (gamepad1.right_bumper) {
                             leftIntake.setPower(-IntakePower);
@@ -665,7 +664,7 @@ public class TeleOpFieldRelative extends LinearOpMode {
                 telemetry.addData("Path1", newTargetVerticalLiftPosition);
                 telemetry.addData("Path2", OuttakeLift.getCurrentPosition());
                 telemetry.update();
-                drivetrain(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
+                fieldRelativeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, MAX_SPEED);
 
                 if (gamepad1.right_bumper) {
                     leftIntake.setPower(IntakePower);
