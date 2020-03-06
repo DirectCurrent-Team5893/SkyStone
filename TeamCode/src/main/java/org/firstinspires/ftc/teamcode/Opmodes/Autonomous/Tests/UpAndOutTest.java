@@ -643,21 +643,25 @@ public class UpAndOutTest extends LinearOpMode {
 
     public void moveFoundation (){
 
+        LeftBaseplateShover.setPosition(0);
+        RightBaseplateShover.setPosition(1);
         Grabber.setPosition(.2);
-        while((HorizontalLift.getCurrentPosition() > -50) && backLeft.isBusy()){
-            HorizontalLift.setPower(1);
-            if (HorizontalLift.isBusy()){
+        sleep(100);
+        
+        while((HorizontalLift.getCurrentPosition() > -50) || backLeft.isBusy()){
+            if (HorizontalLift.getCurrentPosition() > -50){
+                HorizontalLift.setPower(1);
+            }
+            else if (HorizontalLift.getCurrentPosition() <= -50){
+                HorizontalLift.setPower(0);
+            }
+            if (HorizontalLift.isBusy() || backLeft.isBusy()) {
                 encoderDrive(.3, 5, 5, 5, 5, 2);
             }
-            else{
-                HorizontalLift.setPower(0);
-                OuttakeLift.setPower(0);
-            }
         }
-        while((OuttakeLift.getCurrentPosition() > -100) && (HorizontalLift.getCurrentPosition() > -600)){
+        while(OuttakeLift.getCurrentPosition() > -100){
             OuttakeLift.setPower(.8);
-            HorizontalLift.setPower(.9);
-            if(HorizontalLift.isBusy() && OuttakeLift.isBusy()){
+            if(OuttakeLift.isBusy()){
                 LeftBaseplateShover.setPosition(1);
                 RightBaseplateShover.setPosition(0);
             }
@@ -666,17 +670,22 @@ public class UpAndOutTest extends LinearOpMode {
                 OuttakeLift.setPower(0);
                 sleep(800);
             }
-
+        }
+        while((HorizontalLift.getCurrentPosition() > -600) || backLeft.isBusy()){
+            if (HorizontalLift.getCurrentPosition() > -600){
+                HorizontalLift.setPower(.9);
+            }
+            else if (HorizontalLift.getCurrentPosition() <= -600){
+                HorizontalLift.setPower(0);
+            }
+            if (HorizontalLift.isBusy() || backLeft.isBusy()){
+                gyroDrive(.8, -25, -25, -25, -25, 0, 4);
+            }
         }
 
-        telemetry.addData("move Backward 25 inches", "Begun");
-        telemetry.update();
-        gyroDrive(.8, -25, -25, -25, -25, 0, 4);
         encoderDrive(.8, 10, -10, -10, 10, 2);
         encoderDrive(.7, 5, -5, -5, 5, 2);
         encoderDrive(.9, -8, 8, 8, -8, 2);
-        HorizontalLift.setPower(0);
-        OuttakeLift.setPower(0);
 
         telemetry.addData("Arc", "Begun");
         telemetry.update();
